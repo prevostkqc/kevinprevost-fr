@@ -10,7 +10,7 @@
             <span>{{ title }}</span>
           </p>
         </div>
-        <Navigation :viewName="title" :context="context" :customClass="customClass" @close="handleClose" @resize="handleResize" @reduct="handleReduct" />
+        <Navigation @close="handleClose"  @resize="handleResize"  @reduct="handleReduct"  :viewName="title" :context="context" :customClass="customClass" />
       </div>
       <div :class="['kp_element_container--part-content', 'kp_element--enable', `kp_element__${context}--container`]">
         <div class="kp_element__main-content">
@@ -36,6 +36,7 @@
   
   export default {
     name: 'Personnaliser',
+    emits: ['close', 'resize', 'reduct'],
     components: {
       Navigation
     },

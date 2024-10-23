@@ -85,7 +85,6 @@ export default {
   },
   methods: {
     handleClick(id) {
-      // Émet un événement pour dire à Home.vue d'ouvrir la fenêtre correspondante
       this.$emit('openWindow', id);
     }
   }
@@ -93,4 +92,15 @@ export default {
 </script>
 
 <style scoped>
+  .kp_terminal--icn{
+    background: black;
+      font-size: 10px;
+      display: flex;
+      align-items: flex-end;
+      padding: 2px;
+      font-family: "Raster", "Courier New", Courier, monospace;
+      border-top: solid 5px #5089eb;
+      outline: #3b93ff solid 1px;
+      margin-right: 8px;
+  }
 </style>

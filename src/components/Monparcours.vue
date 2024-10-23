@@ -10,7 +10,7 @@
           <span>Kévin Prévost - Mon parcours</span>
         </p>
       </div>
-      <Navigation :viewName="title" :context="context" :customClass="customClass" @close="handleClose" @resize="handleResize" @reduct="handleReduct" />
+      <Navigation @close="handleClose"  @resize="handleResize"  @reduct="handleReduct"  :viewName="title" :context="context" :customClass="customClass" />
     </div>
 
     <div class="kp_folder-projects-zone-texte kp_quisuisje--texte kp_element--enable">
@@ -62,6 +62,8 @@
   <script>
   import Navigation from '@/components/Navigation.vue';
 
+  
+  import iconSource from '@/assets/images/sites/kevinprevost.png';
 
   import technoajax             from '@/assets/images/logos-technos/ajax.png';
   import technoaspnet           from '@/assets/images/logos-technos/aspnet.png';
@@ -122,11 +124,13 @@
   
   export default {
   name: 'Monparcours',
+  emits: ['close', 'resize', 'reduct'],
   components: {
     Navigation
   },
   data() {
     return {
+      iconSource,
       buttonText: 'Afficher les informations',
       experiences: [
         {
@@ -270,14 +274,14 @@
       this.buttonText = this.buttonText === 'Afficher plus d\'informations' ? 'Masquer les informations' : 'Afficher plus d\'informations';
     },
     handleClose() {
-      this.$emit('update-class', 'kp_item_hide');
-    },
-    handleResize() {
-      this.$emit('update-class', 'kp_item_resize');
-    },
-    handleReduct() {
-      this.$emit('update-class', 'kp_item_reduct');
-    },
+        this.$emit('close');
+      },
+      handleResize() {
+        this.$emit('resize');
+      },
+      handleReduct() {
+        this.$emit('reduct');
+      },
     toggleShow(event) {
         const parentElement = event.target.parentElement;
         parentElement.classList.toggle('kp-cv--show');
@@ -299,16 +303,6 @@
         height:100%;
         overflow: hidden;
         overflow-y: scroll;
-    }
-    .kp_quisuisje--texte {
-        background: #ffffff;
-        border: solid 1px #b5b5b5;
-        position: absolute;
-        top: 36px;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: calc(100% - 37px);
     }
     .kp_compagnie-img-nom{
         display: flex;

@@ -1,5 +1,4 @@
 <template>
-
   <!-- Window Internet -->
   <section class="kp_browser kp_z-index kp_browser--show kp_changed__id kp_element--action--close kp_item__window" id="kp_browser">
     <div class="kp_element--title">
@@ -14,7 +13,7 @@
 
       <!-- Vérification que projetActuel est défini avant de rendre le composant Navigation -->
 
-      <Navigation :viewName="title" :context="context" :customClass="customClass" @close="handleClose" @resize="handleResize" @reduct="handleReduct" />
+      <Navigation @close="handleClose"  @resize="handleResize"  @reduct="handleReduct"  :viewName="title" :context="context" :customClass="customClass" />
     </div>
     
     <div class="kp_window--border kp_element--enable">
@@ -112,6 +111,7 @@ import navigationClose from '@/assets/images/close_icn.svg';
 
 export default {
   name: 'Portfolio',
+  emits: ['close', 'resize', 'reduct'],
   components: {
     Navigation
   },
@@ -204,14 +204,14 @@ export default {
       this.$emit('projet-selectionne', compagnie);
     },
     handleClose() {
-      this.$emit('update-class', 'kp_item_hide');
-    },
-    handleResize() {
-      this.$emit('update-class', 'kp_item_resize');
-    },
-    handleReduct() {
-      this.$emit('update-class', 'kp_item_reduct');
-    },
+        this.$emit('close');
+      },
+      handleResize() {
+        this.$emit('resize');
+      },
+      handleReduct() {
+        this.$emit('reduct');
+      },
     changerProjet(projet) {
       this.projetActuel = projet;
       this.showInfo = true;

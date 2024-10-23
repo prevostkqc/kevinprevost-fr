@@ -15,7 +15,7 @@
   
         <div class="kp_notification--applications">
           <article 
-            v-for="app in applications" 
+            v-for="app in visibleApplications" 
             :key="app.id" 
             :class="['kp_barre-une-app', app.class]" 
             :id="`kp_barre-app--${app.id}`">
@@ -54,65 +54,78 @@
   import cvIcon from '@/assets/images/cv.png';
   
   export default {
-    name: 'Barrebottom',
-    data() {
-      return {
-        logo2024,
-        batteryIcon,
-        applications: [
-          {
-            id: 'terminal',
-            class: 'kp_barre-une-app--terminal kp_barre-une-app--open kp_barre-une-app--show',
-            icon: 'KP:\\',
-            title: 'Qui suis-je ?',
-            isText: true
-          },
-          {
-            id: 'folder-projects',
-            class: 'kp_barre-une-app--folder-projects',
-            icon: folderIcon,
-            title: 'Mes réalisations',
-            isText: false
-          },
-          {
-            id: 'browser',
-            class: 'kp_barre-une-app--browser',
-            icon: internetIcon,
-            title: 'Internet',
-            isText: false
-          },
-          {
-            id: 'text',
-            class: 'kp_barre-une-app--text',
-            icon: textIcon,
-            title: 'Autoportrait',
-            isText: false
-          },
-          {
-            id: 'profil',
-            class: 'kp_barre-une-app--profil',
-            icon: textIcon,
-            title: 'Profil',
-            isText: false
-          },
-          {
-            id: 'pokemon',
-            class: 'kp_barre-une-app--pokemon',
-            icon: pokecardIcon,
-            title: 'Ma passion',
-            isText: false
-          },
-          {
-            id: 'quisuisje',
-            class: 'kp_barre-une-app--quisuisje',
-            icon: cvIcon,
-            title: 'Mon parcours',
-            isText: false
-          }
-        ]
-      };
+  name: 'Barrebottom',
+  props: {
+    openWindows: {
+      type: Array,
+      default: () => []
+    }
+  },
+  data() {
+    return {
+      logo2024,
+      batteryIcon,
+      applications: [
+        {
+          id: 'terminal',
+          class: 'kp_barre-une-app--terminal',
+          icon: 'KP:\\',
+          title: 'Qui suis-je ?',
+          isText: true
+        },
+        {
+          id: 'folder',
+          class: 'kp_barre-une-app--folder-projects',
+          icon: folderIcon,
+          title: 'Mes réalisations',
+          isText: false
+        },
+        {
+          id: 'browser',
+          class: 'kp_barre-une-app--browser',
+          icon: internetIcon,
+          title: 'Internet',
+          isText: false
+        },
+        {
+          id: 'autoportrait',
+          class: 'kp_barre-une-app--text',
+          icon: textIcon,
+          title: 'Autoportrait',
+          isText: false
+        },
+        {
+          id: 'profil',
+          class: 'kp_barre-une-app--profil',
+          icon: textIcon,
+          title: 'Profil',
+          isText: false
+        },
+        {
+          id: 'pokemon',
+          class: 'kp_barre-une-app--pokemon',
+          icon: pokecardIcon,
+          title: 'Ma passion',
+          isText: false
+        },
+        {
+          id: 'monparcours',
+          class: 'kp_barre-une-app--quisuisje',
+          icon: cvIcon,
+          title: 'Mon parcours',
+          isText: false
+        }
+      ]
+    };
+  },
+    computed: {
+      visibleApplications() {
+        // Filtre les applications pour ne montrer que celles ouvertes
+        return this.applications.filter(app => this.openWindows.includes(app.id));
+      }
     }
   };
+
   </script>
   
   <style scoped>

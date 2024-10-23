@@ -32,7 +32,7 @@ export default {
     },
     context: {
       type: String,
-      default: 'browser' // Par défaut, on assume un contexte de navigateur
+      default: 'browser'
     },
     customClass: {
       type: String,
@@ -48,21 +48,18 @@ export default {
   },
   methods: {
     handleAction(action) {
-      console.log(`Action "${action}" triggered for view: ${this.viewName} in context: ${this.context}`);
+      console.log(`1 - Action "${action}" triggered for view: ${this.viewName} in context: ${this.context}`);
       
       if (action === 'close') {
-        console.log(`Emitting 'close' event for view: ${this.viewName}`);
-        this.$emit('close');  // Émettre l'événement 'close'
+        this.$emit('close');
       }
 
       if (action === 'resize') {
-        console.log(`Emitting 'resize' event for view: ${this.viewName}`);
-        this.$emit('resize');  // Émettre l'événement 'close'
+        this.$emit('resize'); 
       }
 
       if (action === 'reduct') {
-        console.log(`Emitting 'reduct' event for view: ${this.viewName}`);
-        this.$emit('reduct');  // Émettre l'événement 'close'
+        this.$emit('reduct');
       }
     }
   }

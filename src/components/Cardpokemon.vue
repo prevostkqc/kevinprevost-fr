@@ -10,7 +10,7 @@
           <span>Kévin Prévost - Ma passion</span>
         </p>
       </div>
-      <Navigation :viewName="title" :context="context" :customClass="customClass" @close="handleClose" @resize="handleResize" @reduct="handleReduct" />
+      <Navigation @close="handleClose"  @resize="handleResize"  @reduct="handleReduct"  :viewName="title" :context="context" :customClass="customClass" />
     </div>
     <div class="kp_pokemon_zone-texte kp_element--enable">
       <p class="kp_texte-carte">
@@ -43,6 +43,7 @@ import pokecardIcon from '@/assets/images/pokecard_icn.png';
 
 export default {
   name: 'Cardpokemon',
+  emits: ['close', 'resize', 'reduct'],
   components: {
     Navigation
   },

@@ -11,7 +11,7 @@
                 </p>
             </div>
             <!-- Utilisation du composant Navigation avec le bon contexte -->
-        <Navigation :viewName="title" :context="context" :customClass="customClass" @close="handleClose" @resize="handleResize" @reduct="handleReduct" />
+        <Navigation @close="handleClose"  @resize="handleResize"  @reduct="handleReduct"  :viewName="title" :context="context" :customClass="customClass" />
         </div>
         <pre class="kp_image_ascii--content kp_element--enable">                                                                   
                                            .=#@@@@@@#=.                                             
@@ -77,6 +77,7 @@ import textIcon from '@/assets/images/text.png';
 
 export default {
   name: 'Autoportrait',
+  emits: ['close', 'resize', 'reduct'],
   components: {
     Navigation
   },
