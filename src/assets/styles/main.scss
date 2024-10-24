@@ -603,7 +603,13 @@ p, div, span{
   }
 
 
-
+  .notif_show {
+    display:flex !important;
+  }
+  
+  .notif_hide {
+    display:none !important;
+  }
 
 
  /* Barre des tâches */

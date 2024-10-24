@@ -40,7 +40,7 @@
     </div>
 
     <div class="scanlines-v"></div>
-    <Barrebottom :openWindows="openWindows" />
+    <Barrebottom :openWindows="openWindows" @simulateDesktopClick="handleDesktopClick" />
   </main>
 </template>
 
@@ -166,19 +166,15 @@ export default {
     },
     
     handleCloseWindow(windowName) {
-      if (!windowName) {
-        console.error("Aucun nom de fenêtre passé à handleCloseWindow.");
-        return;
-      }
-      
       const index = this.openWindows.indexOf(windowName);
       if (index !== -1) {
         console.log(`Fermeture de la fenêtre "${windowName}"`);
         this.updateWindowClass(windowName, 'kp_item_hide');
+        this.updateNotificationClass(windowName, 'notif_hide'); // Ajouter notif_hide lors de la fermeture
         setTimeout(() => {
-          this.openWindows.splice(index, 1);
-          console.log(`Fenêtre "${windowName}" retirée de openWindows. Nouvel état :`, this.openWindows);
-        }, 300); // Délai pour permettre une animation de fermeture
+          // On ne supprime plus la fenêtre de openWindows pour qu'elle puisse être réouverte
+          console.log(`Fenêtre "${windowName}" fermée, mais toujours dans openWindows pour réouverture future.`);
+        }, 300);
       } else {
         console.log(`Fenêtre "${windowName}" n'était pas ouverte.`);
       }
@@ -268,18 +264,29 @@ export default {
       document.removeEventListener('mouseup', this.stopDrag);
     },
 
+    handleDesktopClick(windowId) {
+      console.log(`Simulation du clic sur l'icône du bureau pour la fenêtre : ${windowId}`);
+      this.toggleWindow(windowId);
+    },
+    updateNotificationClass(windowName, newClass) {
+      const notifElement = document.querySelector(`#kp_barre-app--${windowName}`);
+      
+      if (notifElement) {
+        notifElement.classList.remove('notif_show', 'notif_hide'); // Retirer toutes les classes avant d'ajouter la nouvelle
+        notifElement.classList.add(newClass);
+        console.log(`Classe "${newClass}" ajoutée à l'icône de notification pour "${windowName}".`);
+      } else {
+        console.log(`Impossible de trouver l'icône de notification pour "${windowName}"`);
+      }
+},
 
     startResize(e) {
       if (e.button !== 0) return;
 
       e.preventDefault();
-
       this.isResizing = true;
       this.lastElementDragable = e.target.parentElement;
-
-
       this.lastElementDragable.classList.add('item-resizing');
-
       this.initialWidth = this.lastElementDragable.offsetWidth;
       this.initialHeight = this.lastElementDragable.offsetHeight;
       this.startX = e.clientX;
@@ -299,11 +306,9 @@ export default {
 
       const newWidth = this.initialWidth + deltaX;
       const newHeight = this.initialHeight + deltaY;
-
       if (newWidth > 150) {
         this.lastElementDragable.style.width = `${newWidth}px`;
       }
-
       if (newHeight > 150) {
         this.lastElementDragable.style.height = `${newHeight}px`;
       }
@@ -311,11 +316,8 @@ export default {
 
     stopResize() {
       this.isResizing = false;
-
       document.removeEventListener('mousemove', this.onResize);
       document.removeEventListener('mouseup', this.stopResize);
-
-
       if (this.lastElementDragable) {
         this.lastElementDragable.classList.remove('is-resizing');
       }
@@ -325,21 +327,24 @@ export default {
 
     toggleWindow(windowName) {
       const index = this.openWindows.indexOf(windowName);
-      
-      if (index === -1 || this.windowClasses[windowName] === 'kp_item_hide') {
-        // Si la fenêtre est fermée ou cachée, l'ouvrir
+      if (index === -1) {
+        // Si la fenêtre est fermée, l'ouvrir
         this.openWindows.push(windowName);
         this.updateWindowClass(windowName, "kp_item_show");
+        this.updateNotificationClass(windowName, 'notif_show'); // Ajouter notif_show
         this.$nextTick(() => {
           const element = document.querySelector(`.${windowName}`);
           if (element) {
             this.bringToFront({ currentTarget: element });
           }
         });
-      } else if (this.windowClasses[windowName] === 'kp_item_reduct') {
-        // Si la fenêtre est réduite, la restaurer
+      } else if (this.windowClasses[windowName] === 'kp_item_reduct' || this.windowClasses[windowName] === 'kp_item_hide') {
+        // Si la fenêtre est réduite ou cachée, la restaurer
         this.restoreWindow(windowName);
-      } 
+      } else {
+        // La fenêtre est déjà visible, rien à faire
+        console.log(`La fenêtre "${windowName}" est déjà ouverte et visible.`);
+      }
     },
     minimizeWindow(windowName) {
       if (this.openWindows.includes(windowName)) {
@@ -351,11 +356,20 @@ export default {
     },
     restoreWindow(windowName) {
       console.log(`Restauration de la fenêtre "${windowName}"`);
-      this.updateWindowClass(windowName, 'kp_item_show'); // Passe la classe à 'kp_item_show'
+      this.updateWindowClass(windowName, 'kp_item_show'); // Remet la fenêtre en classe _show
+      
       this.$nextTick(() => {
         const element = document.querySelector(`.${windowName}`);
         if (element) {
           this.bringToFront({ currentTarget: element });
+        }
+
+        // Retirer la classe "notif_hide" lors de la réouverture de la fenêtre
+        const notifElement = document.querySelector(`#kp_barre-app--${windowName}`);
+        if (notifElement) {
+          notifElement.classList.remove('notif_hide');
+          notifElement.classList.add('notif_show');
+          console.log(`Classe "notif_hide" retirée de l'élément ${windowName} dans la barre de notification`);
         }
       });
     },
@@ -380,11 +394,19 @@ export default {
       const index = this.openWindows.indexOf(windowName);
       if (index !== -1) {
         console.log(`Fermeture de la fenêtre "${windowName}"`);
-        this.updateWindowClass(windowName, 'kp_item_hide'); // Fermer complètement
+        this.updateWindowClass(windowName, 'kp_item_hide'); // Fermer la fenêtre complètement
+        
         setTimeout(() => {
           this.openWindows.splice(index, 1); // Retirer l'icône de la barre de notification
-          console.log(`Fenêtre "${windowName}" retirée de openWindows. Nouvel état :`, this.openWindows);
-        }, 300);
+          console.log(`Fenêtre "${windowName}" retirée de openWindows.`);
+          
+          // Appliquer la classe "notif_hide" sur l'élément de la barre de notification
+          const notifElement = document.querySelector(`#kp_barre-app--${windowName}`);
+          if (notifElement) {
+            notifElement.classList.add('notif_hide');
+            console.log(`Classe "notif_hide" ajoutée à l'élément ${windowName} dans la barre de notification`);
+          }
+        }, 300); // Délai pour laisser le temps à l'animation de fermeture
       } else {
         console.log(`Fenêtre "${windowName}" n'était pas ouverte.`);
       }

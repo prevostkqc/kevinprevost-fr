@@ -18,7 +18,8 @@
           v-for="app in visibleApplications" 
           :key="app.id" 
           :class="['kp_barre-une-app', app.class, isWindowClosed(app.id) ? 'closed' : '']" 
-          :id="`kp_barre-app--${app.id}`">
+          :id="`kp_barre-app--${app.id}`"
+          @click="emitDesktopClick(app.id)"> <!-- Ajout de l'appel à emitDesktopClick -->
           <div class="kp_barre-une-app--icn" v-if="app.isText">
             {{ app.icon }}
           </div>
@@ -133,6 +134,10 @@ export default {
     }
   },
   methods: {
+    emitDesktopClick(appId) {
+      console.log(`Barre de notification: clic détecté pour "${appId}"`);
+      this.$emit('simulateDesktopClick', appId); // Émet l'événement pour gérer le clic sur la barre de notification
+    },
     calculerBatterie() {
       const battery = navigator.getBattery();
       battery.then((batterie) => {
@@ -145,7 +150,35 @@ export default {
     },
     isWindowClosed(windowId) {
       return this.windowClasses && this.windowClasses[windowId] === 'kp_item_hide';
-    }
+    },  
+    emitDesktopClick(appId) {
+      console.log(`Simulation du clic sur l'icône du bureau pour ${appId}`);
+      this.$emit('simulateDesktopClick', appId); // Emit the event to simulate a desktop click
+    },
+    updateNotificationClass(windowName, newClass) {
+      const notificationElement = document.querySelector(`#kp_barre-app--${windowName}`);
+      if (notificationElement) {
+        notificationElement.classList.remove('notif_show', 'notif_hide');
+        notificationElement.classList.add(newClass);
+        console.log(`Classe de notification pour ${windowName} mise à jour en : ${newClass}`);
+      } else {
+        console.error(`Élément de notification pour ${windowName} non trouvé.`);
+      }
+    },
+    handleCloseWindow(windowName) {
+      const index = this.openWindows.indexOf(windowName);
+      if (index !== -1) {
+        console.log(`Fermeture de la fenêtre "${windowName}"`);
+        this.updateWindowClass(windowName, 'kp_item_hide');
+        this.updateNotificationClass(windowName, 'notif_hide');  // Ajoute la classe notif_hide à l'icône de la notification
+        setTimeout(() => {
+          this.openWindows.splice(index, 1);
+          console.log(`Fenêtre "${windowName}" retirée de openWindows. Nouvel état :`, this.openWindows);
+        }, 300);
+      } else {
+        console.log(`Fenêtre "${windowName}" n'était pas ouverte.`);
+      }
+    },
   },
   mounted() {
     this.calculerBatterie();
