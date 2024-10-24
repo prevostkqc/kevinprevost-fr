@@ -124,7 +124,7 @@
   
   export default {
   name: 'Monparcours',
-  emits: ['close', 'resize', 'reduct'],
+  emits: ['update-class', 'close', 'resize', 'reduct'],
   components: {
     Navigation
   },
@@ -273,15 +273,21 @@
     toggleShow() {
       this.buttonText = this.buttonText === 'Afficher plus d\'informations' ? 'Masquer les informations' : 'Afficher plus d\'informations';
     },
+    
     handleClose() {
-        this.$emit('close');
-      },
-      handleResize() {
-        this.$emit('resize');
-      },
-      handleReduct() {
-        this.$emit('reduct');
-      },
+      this.$emit('update-class', 'kp_item_hide');
+    },
+    handleResize() {
+      if (this.windowStateClass === 'kp_item_resize') {
+        this.windowStateClass = ''; 
+      } else {
+        this.windowStateClass = 'kp_item_resize';
+      }
+      this.$emit('update-class', this.windowStateClass);
+    },
+    handleReduct() {
+      this.$emit('update-class', 'kp_item_reduct');
+    },
     toggleShow(event) {
         const parentElement = event.target.parentElement;
         parentElement.classList.toggle('kp-cv--show');

@@ -55,7 +55,7 @@ import fallback from '@/assets/images/fallback.jpg';
 
 export default {
   name: 'Folderprojects',
-  emits: ['close', 'resize', 'reduct'],
+  emits: ['update-class', 'close', 'resize', 'reduct'],
   components: {
     Navigation,
   },
@@ -103,14 +103,20 @@ export default {
       this.$emit('update-class', 'kp_item_show');
     },
     // Gestion des événements de fenêtre
+    
     handleClose() {
-      this.$emit('close');
+      this.$emit('update-class', 'kp_item_hide');
     },
     handleResize() {
-      this.$emit('resize');
+      if (this.windowStateClass === 'kp_item_resize') {
+        this.windowStateClass = ''; 
+      } else {
+        this.windowStateClass = 'kp_item_resize';
+      }
+      this.$emit('update-class', this.windowStateClass);
     },
     handleReduct() {
-      this.$emit('reduct');
+      this.$emit('update-class', 'kp_item_reduct');
     },
     getIconPath(icn) {
       return `/images/icons/${icn}.jpg`; 

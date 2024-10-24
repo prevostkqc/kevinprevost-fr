@@ -554,6 +554,7 @@ p, div, span{
   .kp_element--icon-title p{
     display:flex;
     gap: 5px;
+    filter: drop-shadow(1px 1px 0px black);
   }
   .kp_element--disable{
     pointer-events: none;
@@ -577,13 +578,14 @@ p, div, span{
     position: absolute;
     right: -4px;
     bottom: -2px;
-    height: calc(100% + 4px);
+    height: calc(100% + 1px);
     padding: 0 20px;
     display: flex;
     overflow: hidden;
     align-items: center;
     background: #1791df;
-    border-left: solid 1px #0f6299;
+    border: solid 2px #095bc9;
+    border-left: solid 1px #0a2e52;
   }
   .kp_notification--zone div {
     cursor: inherit !important;
@@ -604,24 +606,10 @@ p, div, span{
 
 
 
-/* Profil */
-  .kp_terminal_zone-titre{
-    background: rgb(3, 82, 226);
-    background: linear-gradient(90deg, rgb(3, 82, 226) 0%, rgb(60, 148, 255) 100%);
-    padding: 5px;
-    border: solid 1px #4e7cd3;
-    display: flex;
-    align-items: center;
-  }
-  .kp_terminal--titre{
-    color: $main-color_primary;
-  }
-
-
  /* Barre des tâches */
  .kp_notification--applications{
     position: absolute;
-    left: 180px;
+    left: 190px;
     top: 3px;
     display: flex;
     gap: 2px;
@@ -639,6 +627,7 @@ p, div, span{
     gap: 8px;
     transition: 0.1s;
     height: 22px;
+    width: 130px;
     &:hover{
         background: #1378b9;
         outline: solid 1px #0c428d;
@@ -719,6 +708,10 @@ p, div, span{
 }
 .kp_item__window {
   max-height: fit-content;
+  border-radius: 10px 10px 0 0;
+  outline: solid 1px #003fad; 
+  border: solid 3px #0053e3;
+  border-top: solid 1px #0053e3;
 }
 
 
@@ -940,7 +933,6 @@ background-color: white;
   background: rgb(235, 235, 235);
   height: calc(100% - 51px);
   width: calc(100% - 30px);
-  margin-top: 3px;
   padding: 10px 25px 30px 5px;
   overflow-y: scroll;
   min-height: 150px;
@@ -1145,17 +1137,17 @@ background-color: white;
   
   .kp_item_resize {
     position: absolute;
-    width: calc(100vw - 9px) !important;
+    width: calc(100vw - 5px) !important;
     height: 100% !important;
     top:0 !important;
     left: 0 !important;
     transition: all 0.3s;
-    max-width: calc(100vw - 9px);
+    max-width: calc(100vw - 5px);
   }
   .kp_item_resize .kp_item__window {
     width: calc(100vw - 4px);
     height: calc(100vh - 50px);
-    max-width: calc(100vw - 9px);
+    max-width: calc(100vw - 5px);
     top: 0;
     left: 0;
     position: fixed;
@@ -1173,6 +1165,11 @@ background-color: white;
     100%{display:none;}
   }
 
+
+  .kp_item_reduct {
+    display: none; /* Masque complètement la fenêtre réduite */
+  }
+  
 
 /* ----------------- */
 /* ----------------- */
@@ -1297,6 +1294,50 @@ background-color: white;
 
 .kp_element--title {
   cursor: grab;
+  background: #0045be;
+}
+.kp_element--title:active {
+  cursor: grabbing;
+  background: #5c83c6 !important;
+}
+.kp_element--title:before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  z-index: -1;
+  background: #3c94ff;
+  filter: blur(2px);
+}
+.kp_element--title:after{
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  z-index: -1;
+  background: #026afe;
+  filter: blur(1px);
+}
+.kp_element--title:active:before{
+  height: 3px;
+  background: #9ab6ea;
+  filter: blur(2px);
+}
+.kp_element--title:active:after{
+  height: 3px;
+  background: #80a6e7;
+  filter: blur(1px);
+}
+.kp_element--title:active .kp_element--incons-zone .kp_icon_zone {
+  background: #4784e2;
+}
+.kp_element--title:active .kp_element--incons-zone .kp_icon_zone--close {
+  background: #b27889;
+  box-shadow: inset 0 0 13px #af768b;
 }
 
 .kp_element--resize {
@@ -1304,11 +1345,11 @@ background-color: white;
 }
 
 .kp_element--title {
-    user-select: none; /* Empêche la sélection du texte */
-    cursor: grab; /* Ajoute un curseur approprié */
-  }
-  
-  .kp_element--title:active {
-    cursor: grabbing; /* Change le curseur quand l'élément est déplacé */
-  }
+  user-select: none; /* Empêche la sélection du texte */
+  cursor: grab; /* Ajoute un curseur approprié */
+}
+
+.kp_element--title:active {
+  cursor: grabbing; /* Change le curseur quand l'élément est déplacé */
+}
   

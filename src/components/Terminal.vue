@@ -22,7 +22,7 @@ import Navigation from '@/components/Navigation.vue';
 
 export default {
 name: 'Terminal',
-emits: ['close', 'resize', 'reduct'],
+emits: ['update-class', 'close', 'resize', 'reduct'],
 
 components: {
   Navigation
@@ -104,23 +104,42 @@ methods: {
     ajouterCaractere();
   },
 
+  
   handleClose() {
-    this.$emit('close');
-  },
-
-  handleResize() {
-    this.$emit('resize');
-  },
-
-  handleReduct() {
-    this.$emit('reduct');
-  },
-}
+      this.$emit('update-class', 'kp_item_hide');
+    },
+    handleResize() {
+      if (this.windowStateClass === 'kp_item_resize') {
+        this.windowStateClass = ''; 
+      } else {
+        this.windowStateClass = 'kp_item_resize';
+      }
+      this.$emit('update-class', this.windowStateClass);
+    },
+    handleReduct() {
+      this.$emit('update-class', 'kp_item_reduct');
+    },
+  }
 };
 </script>
 
 <style scoped>
 /* terminal */
+
+
+.kp_terminal_zone-titre{
+    background: rgb(3, 82, 226);
+    background: linear-gradient(90deg, rgb(3, 82, 226) 0%, rgb(60, 148, 255) 100%);
+    padding: 5px;
+    border: solid 1px #4e7cd3;
+    display: flex;
+    align-items: center;
+  }
+  .kp_terminal--titre{
+    color: #FFFFFF;
+  }
+
+
 .window {
   left:100px;
 }
@@ -129,8 +148,6 @@ methods: {
   height: fit-content;
   background: white;
   position: absolute;
-  border: solid 4px #ffffff;
-  outline: solid 1px #9b9b9b;
   max-width: 1000px;
 }
 
@@ -151,7 +168,6 @@ color: #FFFFFF;
 background: black;
 height: calc(100% - 51px);
 width: calc(100% - 30px);
-margin-top: 3px;
 padding: 10px 25px 30px 5px;
 overflow-y: scroll;
 min-height: 150px;

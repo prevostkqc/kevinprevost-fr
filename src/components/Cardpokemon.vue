@@ -43,7 +43,7 @@ import pokecardIcon from '@/assets/images/pokecard_icn.png';
 
 export default {
   name: 'Cardpokemon',
-  emits: ['close', 'resize', 'reduct'],
+  emits: ['update-class', 'close', 'resize', 'reduct'],
   components: {
     Navigation
   },
@@ -112,7 +112,12 @@ export default {
       this.$emit('update-class', 'kp_item_hide');
     },
     handleResize() {
-      this.$emit('update-class', 'kp_item_resize');
+      if (this.windowStateClass === 'kp_item_resize') {
+        this.windowStateClass = ''; 
+      } else {
+        this.windowStateClass = 'kp_item_resize';
+      }
+      this.$emit('update-class', this.windowStateClass);
     },
     handleReduct() {
       this.$emit('update-class', 'kp_item_reduct');
@@ -144,8 +149,6 @@ export default {
     height: fit-content;
     background: white;
     position: absolute;
-    border: solid 4px #ffffff;
-    outline: solid 1px #9b9b9b;
     max-width: 1000px;
     height: 1080px;
     z-index: 2;
@@ -154,7 +157,6 @@ export default {
     background: rgb(235, 235, 235);
     height: calc(100% - 51px);
     width: calc(100% - 32px);
-    margin-top: 3px;
     padding: 10px 25px 30px 5px;
     overflow-y: scroll;
     min-height: 150px;
@@ -171,12 +173,14 @@ export default {
   perspective: 1000px;
 }
 .kp_card-pokemon--container{ 
-  width: 100%;
-  height: 100%;
-  max-width: 577px;
-  overflow: hidden;
-  border-radius: 32px;
-  filter: drop-shadow(7px 7px 8px #00000077);
+    width: 100%;
+    height: 100%;
+    max-width: 577px;
+    overflow: hidden;
+    border-radius: 32px;
+    filter: drop-shadow(4px 4px 4px #00000099);
+    border-radius: 34px;
+    border: solid 1px #eac043
 }
 .kp_card-pokemon--img{
   object-fit: cover;

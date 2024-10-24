@@ -3,31 +3,31 @@
     <!-- Appel à Desktop avec écoute de l'événement openWindow -->
     <Desktop @openWindow="toggleWindow" />
 
-    <div v-show="openWindows.includes('terminal')" :class="['window', 'kp_item__window_draggable', windowClasses.terminal]">
+    <div @click="bringToFront($event)" v-show="openWindows.includes('terminal')" :class="['window', 'kp_item__window_draggable', windowClasses.terminal]">
       <Terminal @update-class="updateWindowClass('terminal', $event)" @close="handleCloseWindow('terminal')" />
     </div>
 
-    <div v-show="openWindows.includes('folder')" :class="['window', 'kp_item__window_draggable', windowClasses.folder]">
+    <div @click="bringToFront($event)" v-show="openWindows.includes('folder')" :class="['window', 'kp_item__window_draggable', windowClasses.folder]">
       <Folderprojects @update-class="updateWindowClass('folder', $event)" @close="handleCloseWindow('folder')" />
     </div>
 
-    <div v-show="openWindows.includes('autoportrait')" :class="['window', 'kp_item__window_draggable', windowClasses.autoportrait]">
+    <div @click="bringToFront($event)" v-show="openWindows.includes('autoportrait')" :class="['window', 'kp_item__window_draggable', windowClasses.autoportrait]">
       <Autoportrait @update-class="updateWindowClass('autoportrait', $event)" @close="handleCloseWindow('autoportrait')" />
     </div>
 
-    <div v-show="openWindows.includes('personnaliser')" :class="['window', 'kp_item__window_draggable', windowClasses.personnaliser]">
+    <div @click="bringToFront($event)" v-show="openWindows.includes('personnaliser')" :class="['window', 'kp_item__window_draggable', windowClasses.personnaliser]">
       <Personnaliser @update-class="updateWindowClass('personnaliser', $event)" @close="handleCloseWindow('personnaliser')" />
     </div>
 
-    <div v-show="openWindows.includes('monparcours')" :class="['window', 'kp_item__window_draggable', windowClasses.monparcours]">
+    <div @click="bringToFront($event)" v-show="openWindows.includes('monparcours')" :class="['window', 'kp_item__window_draggable', windowClasses.monparcours]">
       <Monparcours @update-class="updateWindowClass('monparcours', $event)" @close="handleCloseWindow('monparcours')" />
     </div>
 
-    <div v-show="openWindows.includes('pokemon')" :class="['window', 'kp_item__window_draggable', windowClasses.pokemon]">
+    <div @click="bringToFront($event)" v-show="openWindows.includes('pokemon')" :class="['window', 'kp_item__window_draggable', windowClasses.pokemon]">
       <Cardpokemon @update-class="updateWindowClass('pokemon', $event)" @close="handleCloseWindow('pokemon')" />
     </div>
 
-    <div v-show="openWindows.includes('portfolio')" :class="['window', 'kp_item__window_draggable', windowClasses.portfolio]">
+    <div @click="bringToFront($event)" v-show="openWindows.includes('portfolio')" :class="['window', 'kp_item__window_draggable', windowClasses.portfolio]">
       <Portfolio ref="portfolio" @update-class="updateWindowClass('portfolio', $event)" @projet-selectionne="afficherProjet" @close="handleCloseWindow('portfolio')" />
     </div>
 
@@ -88,6 +88,18 @@ export default {
         clipy:        'kp_item_hide',
         starting:     'kp_item_hide'
       },
+      windowMinimized: {
+        terminal:     false,
+        folder:       false,
+        autoportrait: false,
+        personnaliser:false,
+        monparcours:  false,
+        pokemon:      false,
+        portfolio:    false,
+        clipy:        false,
+        starting:     false
+      },
+      zIndexCounter: 10, 
       isDragging: false,
       isResizing: false,
       offsetX: null,
@@ -133,14 +145,6 @@ export default {
       }
     },
 
-    toggleWindow(windowName) {
-      const index = this.openWindows.indexOf(windowName);
-      if (index === -1) {
-        this.openWindows.push(windowName);
-      } else {
-        this.openWindows.splice(index, 1);
-      }
-    },
 
     initDragAndResize() {
       document.querySelectorAll('.kp_element--title').forEach(element => {
@@ -152,58 +156,35 @@ export default {
       });
     },
 
-    startDrag(e) {
-      const draggableElement = e.target.closest('.kp_item__window_draggable');
-      if (draggableElement) {
-        this.bringToFront(draggableElement);
-        this.lastElementDragable = draggableElement;
-        this.isDragging = true;
-
-        const rect = draggableElement.getBoundingClientRect();
-        this.lastValidPosition = {
-          left: rect.left,
-          top: rect.top,
-        };
-
-        this.offsetX = e.clientX - rect.left;
-        this.offsetY = e.clientY - rect.top;
-
-        document.body.style.cursor = 'grabbing';
-        document.body.classList.add('no-select');
-
-        document.addEventListener('mousemove', this.onMouseMove);
-        document.addEventListener('mouseup', this.stopDrag);
-      } else {
-      }
-    },
     updateWindowClass(windowName, newClass) {
-        console.log(`Mise à jour de la classe de la fenêtre : ${windowName} à ${newClass}`);
-        this.windowClasses[windowName] = newClass; // Mise à jour sans this.$set
+      if (this.windowClasses.hasOwnProperty(windowName)) {
+        this.windowClasses[windowName] = newClass;
+        console.log(`Classe de la fenêtre "${windowName}" mise à jour en : ${newClass}`);
+      } else {
+        console.error(`La fenêtre "${windowName}" n'existe pas dans windowClasses`);
+      }
     },
     
     handleCloseWindow(windowName) {
+      if (!windowName) {
+        console.error("Aucun nom de fenêtre passé à handleCloseWindow.");
+        return;
+      }
+      
       const index = this.openWindows.indexOf(windowName);
       if (index !== -1) {
-        this.openWindows.splice(index, 1);
-      }
-    },
-    toggleWindow(windowName) {
-      const index = this.openWindows.indexOf(windowName);
-      
-      if (index === -1) {
-        console.log(`Ouverture de la fenêtre "${windowName}"`);
-        this.openWindows.push(windowName);
-        this.updateWindowClass(windowName, 'kp_item_show'); // Afficher la fenêtre
-      } else {
         console.log(`Fermeture de la fenêtre "${windowName}"`);
-        this.openWindows.splice(index, 1);
-        this.updateWindowClass(windowName, 'kp_item_hide'); // Masquer la fenêtre
+        this.updateWindowClass(windowName, 'kp_item_hide');
+        setTimeout(() => {
+          this.openWindows.splice(index, 1);
+          console.log(`Fenêtre "${windowName}" retirée de openWindows. Nouvel état :`, this.openWindows);
+        }, 300); // Délai pour permettre une animation de fermeture
+      } else {
+        console.log(`Fenêtre "${windowName}" n'était pas ouverte.`);
       }
-      
-      console.log('État des fenêtres ouvertes après toggle:', this.openWindows);
     },
 
-
+    
     onMouseMove(e) {
       if (!this.isDragging || !this.lastElementDragable) return;
 
@@ -223,6 +204,32 @@ export default {
 
     },
 
+    startDrag(e) {
+      const draggableElement = e.target.closest('.kp_item__window_draggable');
+      if (draggableElement) {
+        this.bringToFront({ currentTarget: draggableElement }); // Passer immédiatement la fenêtre au premier plan
+
+        this.lastElementDragable = draggableElement;
+        this.isDragging = true;
+
+        const rect = draggableElement.getBoundingClientRect();
+        this.lastValidPosition = {
+          left: rect.left,
+          top: rect.top,
+        };
+
+        this.offsetX = e.clientX - rect.left;
+        this.offsetY = e.clientY - rect.top;
+
+        document.body.style.cursor = 'grabbing';
+        document.body.classList.add('no-select');
+
+        document.addEventListener('mousemove', this.onMouseMove);
+        document.addEventListener('mouseup', this.stopDrag);
+      } else {
+        console.error("Aucun élément draggable trouvé");
+      }
+    },
     stopDrag() {
       this.isDragging = false;
       document.body.style.cursor = 'default';
@@ -270,6 +277,9 @@ export default {
       this.isResizing = true;
       this.lastElementDragable = e.target.parentElement;
 
+
+      this.lastElementDragable.classList.add('item-resizing');
+
       this.initialWidth = this.lastElementDragable.offsetWidth;
       this.initialHeight = this.lastElementDragable.offsetHeight;
       this.startX = e.clientX;
@@ -305,22 +315,80 @@ export default {
       document.removeEventListener('mousemove', this.onResize);
       document.removeEventListener('mouseup', this.stopResize);
 
+
+      if (this.lastElementDragable) {
+        this.lastElementDragable.classList.remove('is-resizing');
+      }
+
       document.body.style.userSelect = 'auto';
     },
 
-    bringToFront(element) {
+    toggleWindow(windowName) {
+      const index = this.openWindows.indexOf(windowName);
+      
+      if (index === -1 || this.windowClasses[windowName] === 'kp_item_hide') {
+        // Si la fenêtre est fermée ou cachée, l'ouvrir
+        this.openWindows.push(windowName);
+        this.updateWindowClass(windowName, "kp_item_show");
+        this.$nextTick(() => {
+          const element = document.querySelector(`.${windowName}`);
+          if (element) {
+            this.bringToFront({ currentTarget: element });
+          }
+        });
+      } else if (this.windowClasses[windowName] === 'kp_item_reduct') {
+        // Si la fenêtre est réduite, la restaurer
+        this.restoreWindow(windowName);
+      } 
+    },
+    minimizeWindow(windowName) {
+      if (this.openWindows.includes(windowName)) {
+        console.log(`Réduction de la fenêtre "${windowName}"`);
+        this.updateWindowClass(windowName, 'kp_item_reduct'); // Passe la classe à 'kp_item_reduct' pour cacher visuellement la fenêtre
+      } else {
+        console.error(`Impossible de réduire la fenêtre "${windowName}" car elle n'est pas ouverte.`);
+      }
+    },
+    restoreWindow(windowName) {
+      console.log(`Restauration de la fenêtre "${windowName}"`);
+      this.updateWindowClass(windowName, 'kp_item_show'); // Passe la classe à 'kp_item_show'
+      this.$nextTick(() => {
+        const element = document.querySelector(`.${windowName}`);
+        if (element) {
+          this.bringToFront({ currentTarget: element });
+        }
+      });
+    },
+
+    bringToFront(event) {
+      const element = event.currentTarget;
+      if (!element) {
+        console.error("Élément non trouvé dans bringToFront");
+        return;
+      }
       const windows = document.querySelectorAll('.kp_item__window_draggable');
       let highestZIndex = 0;
-
       windows.forEach(win => {
         const zIndex = parseInt(window.getComputedStyle(win).zIndex, 10);
         if (!isNaN(zIndex) && zIndex > highestZIndex) {
           highestZIndex = zIndex;
         }
       });
-
       element.style.zIndex = highestZIndex + 1;
-    }
+    },
+    handleCloseWindow(windowName) {
+      const index = this.openWindows.indexOf(windowName);
+      if (index !== -1) {
+        console.log(`Fermeture de la fenêtre "${windowName}"`);
+        this.updateWindowClass(windowName, 'kp_item_hide'); // Fermer complètement
+        setTimeout(() => {
+          this.openWindows.splice(index, 1); // Retirer l'icône de la barre de notification
+          console.log(`Fenêtre "${windowName}" retirée de openWindows. Nouvel état :`, this.openWindows);
+        }, 300);
+      } else {
+        console.log(`Fenêtre "${windowName}" n'était pas ouverte.`);
+      }
+    },
   },
   watch: {
     'windowClasses.portfolio': function (newVal, oldVal) {
