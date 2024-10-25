@@ -17,7 +17,7 @@
         <article 
           v-for="app in visibleApplications" 
           :key="app.id" 
-          :class="['kp_barre-une-app', app.class, isWindowClosed(app.id) ? 'closed' : '']" 
+          :class="['kp_barre-une-app', app.class]" 
           :id="`kp_barre-app--${app.id}`"
           @click="emitDesktopClick(app.id)"> <!-- Ajout de l'appel à emitDesktopClick -->
           <div class="kp_barre-une-app--icn" v-if="app.isText">
@@ -156,11 +156,19 @@ export default {
       this.$emit('simulateDesktopClick', appId); // Emit the event to simulate a desktop click
     },
     updateNotificationClass(windowName, newClass) {
-      const notificationElement = document.querySelector(`#kp_barre-app--${windowName}`);
-      if (notificationElement) {
-        notificationElement.classList.remove('notif_show', 'notif_hide');
-        notificationElement.classList.add(newClass);
-        console.log(`Classe de notification pour ${windowName} mise à jour en : ${newClass}`);
+      const notifElement = document.querySelector(`#kp_barre-app--${windowName}`);
+      if (notifElement) {
+        // On affiche l'état actuel de l'élément de notification
+        console.log(`État actuel de ${windowName} avant mise à jour: ${notifElement.className}`);
+
+        // On supprime les classes 'notif_show' et 'notif_hide' pour éviter les conflits
+        notifElement.classList.remove('notif_show', 'notif_hide');
+        
+        // On ajoute la nouvelle classe 'notif_show' ou 'notif_hide'
+        notifElement.classList.add(newClass);
+        
+        // On affiche l'état après la mise à jour
+        console.log(`État après mise à jour de ${windowName}: ${notifElement.className}`);
       } else {
         console.error(`Élément de notification pour ${windowName} non trouvé.`);
       }
@@ -179,6 +187,22 @@ export default {
         console.log(`Fenêtre "${windowName}" n'était pas ouverte.`);
       }
     },
+    manageWindowNotifications() {
+      this.applications.forEach(app => {
+        const isClosed = this.windowClasses[app.id] === 'kp_item_hide';
+        const newClass = isClosed ? 'notif_hide' : 'notif_show';
+
+        this.updateNotificationClass(app.id, newClass);  // On met à jour la classe de notification ici
+      });
+    }
+  },
+  watch: {
+    windowClasses: {
+      deep: true,
+      handler() {
+        this.manageWindowNotifications();  // On surveille les changements dans windowClasses
+      }
+    }
   },
   mounted() {
     this.calculerBatterie();

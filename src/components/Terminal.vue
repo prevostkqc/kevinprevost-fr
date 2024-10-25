@@ -107,6 +107,7 @@ methods: {
   
   handleClose() {
       this.$emit('update-class', 'kp_item_hide');
+      this.$emit('close');
     },
     handleResize() {
       if (this.windowStateClass === 'kp_item_resize') {
@@ -125,7 +126,9 @@ methods: {
 
 <style scoped>
 /* terminal */
-
+.kp_folder--terminal{
+  margin-top: 0;
+}
 
 .kp_terminal_zone-titre{
     background: rgb(3, 82, 226);

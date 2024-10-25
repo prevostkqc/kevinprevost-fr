@@ -2,41 +2,71 @@
   <main class="kp_main">
     <!-- Appel à Desktop avec écoute de l'événement openWindow -->
     <Desktop @openWindow="toggleWindow" />
-
-    <div @click="bringToFront($event)" v-show="openWindows.includes('terminal')" :class="['window', 'kp_item__window_draggable', windowClasses.terminal]">
-      <Terminal @update-class="updateWindowClass('terminal', $event)" @close="handleCloseWindow('terminal')" />
+    <div class="container--terminal">
+      <div @click="bringToFront($event)" v-show="openWindows.includes('terminal')" :class="['window', 'kp_item__window_draggable', windowClasses.terminal]">
+        <Terminal @update-class="updateWindowClass('terminal', $event)" @close="handleCloseWindow('terminal')" />
+      </div>
     </div>
 
-    <div @click="bringToFront($event)" v-show="openWindows.includes('folder')" :class="['window', 'kp_item__window_draggable', windowClasses.folder]">
+    <div class="container--folder"
+        v-bring-to-front-on-show
+        @click="bringToFront($event)"
+        v-show="openWindows.includes('folder')"
+        :class="['window', 'kp_item__window_draggable', windowClasses.folder]">
       <Folderprojects @update-class="updateWindowClass('folder', $event)" @close="handleCloseWindow('folder')" />
     </div>
 
-    <div @click="bringToFront($event)" v-show="openWindows.includes('autoportrait')" :class="['window', 'kp_item__window_draggable', windowClasses.autoportrait]">
+    <div class="container--autoportrait"
+        v-bring-to-front-on-show
+        @click="bringToFront($event)"
+        v-show="openWindows.includes('autoportrait')"
+        :class="['window', 'kp_item__window_draggable', windowClasses.autoportrait]">
       <Autoportrait @update-class="updateWindowClass('autoportrait', $event)" @close="handleCloseWindow('autoportrait')" />
     </div>
 
-    <div @click="bringToFront($event)" v-show="openWindows.includes('personnaliser')" :class="['window', 'kp_item__window_draggable', windowClasses.personnaliser]">
+    <div class="container--personnaliser"
+        v-bring-to-front-on-show
+        @click="bringToFront($event)"
+        v-show="openWindows.includes('personnaliser')"
+        :class="['window', 'kp_item__window_draggable', windowClasses.personnaliser]">
       <Personnaliser @update-class="updateWindowClass('personnaliser', $event)" @close="handleCloseWindow('personnaliser')" />
     </div>
 
-    <div @click="bringToFront($event)" v-show="openWindows.includes('monparcours')" :class="['window', 'kp_item__window_draggable', windowClasses.monparcours]">
+    <div class="container--monparcours"
+        v-bring-to-front-on-show
+        @click="bringToFront($event)"
+        v-show="openWindows.includes('monparcours')"
+        :class="['window', 'kp_item__window_draggable', windowClasses.monparcours]">
       <Monparcours @update-class="updateWindowClass('monparcours', $event)" @close="handleCloseWindow('monparcours')" />
     </div>
 
-    <div @click="bringToFront($event)" v-show="openWindows.includes('pokemon')" :class="['window', 'kp_item__window_draggable', windowClasses.pokemon]">
+    <div class="container--pokemon"
+        v-bring-to-front-on-show
+        @click="bringToFront($event)"
+        v-show="openWindows.includes('pokemon')"
+        :class="['window', 'kp_item__window_draggable', windowClasses.pokemon]">
       <Cardpokemon @update-class="updateWindowClass('pokemon', $event)" @close="handleCloseWindow('pokemon')" />
     </div>
 
-    <div @click="bringToFront($event)" v-show="openWindows.includes('portfolio')" :class="['window', 'kp_item__window_draggable', windowClasses.portfolio]">
+    <div class="container--portfolio"
+        v-bring-to-front-on-show
+        @click="bringToFront($event)"
+        v-show="openWindows.includes('portfolio')"
+        :class="['window', 'kp_item__window_draggable', windowClasses.portfolio]">
       <Portfolio ref="portfolio" @update-class="updateWindowClass('portfolio', $event)" @projet-selectionne="afficherProjet" @close="handleCloseWindow('portfolio')" />
     </div>
 
-    <div v-show="openWindows.includes('clipy')" :class="['window', 'kp_item__window_draggable', 'kp_clipy_desktop', windowClasses.clipy]">
-      <Clipy @update-class="updateWindowClass('clipy', $event)" @close="handleCloseWindow('clipy')" />
+
+    <div class="container--clipy">
+      <div v-show="openWindows.includes('clipy')" :class="['window', 'kp_item__window_draggable', 'kp_clipy_desktop', windowClasses.clipy]">
+        <Clipy @update-class="updateWindowClass('clipy', $event)" @close="handleCloseWindow('clipy')" />
+      </div>
     </div>
 
-    <div v-show="openWindows.includes('starting')" :class="['window', 'kp_item__window_draggable', windowClasses.starting]">
-      <Starting @update-class="updateWindowClass('starting', $event)" />
+    <div class="container--starting">
+      <div v-show="openWindows.includes('starting')" :class="['window', 'kp_item__window_draggable', windowClasses.starting]">
+        <Starting @update-class="updateWindowClass('starting', $event)" />
+      </div>
     </div>
 
     <div class="scanlines-v"></div>
@@ -106,6 +136,7 @@ export default {
       offsetY: null,
       lastElementDragable: null,
       lastValidPosition: { left: 0, top: 0 },
+      isBeingDragged: false,
     };
   },
   mounted() {
@@ -135,9 +166,7 @@ export default {
     },
 
     updateWindowClass(windowName, newClass) {
-      console.log(`Avant mise à jour, classe actuelle de ${windowName}: ${this.windowClasses[windowName]}`);
       this.$set(this.windowClasses, windowName, newClass);
-      console.log(`Après mise à jour, classe de ${windowName}: ${this.windowClasses[windowName]}`);
       if (this.windowClasses.hasOwnProperty(windowName)) {
         this.$set(this.windowClasses, windowName, newClass);
       } else {
@@ -156,54 +185,67 @@ export default {
       });
     },
 
-    updateWindowClass(windowName, newClass) {
+
+    async updateWindowClass(windowName, newClass) {
       if (this.windowClasses.hasOwnProperty(windowName)) {
-        this.windowClasses[windowName] = newClass;
-        console.log(`Classe de la fenêtre "${windowName}" mise à jour en : ${newClass}`);
-      } else {
-        console.error(`La fenêtre "${windowName}" n'existe pas dans windowClasses`);
+      const previousClass = this.windowClasses[windowName];
+      this.windowClasses[windowName] = newClass;
+
+      if (newClass === 'kp_item_show' && previousClass === 'kp_item_hide') {
+        this.$nextTick(() => {
+        const element = document.querySelector(`.container--${windowName}`);
+        if (element) {
+          this.bringToFront({ currentTarget: element });
+        } else {
+          console.error(`Élément non trouvé pour ${windowName}`);
+        }
+        });
       }
-    },
-    
-    handleCloseWindow(windowName) {
-      const index = this.openWindows.indexOf(windowName);
-      if (index !== -1) {
-        console.log(`Fermeture de la fenêtre "${windowName}"`);
-        this.updateWindowClass(windowName, 'kp_item_hide');
-        this.updateNotificationClass(windowName, 'notif_hide'); // Ajouter notif_hide lors de la fermeture
-        setTimeout(() => {
-          // On ne supprime plus la fenêtre de openWindows pour qu'elle puisse être réouverte
-          console.log(`Fenêtre "${windowName}" fermée, mais toujours dans openWindows pour réouverture future.`);
-        }, 300);
       } else {
-        console.log(`Fenêtre "${windowName}" n'était pas ouverte.`);
+      console.error(`La fenêtre "${windowName}" n'existe pas.`);
       }
     },
 
-    
+
+    bringToFront(event) {
+      const element = event.currentTarget; // Récupération de l'élément actuel
+      if (!element) {
+        console.error("bringToFront - Élément non trouvé");
+        return;
+      }
+
+      const windows = document.querySelectorAll('.kp_item__window_draggable');
+      let highestZIndex = 0; 
+      windows.forEach(win => {
+        const zIndex = parseInt(window.getComputedStyle(win).zIndex, 10);
+        if (!isNaN(zIndex) && zIndex > highestZIndex) {
+          highestZIndex = zIndex;
+        }
+      });
+
+ 
+      element.style.zIndex = highestZIndex + 1;
+    },
+
     onMouseMove(e) {
       if (!this.isDragging || !this.lastElementDragable) return;
 
-      const newLeft = e.clientX - this.offsetX;
-      const newTop = e.clientY - this.offsetY;
+      const newLeft = Math.max(0, e.clientX - this.offsetX);
+      const newTop = Math.max(0, e.clientY - this.offsetY);
 
-      const adjustedLeft = Math.max(0, newLeft);
-      const adjustedTop = Math.max(0, newTop);
-
-      this.lastElementDragable.style.left = `${adjustedLeft}px`;
-      this.lastElementDragable.style.top = `${adjustedTop}px`;
-
-      this.lastValidPosition = {
-        left: adjustedLeft,
-        top: adjustedTop,
-      };
-
+      this.lastElementDragable.style.left = `${newLeft}px`;
+      this.lastElementDragable.style.top = `${newTop}px`;
+      this.lastValidPosition = { left: newLeft, top: newTop };
     },
 
     startDrag(e) {
       const draggableElement = e.target.closest('.kp_item__window_draggable');
       if (draggableElement) {
-        this.bringToFront({ currentTarget: draggableElement }); // Passer immédiatement la fenêtre au premier plan
+        if (!this.isBeingDragged) { // Ne pas réappeler bringToFront si déjà en cours
+          this.bringToFront({ currentTarget: draggableElement });
+        }
+
+        this.isBeingDragged = true; // On commence le drag
 
         this.lastElementDragable = draggableElement;
         this.isDragging = true;
@@ -226,59 +268,59 @@ export default {
         console.error("Aucun élément draggable trouvé");
       }
     },
+
+
     stopDrag() {
       this.isDragging = false;
+      this.isBeingDragged = false;
+
       document.body.style.cursor = 'default';
       document.body.classList.remove('no-select');
 
       const rect = this.lastElementDragable.getBoundingClientRect();
-
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;
 
-      const isOutOfBoundsLeft = rect.right < 0;
-      const isOutOfBoundsRight = rect.left > windowWidth; 
-      const isOutOfBoundsTop = rect.bottom < 0;
-      const isOutOfBoundsBottom = rect.top > windowHeight; 
+      const isOutOfBoundsLeft = rect.left < 0;
+      const isOutOfBoundsRight = rect.right > windowWidth;
+      const isOutOfBoundsTop = rect.top < 0;
+      const isOutOfBoundsBottom = rect.bottom > windowHeight;
 
-      const isPartiallyOutOfBounds = rect.left < 0 || rect.top < 0 || rect.right > windowWidth || rect.bottom > windowHeight;
+      let newLeft = this.lastValidPosition.left;
+      let newTop = this.lastValidPosition.top;
 
-      if (isOutOfBoundsLeft || isOutOfBoundsRight || isOutOfBoundsTop || isOutOfBoundsBottom) {
-        let newLeft = this.lastValidPosition.left;
-        let newTop = this.lastValidPosition.top;
-        if (isOutOfBoundsLeft) {
-          newLeft = 10;
-        } else if (isOutOfBoundsRight) {
-          newLeft = windowWidth - rect.width - 10; 
-        }
-        if (isOutOfBoundsTop) {
-          newTop = 10; 
-        } else if (isOutOfBoundsBottom) {
-          newTop = windowHeight - rect.height - 10;
-        }
-        this.lastElementDragable.style.left = `${newLeft}px`;
-        this.lastElementDragable.style.top = `${newTop}px`;
-      } else if (isPartiallyOutOfBounds) {
+      if (isOutOfBoundsLeft) {
+        newLeft = 0;
+      } else if (isOutOfBoundsRight) {
+        newLeft = windowWidth - rect.width;
       }
+
+      if (isOutOfBoundsTop) {
+        newTop = 0;
+      } else if (isOutOfBoundsBottom) {
+        newTop = windowHeight - rect.height;
+      }
+
+      this.lastElementDragable.style.left = `${newLeft}px`;
+      this.lastElementDragable.style.top = `${newTop}px`;
+
       document.removeEventListener('mousemove', this.onMouseMove);
       document.removeEventListener('mouseup', this.stopDrag);
     },
 
     handleDesktopClick(windowId) {
-      console.log(`Simulation du clic sur l'icône du bureau pour la fenêtre : ${windowId}`);
       this.toggleWindow(windowId);
     },
+
     updateNotificationClass(windowName, newClass) {
       const notifElement = document.querySelector(`#kp_barre-app--${windowName}`);
-      
       if (notifElement) {
-        notifElement.classList.remove('notif_show', 'notif_hide'); // Retirer toutes les classes avant d'ajouter la nouvelle
+        notifElement.classList.remove('notif_show', 'notif_hide');
         notifElement.classList.add(newClass);
-        console.log(`Classe "${newClass}" ajoutée à l'icône de notification pour "${windowName}".`);
       } else {
-        console.log(`Impossible de trouver l'icône de notification pour "${windowName}"`);
+        console.error(`Élément de notification pour "${windowName}" non trouvé.`);
       }
-},
+    },
 
     startResize(e) {
       if (e.button !== 0) return;
@@ -327,94 +369,67 @@ export default {
 
     toggleWindow(windowName) {
       const index = this.openWindows.indexOf(windowName);
+
       if (index === -1) {
-        // Si la fenêtre est fermée, l'ouvrir
         this.openWindows.push(windowName);
-        this.updateWindowClass(windowName, "kp_item_show");
-        this.updateNotificationClass(windowName, 'notif_show'); // Ajouter notif_show
-        this.$nextTick(() => {
-          const element = document.querySelector(`.${windowName}`);
-          if (element) {
-            this.bringToFront({ currentTarget: element });
-          }
-        });
+        this.updateWindowClass(windowName, 'kp_item_show');
       } else if (this.windowClasses[windowName] === 'kp_item_reduct' || this.windowClasses[windowName] === 'kp_item_hide') {
-        // Si la fenêtre est réduite ou cachée, la restaurer
         this.restoreWindow(windowName);
-      } else {
-        // La fenêtre est déjà visible, rien à faire
-        console.log(`La fenêtre "${windowName}" est déjà ouverte et visible.`);
       }
     },
+
     minimizeWindow(windowName) {
       if (this.openWindows.includes(windowName)) {
-        console.log(`Réduction de la fenêtre "${windowName}"`);
-        this.updateWindowClass(windowName, 'kp_item_reduct'); // Passe la classe à 'kp_item_reduct' pour cacher visuellement la fenêtre
+        this.updateWindowClass(windowName, 'kp_item_reduct');
       } else {
         console.error(`Impossible de réduire la fenêtre "${windowName}" car elle n'est pas ouverte.`);
       }
     },
+
     restoreWindow(windowName) {
       console.log(`Restauration de la fenêtre "${windowName}"`);
-      this.updateWindowClass(windowName, 'kp_item_show'); // Remet la fenêtre en classe _show
+      this.updateWindowClass(windowName, 'kp_item_show');
       
       this.$nextTick(() => {
         const element = document.querySelector(`.${windowName}`);
         if (element) {
           this.bringToFront({ currentTarget: element });
         }
-
-        // Retirer la classe "notif_hide" lors de la réouverture de la fenêtre
-        const notifElement = document.querySelector(`#kp_barre-app--${windowName}`);
-        if (notifElement) {
-          notifElement.classList.remove('notif_hide');
-          notifElement.classList.add('notif_show');
-          console.log(`Classe "notif_hide" retirée de l'élément ${windowName} dans la barre de notification`);
-        }
+        this.updateNotificationClass(windowName, 'notif_show');
       });
     },
 
-    bringToFront(event) {
-      const element = event.currentTarget;
-      if (!element) {
-        console.error("Élément non trouvé dans bringToFront");
-        return;
-      }
-      const windows = document.querySelectorAll('.kp_item__window_draggable');
-      let highestZIndex = 0;
-      windows.forEach(win => {
-        const zIndex = parseInt(window.getComputedStyle(win).zIndex, 10);
-        if (!isNaN(zIndex) && zIndex > highestZIndex) {
-          highestZIndex = zIndex;
-        }
-      });
-      element.style.zIndex = highestZIndex + 1;
-    },
     handleCloseWindow(windowName) {
-      const index = this.openWindows.indexOf(windowName);
-      if (index !== -1) {
-        console.log(`Fermeture de la fenêtre "${windowName}"`);
-        this.updateWindowClass(windowName, 'kp_item_hide'); // Fermer la fenêtre complètement
-        
-        setTimeout(() => {
-          this.openWindows.splice(index, 1); // Retirer l'icône de la barre de notification
-          console.log(`Fenêtre "${windowName}" retirée de openWindows.`);
-          
-          // Appliquer la classe "notif_hide" sur l'élément de la barre de notification
-          const notifElement = document.querySelector(`#kp_barre-app--${windowName}`);
-          if (notifElement) {
-            notifElement.classList.add('notif_hide');
-            console.log(`Classe "notif_hide" ajoutée à l'élément ${windowName} dans la barre de notification`);
-          }
-        }, 300); // Délai pour laisser le temps à l'animation de fermeture
-      } else {
-        console.log(`Fenêtre "${windowName}" n'était pas ouverte.`);
+    const index = this.openWindows.indexOf(windowName);
+    
+    console.log(`Fermeture de la fenêtre "${windowName}"`);
+    
+    this.updateNotificationClass(windowName, 'notif_hide'); // Cacher la notification
+    
+    if (index !== -1) {
+      this.updateWindowClass(windowName, 'kp_item_hide');
+      this.openWindows.splice(index, 1);
+      console.log(`Fenêtre "${windowName}" retirée de openWindows. Nouvel état :`, this.openWindows);
+    } else {
+      console.log(`La fenêtre "${windowName}" n'était pas ouverte.`);
+    }
+  },},
+  directives: {
+    bringToFrontOnShow: {
+      update(el, binding, vnode) {
+        const oldValue = binding.oldValue;
+        const newValue = binding.value;
+
+        // Log pour voir l'ancienne et la nouvelle valeur
+        console.log(`Directive bringToFrontOnShow - Ancienne valeur: ${oldValue}, Nouvelle valeur: ${newValue}`);
+
+        if (oldValue !== newValue && newValue.includes('kp_item_show')) {
+          console.log(`La fenêtre avec l'élément ${el} passe en mode kp_item_show. Appel de bringToFront.`);
+          vnode.context.bringToFront({ currentTarget: el });
+        } else {
+          console.log("Pas de changement vers kp_item_show, pas d'appel à bringToFront.");
+        }
       }
-    },
-  },
-  watch: {
-    'windowClasses.portfolio': function (newVal, oldVal) {
-      console.log('Changement de la classe pour portfolio :', oldVal, '->', newVal);
     }
   }
 };

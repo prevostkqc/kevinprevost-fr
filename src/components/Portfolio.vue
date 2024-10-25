@@ -204,14 +204,20 @@ export default {
       this.$emit('projet-selectionne', compagnie);
     },
     handleClose() {
-        this.$emit('close');
-      },
-      handleResize() {
-        this.$emit('resize');
-      },
-      handleReduct() {
-        this.$emit('reduct');
-      },
+      this.$emit('update-class', 'kp_item_hide');
+      this.$emit('close');
+    },
+    handleResize() {
+      if (this.windowStateClass === 'kp_item_resize') {
+        this.windowStateClass = ''; 
+      } else {
+        this.windowStateClass = 'kp_item_resize';
+      }
+      this.$emit('update-class', this.windowStateClass);
+    },
+    handleReduct() {
+      this.$emit('update-class', 'kp_item_reduct');
+    },
     changerProjet(projet) {
       this.projetActuel = projet;
       this.showInfo = true;

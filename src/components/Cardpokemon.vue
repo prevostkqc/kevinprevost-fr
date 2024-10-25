@@ -110,6 +110,7 @@ export default {
     
     handleClose() {
       this.$emit('update-class', 'kp_item_hide');
+      this.$emit('close');
     },
     handleResize() {
       if (this.windowStateClass === 'kp_item_resize') {
