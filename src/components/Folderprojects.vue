@@ -1,63 +1,81 @@
 <template>
-  <section :class="['kp_folder', 'kp_z-index', 'kp_changed__id', `kp_${context}`, 'kp_item__window', windowStateClass]" :id="`kp_${context}`">
-    <div class="kp_element--title">
-      <div class="kp_element--icon-title">
-        <p class="kp_element--title-p kp_element--enable">
-          <div class="kp_element_title--icn">
-            <img class="kp_icon_zone--img" :src="iconprojet" alt="text">
-          </div>
-          <span>Kévin Prévost - Mes réalisations</span>
-        </p>
+  <!-- Texte image -->
+  <section :class="['kp_image_ascii', 'kp_z-index', 'kp_changed__id', `kp_${context}`, 'kp_item__window', windowStateClass]" :id="`kp_${context}`">
+     <div class="kp_element--title">
+           <div class="kp_element--icon-title">
+               <p class="kp_element--title-p kp_element--enable">
+                   <div class="kp_element_title--icn">
+                       <img class="kp_icon_zone--img" :src="iconprojet" alt="text">
+                   </div>
+                   <span>Kévin Prévost - Mes réalisations</span>
+               </p>
+           </div>
+           <!-- Utilisation du composant Navigation avec le bon contexte -->
+           <Navigation @close="handleClose"  @resize="handleResize"  @reduct="handleReduct"  :viewName="title" :context="context" :customClass="customClass" />
       </div>
-      <Navigation @close="handleClose" @resize="handleResize" @reduct="handleReduct" :windowStateClass="windowStateClass" :viewName="title" :context="context" :customClass="customClass" />
-    </div>
-
-    <div class="kp_window--border kp_element--enable">
-      <div class="kp_window--container-folder">
         <ul class="kp_folder-liste projets">
-          <li class="kp_folder-li" v-for="project in projects" :key="project.id" @click="chargerprojet(project.id)">
-            {{ project.nomduprojet }}
-          </li>
+            <li 
+                :class="['kp_folder-li', { 'selected-project': project.id === selectedProjectId }]" 
+                v-for="project in projects" 
+                :key="project.id" 
+                @click="chargerprojet(project.id)">
+              {{ project.nomduprojet }}
+            </li>
         </ul>
-        
-        <div class="kp_element--container-folder kp_element--container">
-          <!-- Afficher uniquement le projet sélectionné -->
-          <div v-if="selectedProject" class="kp_line-projet">
-            <div class="kp_line-year">
-              {{ selectedProject.texteclient }}
-              
-              {{ selectedProject.nomduprojet }}
-              <br>{{ selectedProject.date }}
-            </div>
+        <div class="kp_image_ascii--content kp_element--enable"> 
+            <div class="container-mesreals">
+              <div class="kp_element--container-folder kp_element--container">
+              <!-- Afficher uniquement le projet sélectionné -->
+              <div v-if="selectedProject" class="kp_line-projet">
+                  <div class="kp_texte-image">
+                      <div class="unprojet--titre-image">
+                        <img class="kp_folder--img" :src="getIconPath(selectedProject.logo)" :alt="selectedProject.nomduprojet" @error="imageError($event)" />
+                        <h2 class="unprojet--titre">{{ selectedProject.nomduprojet }}</h2>
+                    </div>
+                    <p class="unprojet--texte  unprojet--annee">{{ selectedProject.date }}</p>
+                    <p class="unprojet--texte  unprojet--texteclient"><span class="unprojet--texte  unprojet--textetitre">Le client :</span><br/>{{ selectedProject.texteclient }}</p>
 
-            <!-- Boucle pour afficher les pages du projet sélectionné -->
-            <div class="kp_pages-container" v-if="selectedProject.nomdespages && selectedProject.nomdespages.length">
-              <div v-for="(page, index) in selectedProject.nomdespages" :key="index" class="kp_page-thumbnail">
-                <img :src="getPageThumbnailPath(selectedProject.nomimageprojet, page)" :alt="page || 'Page sans nom'" @error="imageError($event)" class="kp_page-thumbnail-img" />
-                <p class="kp_page-title">{{ page || "Page sans nom" }}</p>
+                    <ul class="kp_techno-list">
+                        <li v-for="tech in selectedProject.technos" :key="tech" class="kp_techno-item">
+                            <img :src="getTechIconPath(tech)" :alt="tech" @error="imageError($event)" class="kp_techno-icon" />
+                            <p class="unprojet--texte  unprojet-nomtechno">{{ tech }}</p>
+                        </li>
+                    </ul>
+
+                    <div class="kp_pages-container" v-if="selectedProject.nomdespages && selectedProject.nomdespages.length > 1">
+                      <p class="unprojet--texte  titre-miniatures">Selectionnez une page&nbsp;:</p>
+                      <div v-for="(page, index) in selectedProject.nomdespages" :key="index" class="kp_page-thumbnail">
+                          <img 
+                            v-if="selectedProject.versionmobile == 'oui'" 
+                            :src="getPageThumbnailPath(selectedProject.nomimageprojet, index)" 
+                            :alt="page || 'Page sans nom'" 
+                            @error="imageError($event)" 
+                            class="kp_page-thumbnail-img" 
+                          />
+                          <p class="kp_page-title">{{ page || "" }}</p>
+                      </div>
+                    </div>
+
+                    <div class="kp_mobile-image">
+                      <img :src="getPageThumbnailPathMobile(selectedProject.nomimageprojet, selectedImageIndex)" alt="Image sélectionnée" @error="imageError($event)" class="kp_large-image-display" />
+                    </div>
+                </div>
+           
+
+                <div class="kp_large-image">
+                  <img :src="getPageThumbnailPath(selectedProject.nomimageprojet, selectedImageIndex)" alt="Image sélectionnée" @error="imageError($event)" class="kp_large-image-display" />
+                </div>
+
+               
               </div>
             </div>
-
-            <article
-              class="kp_folder--un-ico kp_folder--projets"
-              @click="setCompagnieProjet(selectedProject.client)"
-            >
-              <div class="kp_folder--un-ico-container-img">
-                <img class="kp_folder--img" :src="getIconPath(selectedProject.logo)" :alt="selectedProject.nomduprojet" @error="imageError($event)" />
-              </div>
-              <p class="kp_folder--un-ico-container-text kp_folder--un-ico-container-text--black">
-                {{ selectedProject.nomduprojet }}<br>{{ selectedProject.date }}
-              </p>
-              <p class="kp_techno-list">
-                <span v-for="tech in selectedProject.technos" :key="tech">{{ tech }} </span>
-              </p>
-            </article>
           </div>
+            
         </div>
-      </div>
-    </div>    
+         
+    <div class="resize-handle"></div>
   </section>
-  <div class="resize-handle"></div>
+  <!-- Texte image -->
 </template>
 
 <script>
@@ -67,194 +85,401 @@ import iconprojet from '@/assets/images/folder.png';
 import fallback from '@/assets/images/fallback.jpg';
 
 export default {
-  name: 'Folderprojects',
-  emits: ['update-class', 'close', 'resize', 'reduct'],
-  components: {
-    Navigation,
-  },
-  props: {
-    context: {
-      type: String,
-      default: 'folder',
-    },
-    title: {
-      type: String,
-      default: 'folder',
-    },
-    iconSource: {
-      type: String,
-      default: '/images/folder.png',
-    },
-    customClass: {
-      type: String,
-      default: 'kp_element--incons-zone',
-    },
-  },
-  data() {
-    return {
-      projects: [],
-      selectedProjectId: null,
-      iconprojet,
-    };
-  },
-  computed: {
-    selectedProject() {
-      return this.projects.find(project => project.id === this.selectedProjectId);
-    },
-  },
-  methods: {
-    async loadProjects() {
-      try {
-        const response = await axios.get('/projets.json', { params: { t: Date.now() } });
-        this.projects = response.data;
-      } catch (error) {
-        console.error('Erreur lors du chargement des projets:', error);
+ name: 'Folderprojects',
+ emits: ['update-class', 'close', 'resize', 'reduct'],
+ components: {
+   Navigation,
+ },
+ props: {
+   context: {
+     type: String,
+     default: 'folder',
+   },
+   title: {
+     type: String,
+     default: 'folder',
+   },
+   iconSource: {
+     type: String,
+     default: '/images/folder.png',
+   },
+   customClass: {
+     type: String,
+     default: 'kp_element--incons-zone',
+   },
+ },
+ data() {
+   return {
+     projects: [],
+     selectedProjectId: null,
+     selectedImageIndex: 0,
+     iconprojet,
+   };
+ },
+
+ computed: {
+   selectedProject() {
+     return this.projects.find(project => project.id === this.selectedProjectId);
+   },
+ },
+ methods: {
+  async loadProjects() {
+    try {
+      const response = await axios.get('/projets.json', { params: { t: Date.now() } });
+      this.projects = response.data;
+      if (this.projects.length > 0) {
+        this.selectedProjectId = this.projects[0].id;
+        this.selectedImageIndex = 0;
       }
-    },
-    imageError(event) {
-      event.target.src = fallback;
-    },
-    chargerprojet(projectId) {
-      this.selectedProjectId = projectId;
-    },
-    setCompagnieProjet(client) {
-      console.log('Projet sélectionné:', client);
-      this.$emit('projet-selectionne', client);
-      this.$emit('update-class', 'kp_item_show');
-    },
-    handleClose() {
-      this.$emit('update-class', 'kp_item_hide');
-      this.$emit('close');
-    },
-    handleResize() {
-      this.windowStateClass = this.windowStateClass === 'kp_item_resize' ? '' : 'kp_item_resize';
-      this.$emit('update-class', this.windowStateClass);
-    },
-    handleReduct() {
-      this.$emit('update-class', 'kp_item_reduct');
-    },
-    getIconPath(logo) {
-      return `/images/icons/${logo}.jpg`; 
-    },
-    getPageThumbnailPath(nomimageprojet, page) {
-      return `/images/projects/${nomimageprojet}/${page || 'default'}.jpg`; 
-    },
+    } catch (error) {
+      console.error('Erreur lors du chargement des projets:', error);
+    }
   },
-  mounted() {
+   adjustContainerHeight() {
+    if (this.$refs.folderList && this.$refs.contentContainer) {
+      const folderListHeight = this.$refs.folderList.offsetHeight;
+      this.$refs.contentContainer.style.height = `${folderListHeight + 38}px`;
+    }
+  },
+   imageError(event) {
+     event.target.src = fallback;
+   },
+   chargerprojet(projectId) {
+     this.selectedProjectId = projectId;
+   },
+   selectImage(index) {
+     this.selectedImageIndex = index;
+   },
+   setCompagnieProjet(client) {
+     console.log('Projet sélectionné:', client);
+     this.$emit('projet-selectionne', client);
+     this.$emit('update-class', 'kp_item_show');
+   },
+   handleClose() {
+     this.$emit('update-class', 'kp_item_hide');
+     this.$emit('close');
+   },
+   handleResize() {
+     this.windowStateClass = this.windowStateClass === 'kp_item_resize' ? '' : 'kp_item_resize';
+     this.$emit('update-class', this.windowStateClass);
+   },
+   handleReduct() {
+     this.$emit('update-class', 'kp_item_reduct');
+   },
+   getTechIconPath(tech) {
+     return `/images/technos/${tech}.png`;
+   },
+   getIconPath(logo) {
+     return `/images/icons/${logo}.png`; 
+   },
+   getPageThumbnailPath(nomimageprojet, index) {
+    const suffix = index === 0 ? '' : index + 1;
+    return `/images/preview-projets/${nomimageprojet}${suffix}.jpg`;
+  },
+   getPageThumbnailPathMobile(nomimageprojet, index) {
+    const suffix = index === 0 ? '' : index + 1;
+    return `/images/preview-projets/${nomimageprojet}-m.jpg`;
+  },
+ },
+ mounted() {
     this.loadProjects();
+    this.adjustContainerHeight();
+    window.addEventListener('resize', this.adjustContainerHeight);
   },
+  updated() {
+    this.adjustContainerHeight();
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.adjustContainerHeight);
+  }
 };
 </script>
-
 <style scoped>
-.kp_element--container-folder {
-  overflow-y: scroll;
-  max-height: 100vh;
+.kp_window--show{
+  display: block !important;
+  overflow: hidden;
 }
-.kp_element--container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    height: 80vh;
-    max-height: 100vh;
-    top: 100px;
-    position: relative;
-    padding: 20px;
+.kp_image_ascii--content{
+  overflow: scroll;
+  width: 100%;
+  height: calc(100% - 11px);
+  transition: 0.3s;
+  position: relative;
 }
-.resize-handle {
-  background: red;
+.kp_image-text--show,
+.kp_text--show{
+  display: block;
+}
+.kp_image_ascii--content{
+  overflow: scroll;
+  overflow: scroll;
+  width: 100%;
+  height: calc(100% - 11px);
+  transition: 0.3s;
+}
+.kp_image_ascii{
+  position: absolute;
+  font-size: 14px;
+  letter-spacing: 0px;
+  color: black;
+  max-width: 800px;
+  width: 50%;
+  height: fit-content;
+  background: #eeecdf;
+  position: absolute;
 }
 
-/* Styles pour les miniatures de pages */
-.kp_pages-container {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-  flex-wrap: wrap;
+
+@media screen and (max-width: 900px){
+  .kp_image_ascii--content{
+    overflow: scroll;
+    width: 100%;
+    height: calc(100% - 11px);
+    transition: 0.3s;
+    position: relative;
+    height: calc(100% - 36px) !important;
+    font-size: 9px;
+    display: flex;
+    align-items: flex-end;
+  }
 }
-.kp_page-thumbnail {
-  text-align: center;
-  width: 100px;
+
+
+.kp_element--container {
+   display: flex;
+   flex-direction: column;
+   gap: 20px;
+   position: relative;
+   padding: 40px 20px 20px;
 }
-.kp_page-thumbnail-img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+.kp_folder {
+ width: 80vw;
+ height: 80vh;
+ max-width: 100vw;
+ max-height: 100vh;
 }
-.kp_page-title {
-  font-size: 0.85rem;
-  margin-top: 5px;
-  color: #333;
-}
+
+
+
+
+
 
 .kp_window--border{
-  background-color: #eeecdf;
+ background-color: #eeecdf;
 }
 .kp_window--container-folder{
-    margin: 10px;
-    background: white;
-    border: solid 2px #91a7b4;
+   margin: 10px;
+   background: white;
+   border: solid 2px #91a7b4;
 }
 .kp_folder-liste{
-    width: calc(100% + -24px);
-    position: absolute;
-    left: 12px;
-    top: 46px;
+  width: calc(100% - 37px);
+    position: relative;
+    left: 0px;
+    top: 0;
     background-color: #eeecdf;
     display: flex;
     flex-wrap: wrap;
     z-index: 10;
-
-    justify-content: flex-start; /* Aligner à gauche */
-    align-items: flex-end; /* Aligner en bas */
+    justify-content: flex-start;
+    align-items: flex-end;
+    margin: 10px 10px 0;
 }
 
 .kp_folder-li{
-  border: solid 2px #91a7b4;
-    border-radius: 5px 5px 0 0;
-    color: #000000;
-    border-bottom: none;
-    padding: 7px 45px;
-    background: #f6f6f2;
-    position: relative;
-    border-bottom: solid 3px #919b9c;
-    position: relative;
-    bottom: -2px;
-    cursor: pointer;
-  }
+ border: solid 2px #91a7b4;
+   border-radius: 5px 5px 0 0;
+   color: #000000;
+   border-bottom: none;
+   padding: 7px 45px;
+   background: #f6f6f2;
+   position: relative;
+   border-bottom: solid 3px #919b9c;
+   position: relative;
+   bottom: -2px;
+   cursor: pointer;
+   height: 16px;
+ }
 
-.kp_folder-li:hover{
-    border: solid 2px #91a7b4;
-    border-radius: 5px 5px 0 0;
-    color: #000000;
-    border-bottom: none;
-    padding: 7px 45px;
-    background: white;
-    position: relative;
+.kp_folder-li:hover,
+.selected-project{
+   border: solid 2px #91a7b4;
+   border-radius: 5px 5px 0 0;
+   color: #000000;
+   border-bottom: solid 2px white;
+   padding: 7px 45px 7px;
+   background: white;
+   position: relative;    
+   height: 17px;
 }
 
 .kp_folder-li::before{
-  content: "";
-    position: absolute;
-    top: -2px;
-    left: -1px;
-    width: 100%;
-    height: 100%;
+ content: "";
+   position: absolute;
+   top: -2px;
+   left: -1px;
+   width: 100%;
+   height: 100%;
 }
-.kp_folder-li:hover::before{
-  content: "";
+.kp_folder-li:hover::before,
+.selected-project::before{
+ content: "";
+   position: absolute;
+   top: -2px;
+   left: -1px;
+   width: 100%;
+   height: 100%;
+   background: #ffc73c;
+   border-radius: 5px 5px 0 0;
+   height: 4px;
+   border: solid 1px #e68b2c;
+   border-bottom: none;
+   border-top: solid 3px #e68b2c;
+}
+
+
+/* Styles pour les miniatures de pages */
+.kp_pages-container {
+  display: flex;
+  gap: 27px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+  border-top: solid 3px #000000;
+  padding-top: 30px;
+  padding-bottom: 40px;
+}
+.kp_page-thumbnail {
+ text-align: center;
+ width: 80px;
+}
+.kp_page-thumbnail-img {
+  width: 70px;
+    height: 70px;
+    object-fit: cover;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    border: solid 3px #000000;
+}
+.kp_page-title {
+ font-size: 0.85rem;
+ margin-top: 5px;
+ color: #333;
+}
+.container-mesreals{
+  max-height: calc(100% - 120px);
+  margin: 0 10px 10px;
+  background: white;
+  border: solid 2px #91a7b4;
+  overflow-y: scroll;
+  height: fit-content;
+}
+
+.unprojet--titre{
+  font-size:32px;
+  color: #000000;
+  font-weight: 600;
+}
+.unprojet--texte{
+  font-size: 16px;
+  color: #000000;
+  line-height: 1.5;
+}
+.unprojet--annee{
+  font-weight: 600;
+  padding-top:5px;
+  padding-bottom:5px;
+  border-bottom: solid 1px #000000;
+}
+.unprojet--texteclient{
+  margin-top:10px;
+}
+.unprojet--textetitre{
+  font-size:22px;
+}
+.kp_large-image-display{
+  width:100%;
+}
+.kp_large-image{
+  width: 70%;
+  max-height: calc(100vh - 300px);
+  overflow-y: scroll;
+  outline: solid 3px #1b1b17;
+  max-width: 1300px;
+}
+.unprojet--titre-image{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kp_techno-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  list-style: none;
+  padding: 20px 0;
+}
+
+.kp_techno-item {
+  text-align: center;
+  width: 40px;
+  position: relative;
+  cursor: help;
+}
+
+.kp_techno-icon {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+  margin-bottom: 5px;
+}
+.unprojet-nomtechno{
+  pointer-events: none;
+  position: absolute;
+  top: -42px;
+  left: -4px;
+  background: #fdf9ce;
+  border-radius: 2px;
+  padding: 5px 20px;
+  border: solid 1px #000000;
+  opacity:0;
+}
+.kp_techno-item:hover .unprojet-nomtechno{
+  pointer-events: initial;
+  opacity:1;
+  transition:0.3s;
+}
+.unprojet-nomtechno::after {
+    content: "";
+    background: #fdf9ce;
+    width: 9px;
+    height: 9px;
     position: absolute;
-    top: -2px;
-    left: -1px;
+    bottom: -5px;
+    left: 11px;
+    border: solid 1px black;
+    transform: rotate(315deg);
+    clip-path: polygon(0 0, 0% 100%, 100% 100%);
+}
+.kp_line-projet{
+  display: flex;
+  gap: 40px;
+}
+
+.kp_texte-image{
+  width: 30%;
+}
+.kp_mobile-image{
     width: 100%;
+    max-width: 430px;
+    max-height: calc(100vh - 580px);
     height: 100%;
-    background: #ffc73c;
-    border-radius: 5px 5px 0 0;
-    height: 4px;
-    border: solid 1px #e68b2c;
-    border-bottom: none;
-    border-top: solid 3px #e68b2c;
+    overflow-y: scroll;
+    outline: solid 3px #1b1b17;
+}
+
+.titre-miniatures{
+  font-size:22px;
+  width:100%;
 }
 </style>

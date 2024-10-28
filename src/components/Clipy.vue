@@ -71,7 +71,7 @@
     position: fixed;
     bottom: 50px;
     right: 5px;
-    z-index: 1000;
+    z-index: 0;
   }
   
   .kp_clipy {

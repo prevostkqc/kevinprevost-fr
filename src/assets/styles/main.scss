@@ -1011,8 +1011,8 @@ background-color: white;
     max-width: calc(100vw - 5px);
   }
   .kp_item_resize .kp_item__window {
-    width: calc(100vw - 4px);
-    height: calc(100vh - 50px);
+    width: calc(100vw - 4px) !important;
+    height: calc(100vh - 50px) !important;
     max-width: calc(100vw - 5px);
     top: 0;
     left: 0;
