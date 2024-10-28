@@ -18,7 +18,8 @@
         Après avoir développé deux jeux amateurs en Ruby pour honorer la passion de mon enfance, cela m'a laissé un attachement particulier.<br>
         J'ai conservé ma collection de cartes d'enfance, qui contient des raretés toujours très recherchées de nos jours.
         <br><br>
-        <span class="kp_p-black kp_bold">Cliquez sur les coins de la carte pour la voir briller.</span>
+        <span class="kp_p-black kp_bold  hide-mobile">Survolez la carte pour la voir briller.</span>
+        <span class="kp_p-black kp_bold  hide-desktop">Cliquez sur les coins de la carte pour la voir briller.</span>
       </p>
       <article class="kp_card-pokemon" ref="cardPokemon">
         <div class="kp_card-pokemon--container">
@@ -37,8 +38,9 @@
 
 <script>
 import Navigation from '@/components/Navigation.vue';
-import Pokemoncard1 from '@/assets/images/card_poke_1.png';
-import Pokemoncard2 from '@/assets/images/card_poke_2.png';
+import Pokemoncard1 from '@/assets/images/card_poke.png';
+import Pokemoncard3 from '@/assets/images/card_poke.png';
+import Pokemoncard2 from '@/assets/images/card_poke_sous.png';
 import pokecardIcon from '@/assets/images/pokecard_icn.png';
 
 export default {
@@ -171,7 +173,7 @@ export default {
   left: 25px; 
   width: 577px;
   height: 800px;
-  perspective: 1000px;
+  perspective: 2500px;
 }
 .kp_card-pokemon--container{ 
     width: 100%;
@@ -198,7 +200,7 @@ export default {
   background: #fff;
   opacity: 0.5;
   background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.2) 0%, transparent);
-  background-image: linear-gradient(90deg, transparent 10%, transparent 7%, rgba(255, 0, 0, 0.42) 34%, transparent 50%, transparent 53%, rgba(222, 255, 10, 0.48) 75%, transparent 100%);
+  background-image: linear-gradient(90deg, transparent 10%, transparent 7%, rgb(177 0 0 / 42%) 70%, transparent 50%, transparent 53%, rgba(222, 255, 10, 0.48) 90%, transparent 100%);
   transform: rotate(45deg);
 }
 .kp_card-pokemon--glow2  {

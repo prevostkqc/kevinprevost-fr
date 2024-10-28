@@ -2,7 +2,18 @@
     <!-- Clipy -->
     <section class="kp_clipy__zone">
       <article :class="['kp_clipy', customClass]" :id="`kp_${context}`">
-        <img :class="['kp_clipy--img']" :src="clipyImage" alt="Clipy">
+        <img :class="['kp_clippy--img', 'kp_clipy--feuille']" :src="clippyfeuille" alt="Clipy">
+        <div class="kp_clippy--container">
+          <img :class="['kp_clippy--img', 'kp_clipy--corps']" :src="clippy" alt="Clipy">
+          <div class="kp_clippy--yeux-container">
+            <img :class="['kp_clippy--img', 'kp_clipy--blancyeux']" :src="clippyblancyeux" alt="Clipy">
+            <img :class="['kp_clippy--img', 'kp_clipy--vision', 'kp_clipy--vision1']" :src="clippyvision1" alt="Clipy">
+            <img :class="['kp_clippy--img', 'kp_clipy--vision', 'kp_clipy--vision2']" :src="clippyvision2" alt="Clipy">
+            <img :class="['kp_clippy--img', 'kp_clipy--yeux']" :src="clippyyeux" alt="Clipy">
+            <img :class="['kp_clippy--img', 'kp_clipy--sourcil1']" :src="clippysourcil1" alt="Clipy">
+            <img :class="['kp_clippy--img', 'kp_clipy--sourcil2']" :src="clippysourcil2" alt="Clipy">
+          </div>
+        </div>
       </article>
       <div :class="['kp_clipy--bulle', `kp_bulle--${context}`]">
         {{ message }}
@@ -12,7 +23,16 @@
   </template>
   
   <script>
-  import clipyImage from '@/assets/images/clipy.gif';   
+  import clippyfeuille    from '@/assets/images/clippy/feuille.svg';   
+  import clippy           from '@/assets/images/clippy/clippy.svg';  
+  import clippyblancyeux  from '@/assets/images/clippy/blancyeux.svg'; 
+  import clippyvision1    from '@/assets/images/clippy/vision1.svg';
+  import clippyvision2    from '@/assets/images/clippy/vision2.svg';
+  import clippyyeux       from '@/assets/images/clippy/yeux.svg';
+  import clippysourcil1   from '@/assets/images/clippy/sourcil1.svg';
+  import clippysourcil2   from '@/assets/images/clippy/sourcil2.svg';
+
+
   export default {
     name: 'Clipy',
     props: {
@@ -31,7 +51,14 @@
     },
     data() {
       return {
-        clipyImage
+        clippyfeuille,
+        clippy,
+        clippyblancyeux,
+        clippyvision1,
+        clippyvision2,
+        clippyyeux,
+        clippysourcil1,
+        clippysourcil2,
       };
     }
   };
@@ -39,17 +66,211 @@
   
   <style scoped>
   .kp_clipy__zone {
-    width: 70px;  
+    width: 0px;
+    height: 80px;
     position: fixed;
     bottom: 50px;
-    right: 30px;
+    right: 5px;
     z-index: 1000;
   }
   
-  .kp_clipy--img {
+  .kp_clipy {
     width: 100%;
-    filter: drop-shadow(2px 4px 4px black);
+    height: 100%;
+    position: relative;
+    background-color: transparent;
+    cursor: pointer;
   }
+  .kp_clippy--img{   
+    position: absolute;
+    top: 0;
+    left: -350px;
+  }
+
+  /* Clippy Corps */
+  .kp_clipy--corps{
+    animation: clippycorps 5s infinite;
+  }
+  @keyframes clippycorps {
+    0%{ 
+      transform : scaleY(1) translateY(0);
+    }
+    90%{ 
+      transform : scaleY(1) translateY(0);
+    }
+    95%{
+      transform : scaleY(0.8) translateY(12px);
+    }
+    100%{
+      transform : scaleY(1) translateY(0);
+    }
+  }
+
+  /* Clippy Corps */
+  .kp_clippy--yeux-container{
+    animation: clippyyeux 5s infinite;
+  }
+  @keyframes clippyyeux {
+    0%{ 
+      transform : translateY(0);
+    }
+    90%{ 
+      transform : translateY(0);
+    }
+    95%{
+      transform : translateY(7px);
+    }
+    100%{
+      transform : translateY(0);
+    }
+  }
+
+  /* Clippy sourcil1 */
+  .kp_clipy--sourcil1{
+    animation: clippysourcil1 3s infinite linear;
+  }
+  @keyframes clippysourcil1 {
+    0%{ 
+      transform : rotate(0) translate(0, 0);
+    }
+    15%{ 
+      transform : rotate(0) translate(0, 0);
+    }
+    20%{ 
+      transform : rotate(-2deg) translate(0, 0);
+    }
+    25%{ 
+      transform : rotate(0) translate(0, 0);
+    }
+    75%{ 
+      transform : rotate(0) translate(0, 0);
+    }
+    80%{ 
+      transform : rotate(-2deg) translate(0, 0);
+    }
+    85%{ 
+      transform : rotate(0) translate(0, 0);
+    }
+    100%{
+      transform : translateY(0);
+    }
+  }
+  /* Clippy sourcil2 */
+  .kp_clipy--sourcil2{
+    animation: clippysourcil1 4s infinite linear;
+  }
+  @keyframes clippysourcil1 {
+    0%{ 
+      transform : rotate(0) translate(0, 0);
+    }
+    18%{ 
+      transform : rotate(0) translate(0, 0);
+    }
+    20%{ 
+      transform : rotate(-2deg) translate(0, 0);
+    }
+    22%{ 
+      transform : rotate(0) translate(0, 0);
+    }
+    77%{ 
+      transform : rotate(0) translate(0, 0);
+    }
+    80%{ 
+      transform : rotate(-2deg) translate(0, 0);
+    }
+    82%{ 
+      transform : rotate(0) translate(0, 0);
+    }
+    100%{
+      transform : translateY(0);
+    }
+  }
+
+  /* clippy vision */
+  .kp_clipy--vision{
+    animation: clippyvision 8s infinite;
+  }
+  @keyframes clippyvision {
+    0%{ 
+      transform : translate(0,0);
+    }
+    5%{ 
+      transform : translate(-5px,0);
+    }
+    8%{ 
+      transform : translate(-5px,-2px);
+    }
+    10%{ 
+      transform : translate(0,0);
+    }
+    35%{ 
+      transform : translate(0,0);
+    }
+    45%{ 
+      transform : translate(5px,0);
+    }
+    50%{ 
+      transform : translate(0,0);
+    }
+    55%{ 
+      transform : translate(3px,2px);
+    }
+    60%{ 
+      transform : translate(-3px,2px);
+    }
+    65%{ 
+      transform : translate(0,0);
+    }
+    85%{ 
+      transform : translate(3px,-2px);
+    }
+    90%{ 
+      transform : translate(0,0);
+    }
+    95%{ 
+      transform : translate(-3px,2px);
+    }
+    100%{ 
+      transform : translate(0,0);
+    }
+  }
+
+  .kp_clippy--container{
+    user-select: none;
+    pointer-events: none;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    animation: clippymove 5s infinite;
+  }
+
+  @keyframes clippymove{
+    0%{ 
+      transform : scaleY(1) translateY(0);
+    }
+    20%{ 
+      transform : scaleY(1) translateY(0);
+    }
+    21%{ 
+      transform : scaleY(1) translateY(3px);
+    }
+    26%{
+      transform : scaleY(0.8) translateY(-15px);
+    }
+    30%{
+      transform : scaleY(1) translateY(0);
+    }
+    35%{ 
+      transform : scaleY(1) translateY(0);
+    }
+    38%{
+      transform : scaleY(0.95) translateY(1px);
+    }
+    40%{
+      transform : scaleY(1) translateY(0);
+    }
+  }
+
   
   @media screen and (max-width: 900px) {
     .kp_clipy {

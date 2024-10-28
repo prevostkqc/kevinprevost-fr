@@ -1,12 +1,19 @@
 <template>
   <main class="kp_main">
     <!-- Appel à Desktop avec écoute de l'événement openWindow -->
-    <Desktop @openWindow="toggleWindow" />
+    <Desktop @openWindow="toggleWindow" ref="desktop"  />
     <div class="container--terminal">
       <div @click="bringToFront($event)" v-show="openWindows.includes('terminal')" :class="['window', 'kp_item__window_draggable', windowClasses.terminal]">
         <Terminal @update-class="updateWindowClass('terminal', $event)" @close="handleCloseWindow('terminal')" />
       </div>
     </div>
+
+
+<div class="container--clipy">
+  <div class="clipy">
+    <Clipy @update-class="updateWindowClass('clipy', $event)" @close="handleCloseWindow('clipy')" />
+  </div>
+</div>
 
     <div class="container--folder"
         v-bring-to-front-on-show
@@ -56,13 +63,6 @@
       <Portfolio ref="portfolio" @update-class="updateWindowClass('portfolio', $event)" @projet-selectionne="afficherProjet" @close="handleCloseWindow('portfolio')" />
     </div>
 
-
-    <div class="container--clipy">
-      <div v-show="openWindows.includes('clipy')" :class="['window', 'kp_item__window_draggable', 'kp_clipy_desktop', windowClasses.clipy]">
-        <Clipy @update-class="updateWindowClass('clipy', $event)" @close="handleCloseWindow('clipy')" />
-      </div>
-    </div>
-
     <div class="container--starting">
       <div v-show="openWindows.includes('starting')" :class="['window', 'kp_item__window_draggable', windowClasses.starting]">
         <Starting @update-class="updateWindowClass('starting', $event)" />
@@ -70,7 +70,19 @@
     </div>
 
     <div class="scanlines-v"></div>
-    <Barrebottom :openWindows="openWindows" @simulateDesktopClick="handleDesktopClick" />
+
+    <div
+      v-if="!menuIsVisible"
+      class="kp_menu__backdrop"
+      @click="toggleMenu()"
+    ></div> 
+    <div 
+      class="container--menuderoulant" 
+      :class="['window', 'kp_item__window_draggable']">
+      <Menuderoulant :isVisible="menuIsVisible"  ref="menuDeroulant" @click="handleContainerClick" @actionSelected="handleAction"/>
+    </div>
+
+    <Barrebottom :openWindows="openWindows" @childClicked="handleContainerClick" @simulateDesktopClick="handleDesktopClick" @openMenuDeroulant="openMenuDeroulant"  @toggleMenu="toggleMenu"  class="barrenotif" />
   </main>
 </template>
 
@@ -88,6 +100,7 @@ import Portfolio      from '@/components/Portfolio.vue';
 import Clipy          from '@/components/Clipy.vue';
 import Barrebottom    from '@/components/Barrebottom.vue';
 import Starting       from '@/components/Starting.vue';
+import Menuderoulant from './Menuderoulant.vue';
 
 export default {
   name: 'Home',
@@ -103,6 +116,7 @@ export default {
     Clipy,
     Barrebottom,
     Starting,
+    Menuderoulant,
   },
   data() {
     return {
@@ -116,7 +130,8 @@ export default {
         pokemon:      'kp_item_hide',
         portfolio:    'kp_item_hide',
         clipy:        'kp_item_hide',
-        starting:     'kp_item_hide'
+        starting:     'kp_item_hide',
+        menuderoulant:'kp_item_hide',
       },
       windowMinimized: {
         terminal:     false,
@@ -137,6 +152,8 @@ export default {
       lastElementDragable: null,
       lastValidPosition: { left: 0, top: 0 },
       isBeingDragged: false,
+      barrenotif: 'barrenotif',
+      menuIsVisible: true,
     };
   },
   mounted() {
@@ -184,7 +201,9 @@ export default {
         handle.addEventListener('mousedown', this.startResize);
       });
     },
-
+    openMenuDeroulant() {
+        this.isVisible = !this.isVisible; 
+    },
 
     async updateWindowClass(windowName, newClass) {
       if (this.windowClasses.hasOwnProperty(windowName)) {
@@ -205,6 +224,10 @@ export default {
       console.error(`La fenêtre "${windowName}" n'existe pas.`);
       }
     },
+    handleAction(actionType) {
+      this.toggleWindow(actionType);
+       
+    },
 
 
     bringToFront(event) {
@@ -216,14 +239,16 @@ export default {
 
       const windows = document.querySelectorAll('.kp_item__window_draggable');
       let highestZIndex = 0; 
-      windows.forEach(win => {
-        const zIndex = parseInt(window.getComputedStyle(win).zIndex, 10);
-        if (!isNaN(zIndex) && zIndex > highestZIndex) {
+      
+      // si le z-index max est audesssus de 9999, on prend le z-index du suivant en dessous de 9999
+      
+      windows.forEach(window => {
+        const zIndex = parseInt(window.style.zIndex, 10);
+        if (zIndex > highestZIndex && zIndex < 9999) {
           highestZIndex = zIndex;
         }
       });
 
- 
       element.style.zIndex = highestZIndex + 1;
     },
 
@@ -236,6 +261,12 @@ export default {
       this.lastElementDragable.style.left = `${newLeft}px`;
       this.lastElementDragable.style.top = `${newTop}px`;
       this.lastValidPosition = { left: newLeft, top: newTop };
+    },
+    handleContainerClick() {
+      const backdropElement = document.querySelector('.kp_menu__backdrop');
+      if (backdropElement) {
+        backdropElement.click();
+      }
     },
 
     startDrag(e) {
@@ -387,7 +418,6 @@ export default {
     },
 
     restoreWindow(windowName) {
-      console.log(`Restauration de la fenêtre "${windowName}"`);
       this.updateWindowClass(windowName, 'kp_item_show');
       
       this.$nextTick(() => {
@@ -400,38 +430,49 @@ export default {
     },
 
     handleCloseWindow(windowName) {
-    const index = this.openWindows.indexOf(windowName);
+      const index = this.openWindows.indexOf(windowName);
+      
+      console.log(`Fermeture de la fenêtre "${windowName}"`);
+      
+      this.updateNotificationClass(windowName, 'notif_hide');
+      
+      if (index !== -1) {
+        this.updateWindowClass(windowName, 'kp_item_hide');
+        this.openWindows.splice(index, 1);
+        console.log(`Fenêtre "${windowName}" retirée de openWindows. Nouvel état :`, this.openWindows);
+      } else {
+        console.log(`La fenêtre "${windowName}" n'était pas ouverte.`);
+      }
+    },
     
-    console.log(`Fermeture de la fenêtre "${windowName}"`);
-    
-    this.updateNotificationClass(windowName, 'notif_hide'); // Cacher la notification
-    
-    if (index !== -1) {
-      this.updateWindowClass(windowName, 'kp_item_hide');
-      this.openWindows.splice(index, 1);
-      console.log(`Fenêtre "${windowName}" retirée de openWindows. Nouvel état :`, this.openWindows);
-    } else {
-      console.log(`La fenêtre "${windowName}" n'était pas ouverte.`);
-    }
-  },},
+    toggleMenu() {
+      this.menuIsVisible = !this.menuIsVisible;
+      this.$refs.menuDeroulant.toggleClass(this.menuIsVisible);
+    },
+    openMenuDeroulant() {
+      this.menuIsVisible = true;
+  },
+  
+},
   directives: {
     bringToFrontOnShow: {
       update(el, binding, vnode) {
         const oldValue = binding.oldValue;
         const newValue = binding.value;
 
-        // Log pour voir l'ancienne et la nouvelle valeur
-        console.log(`Directive bringToFrontOnShow - Ancienne valeur: ${oldValue}, Nouvelle valeur: ${newValue}`);
-
         if (oldValue !== newValue && newValue.includes('kp_item_show')) {
-          console.log(`La fenêtre avec l'élément ${el} passe en mode kp_item_show. Appel de bringToFront.`);
           vnode.context.bringToFront({ currentTarget: el });
         } else {
-          console.log("Pas de changement vers kp_item_show, pas d'appel à bringToFront.");
         }
       }
     }
-  }
+  },
+  computed: {
+    barrenotif() {
+      return this.openWindows.includes('menuderoulant') ? 'classe-active' : '';
+    },
+  },
+
 };
 </script>
 
@@ -473,7 +514,37 @@ export default {
 }
 
 .window {
-  position: absolute; /* ou fixed si nécessaire */
+  position: absolute;
   z-index: 1;
+}
+.barrenotif{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999999;
+}
+  .kp_menu__backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+    z-index: 9990;
+  }
+
+.container--menuderoulant{
+  position: fixed;
+  z-index: 9991;
+  bottom: 0;
+  left: 0;
+  top: auto;
+  right: auto;
+  pointer-events: none;
+  height: 100vh;
+  width:100%;
+  max-width: 600px;
 }
 </style>
