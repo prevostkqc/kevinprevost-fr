@@ -1,70 +1,75 @@
 <template>
   <main class="kp_main">
     <!-- Appel à Desktop avec écoute de l'événement openWindow -->
-    <Desktop @openWindow="toggleWindow" ref="desktop"  />
-    <div class="container--terminal">
-      <div @click="bringToFront($event)" v-show="openWindows.includes('terminal')" :class="['window', 'kp_item__window_draggable', windowClasses.terminal]">
-        <Terminal @update-class="updateWindowClass('terminal', $event)" @close="handleCloseWindow('terminal')" />
+    <Desktop @openWindow="toggleWindow" ref="desktop"  @callBringToFront="callBringToFront"  />
+
+    <div class="container--clipy">
+      <div class="clipy">
+        <Clipy @update-class="updateWindowClass('clipy', $event)" @close="handleCloseWindow('clipy')" />
       </div>
     </div>
-
-
-<div class="container--clipy">
-  <div class="clipy">
-    <Clipy @update-class="updateWindowClass('clipy', $event)" @close="handleCloseWindow('clipy')" />
-  </div>
-</div>
+    
+    <div class="container--terminal">
+      <div @click="bringToFront($event)" v-show="openWindows.includes('terminal')" :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.terminal]">
+        <Terminal @update-class="updateWindowClass('terminal', $event)" @close="handleCloseWindow('terminal')" 
+        :context="'terminal'"
+        :title="'terminal'" />
+      </div>
+    </div>
 
     <div class="container--folder"
         v-bring-to-front-on-show
         @click="bringToFront($event)"
         v-show="openWindows.includes('folder')"
-        :class="['window', 'kp_item__window_draggable', windowClasses.folder]">
-      <Folderprojects @update-class="updateWindowClass('folder', $event)" @close="handleCloseWindow('folder')" />
+        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.folder]">
+      <Folderprojects @update-class="updateWindowClass('folder', $event)" @close="handleCloseWindow('folder')" 
+        :context="'folder'"
+        :title="'folder'" />
     </div>
 
     <div class="container--autoportrait"
         v-bring-to-front-on-show
         @click="bringToFront($event)"
         v-show="openWindows.includes('autoportrait')"
-        :class="['window', 'kp_item__window_draggable', windowClasses.autoportrait]">
-      <Autoportrait @update-class="updateWindowClass('autoportrait', $event)" @close="handleCloseWindow('autoportrait')" />
+        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.autoportrait]">
+      <Autoportrait @update-class="updateWindowClass('autoportrait', $event)" @close="handleCloseWindow('autoportrait')"
+        :context="'autoportrait'"
+        :title="'autoportrait'" />
     </div>
 
     <div class="container--personnaliser"
         v-bring-to-front-on-show
         @click="bringToFront($event)"
         v-show="openWindows.includes('personnaliser')"
-        :class="['window', 'kp_item__window_draggable', windowClasses.personnaliser]">
-      <Personnaliser @update-class="updateWindowClass('personnaliser', $event)" @close="handleCloseWindow('personnaliser')" />
+        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.personnaliser]">
+      <Personnaliser @update-class="updateWindowClass('personnaliser', $event)" @close="handleCloseWindow('personnaliser')"
+        :context="'personnaliser'"
+        :title="'personnaliser'" />
     </div>
 
     <div class="container--monparcours"
         v-bring-to-front-on-show
         @click="bringToFront($event)"
         v-show="openWindows.includes('monparcours')"
-        :class="['window', 'kp_item__window_draggable', windowClasses.monparcours]">
-      <Monparcours @update-class="updateWindowClass('monparcours', $event)" @close="handleCloseWindow('monparcours')" />
+        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.monparcours]">
+      <Monparcours @update-class="updateWindowClass('monparcours', $event)" @close="handleCloseWindow('monparcours')"
+        :context="'monparcours'"
+        :title="'monparcours'" />
     </div>
 
     <div class="container--pokemon"
         v-bring-to-front-on-show
         @click="bringToFront($event)"
         v-show="openWindows.includes('pokemon')"
-        :class="['window', 'kp_item__window_draggable', windowClasses.pokemon]">
-      <Cardpokemon @update-class="updateWindowClass('pokemon', $event)" @close="handleCloseWindow('pokemon')" />
+        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.pokemon]">
+      <Cardpokemon @update-class="updateWindowClass('pokemon', $event)" @close="handleCloseWindow('pokemon')"
+        :context="'pokemon'"
+        :title="'Pokémon Card'" />
     </div>
 
-    <div class="container--portfolio"
-        v-bring-to-front-on-show
-        @click="bringToFront($event)"
-        v-show="openWindows.includes('portfolio')"
-        :class="['window', 'kp_item__window_draggable', windowClasses.portfolio]">
-      <Portfolio ref="portfolio" @update-class="updateWindowClass('portfolio', $event)" @projet-selectionne="afficherProjet" @close="handleCloseWindow('portfolio')" />
-    </div>
 
     <div class="container--starting">
-      <div v-show="openWindows.includes('starting')" :class="['window', 'kp_item__window_draggable', windowClasses.starting]">
+      <div v-show="openWindows.includes('starting')" :class="['window', windowClasses.starting]">
         <Starting @update-class="updateWindowClass('starting', $event)" />
       </div>
     </div>
@@ -82,7 +87,7 @@
       <Menuderoulant :isVisible="menuIsVisible"  ref="menuDeroulant" @click="handleContainerClick" @actionSelected="handleAction"/>
     </div>
 
-    <Barrebottom :openWindows="openWindows" @childClicked="handleContainerClick" @simulateDesktopClick="handleDesktopClick" @openMenuDeroulant="openMenuDeroulant"  @toggleMenu="toggleMenu"  class="barrenotif" />
+    <Barrebottom :openWindows="openWindows" :windowClasses="windowClasses" @childClicked="handleContainerClick"  @callBringToFront="callBringToFront"  @openMenuDeroulant="openMenuDeroulant"  @toggleMenu="toggleMenu"  class="barrenotif" />
   </main>
 </template>
 
@@ -96,7 +101,6 @@ import Autoportrait   from '@/components/Autoportrait.vue';
 import Personnaliser  from '@/components/Personnaliser.vue';
 import Monparcours    from '@/components/Monparcours.vue';
 import Cardpokemon    from '@/components/Cardpokemon.vue';
-import Portfolio      from '@/components/Portfolio.vue';
 import Clipy          from '@/components/Clipy.vue';
 import Barrebottom    from '@/components/Barrebottom.vue';
 import Starting       from '@/components/Starting.vue';
@@ -112,7 +116,6 @@ export default {
     Personnaliser,
     Monparcours,
     Cardpokemon,
-    Portfolio,
     Clipy,
     Barrebottom,
     Starting,
@@ -128,7 +131,6 @@ export default {
         personnaliser:'kp_item_hide',
         monparcours:  'kp_item_hide',
         pokemon:      'kp_item_hide',
-        portfolio:    'kp_item_hide',
         clipy:        'kp_item_hide',
         starting:     'kp_item_hide',
         menuderoulant:'kp_item_hide',
@@ -140,7 +142,6 @@ export default {
         personnaliser:false,
         monparcours:  false,
         pokemon:      false,
-        portfolio:    false,
         clipy:        false,
         starting:     false
       },
@@ -152,7 +153,7 @@ export default {
       lastElementDragable: null,
       lastValidPosition: { left: 0, top: 0 },
       isBeingDragged: false,
-      barrenotif: 'barrenotif',
+      barrenotifClass: 'barrenotifClass',
       menuIsVisible: true,
     };
   },
@@ -160,34 +161,13 @@ export default {
     this.initDragAndResize();
   },
   methods: {
-    afficherProjet(compagnie) {
-      console.log('afficherProjet appelé avec compagnie:', compagnie);
-      
-      const projet = this.rechercherProjetParCompagnie(compagnie);
-      if (projet) {
-        console.log('Projet trouvé:', projet);
-        
-        this.$refs.portfolio.changerProjet(projet);
-        
-        this.updateWindowClass('portfolio', 'kp_item_show');
-      } else {
-        console.log('Projet non trouvé pour la compagnie:', compagnie);
-      }
-    },
-
-    rechercherProjetParCompagnie(compagnie) {
-      const projets = this.$refs.portfolio?.projets || [];
-      const projet = projets.find(projet => projet.compagnie === compagnie);
-      console.log('rechercherProjetParCompagnie:', projet);
-      return projet;
-    },
+    
 
     updateWindowClass(windowName, newClass) {
-      this.$set(this.windowClasses, windowName, newClass);
       if (this.windowClasses.hasOwnProperty(windowName)) {
         this.$set(this.windowClasses, windowName, newClass);
       } else {
-        console.error(`Invalid window name: ${windowName}`);
+        console.error(`Nom de fenêtre non valide : ${windowName}`);
       }
     },
 
@@ -229,27 +209,55 @@ export default {
        
     },
 
+    callBringToFront(appId) {
+      const element = document.querySelector(`.container--${appId}`);
+      if (!element) {
+        console.error(`callBringToFront - Élément pour "${appId}" non trouvé`);
+        return;
+      }
+      this.bringToFront({ currentTarget: element });
+    },
 
+
+    
     bringToFront(event) {
-      const element = event.currentTarget; // Récupération de l'élément actuel
+      const element = event.currentTarget;
       if (!element) {
         console.error("bringToFront - Élément non trouvé");
         return;
       }
+      // Trouver le z-index le plus élevé parmi toutes les fenêtres
+      const windows = document.querySelectorAll('.window');
+      let highestZIndex = Math.max(...Array.from(windows).map(w => parseInt(w.style.zIndex) || 0));
+      element.style.zIndex = highestZIndex + 1;
+      const firstChild = element.firstElementChild;
+      if (firstChild) {
+        firstChild.style.zIndex = highestZIndex + 1;
+      }
+      this.updateWindowClasses();
+    },
 
-      const windows = document.querySelectorAll('.kp_item__window_draggable');
-      let highestZIndex = 0; 
-      
-      // si le z-index max est audesssus de 9999, on prend le z-index du suivant en dessous de 9999
-      
+    updateWindowClasses() {
+      const windows = Array.from(document.querySelectorAll('.kp_item__window_header'));
+      let highestZIndex = 0;
+      let topWindow = null;
+
       windows.forEach(window => {
-        const zIndex = parseInt(window.style.zIndex, 10);
-        if (zIndex > highestZIndex && zIndex < 9999) {
+        const zIndex = parseInt(window.style.zIndex, 10) || 0;
+        if (zIndex > highestZIndex) {
           highestZIndex = zIndex;
+          topWindow = window;
         }
       });
-
-      element.style.zIndex = highestZIndex + 1;
+      windows.forEach(window => {
+        if (window === topWindow) {
+          window.classList.remove('window-behind');
+          window.classList.add('window-top');
+        } else {
+          window.classList.remove('window-top');
+          window.classList.add('window-behind');
+        }
+      });
     },
 
     onMouseMove(e) {
@@ -340,7 +348,8 @@ export default {
     },
 
     handleDesktopClick(windowId) {
-      this.toggleWindow(windowId);
+      //this.toggleWindow(windowId);
+      bringToFront(windowId);
     },
 
     updateNotificationClass(windowName, newClass) {
@@ -439,7 +448,6 @@ export default {
       if (index !== -1) {
         this.updateWindowClass(windowName, 'kp_item_hide');
         this.openWindows.splice(index, 1);
-        console.log(`Fenêtre "${windowName}" retirée de openWindows. Nouvel état :`, this.openWindows);
       } else {
         console.log(`La fenêtre "${windowName}" n'était pas ouverte.`);
       }
@@ -451,7 +459,16 @@ export default {
     },
     openMenuDeroulant() {
       this.menuIsVisible = true;
-  },
+    },
+    handleWindowAction(windowName, action) {
+      if (action === 'close') {
+        this.handleCloseWindow(windowName);
+      } else if (action === 'resize') {
+        this.toggleWindow(windowName, 'resize');
+      } else if (action === 'reduct') {
+        this.minimizeWindow(windowName);
+      }
+    },
   
 },
   directives: {

@@ -97,10 +97,7 @@ export default {
   },
   data() {
     return {
-      context: 'text',
-      title: 'Kévin Prévost - autoportrait.txt',
       textIcon,
-      customClass: 'kp_element--incons-zone',
       windowStateClass: 'kp_item_window_hide'
     };
   },

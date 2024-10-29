@@ -4,7 +4,8 @@
       v-for="item in desktopItems" 
       :key="item.id" 
       :class="['kp_folder--un-ico', item.class]"
-      @click="handleClick(item.id)">  <!-- Ajout de @click pour chaque icône -->
+      @click="handleClick(item.id); callBringToFront(item.id)
+      ">  <!-- Ajout de @click pour chaque icône -->
       <div class="kp_folder--un-ico-container-img">
         <div v-if="item.isTextIcon" class="kp_terminal--icn">{{ item.icon }}</div>
         <img v-else :class="['kp_folder--img', item.imageClass]" :src="item.icon" :alt="item.altText" />
@@ -43,7 +44,7 @@ export default {
           class: 'kp_folder--terminal',
           icon: 'KP:\\',
           isTextIcon: true,
-          text: 'quisuisje',
+          text: 'qui suis-je ?',
           altText: 'Terminal',
         },
         {
@@ -51,7 +52,7 @@ export default {
           class: 'kp_folder--folder',
           icon: folderIcon,
           isTextIcon: false,
-          text: 'mesrealisations',
+          text: 'Mes réalisations',
           altText: 'Mes projets',
         },
         {
@@ -59,7 +60,7 @@ export default {
           class: 'kp_folder--quisuisje',
           icon: cvIcon,
           isTextIcon: false,
-          text: 'monparcours',
+          text: 'Mon parcours',
           altText: 'Mon parcours',
         },
         {
@@ -67,7 +68,7 @@ export default {
           class: 'kp_folder--autoportrait',
           icon: textIcon,
           isTextIcon: false,
-          text: 'autoportrait',
+          text: 'Autoportrait',
           altText: 'Ma tête',
         },
         {
@@ -75,7 +76,7 @@ export default {
           class: 'kp_folder--pokemon',
           icon: pokecardIcon,
           isTextIcon: false,
-          text: 'mapassion',
+          text: 'Mes passions',
           altText: 'Ma passion',
         }
       ],
@@ -86,7 +87,11 @@ export default {
   methods: {
     handleClick(id) {
       this.$emit('openWindow', id);
-    }
+    },
+    
+    callBringToFront(appId) {
+      this.$emit('callBringToFront', appId);
+    },
   }
 };
 </script>

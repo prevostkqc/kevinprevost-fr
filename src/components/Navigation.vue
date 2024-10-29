@@ -26,10 +26,6 @@ import navigationReduct from '@/assets/images/reduct_icn.svg';
 export default {
   name: 'Navigation',
   props: {
-    viewName: {
-      type: String,
-      required: true
-    },
     context: {
       type: String,
       default: 'browser'
@@ -47,9 +43,7 @@ export default {
     };
   },
   methods: {
-    handleAction(action) {
-      console.log(`1 - Action "${action}" triggered for view: ${this.viewName} in context: ${this.context}`);
-      
+    handleAction(action) {      
       if (action === 'close') {
         this.$emit('close');
       }

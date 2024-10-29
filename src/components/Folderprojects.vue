@@ -41,29 +41,44 @@
                             <p class="unprojet--texte  unprojet-nomtechno">{{ tech }}</p>
                         </li>
                     </ul>
+                    <div class="btn-windows-xp  btn-windows-xp-ok"><span class="btn-windows-xp--texte">Voir le projet en ligne</span></div>
 
-                    <div class="kp_pages-container" v-if="selectedProject.nomdespages && selectedProject.nomdespages.length > 1">
-                      <p class="unprojet--texte  titre-miniatures">Selectionnez une page&nbsp;:</p>
-                      <div v-for="(page, index) in selectedProject.nomdespages" :key="index" class="kp_page-thumbnail">
+                    <!-- Boucle pour afficher les miniatures du projet sélectionné -->
+                      <div class="kp_pages-container" v-if="selectedProject.nomdespages && selectedProject.nomdespages.length > 1">
+                        <p class="unprojet--texte titre-miniatures">Sélectionnez une page&nbsp;:</p>
+                        <div 
+                            v-for="(page, index) in selectedProject.nomdespages" 
+                            :key="index" 
+                            class="kp_page-thumbnail" 
+                            :class="{ 'selected-image': index === selectedImageIndex }" 
+                            @click="selectImage(index)">
                           <img 
-                            v-if="selectedProject.versionmobile == 'oui'" 
                             :src="getPageThumbnailPath(selectedProject.nomimageprojet, index)" 
                             :alt="page || 'Page sans nom'" 
                             @error="imageError($event)" 
                             class="kp_page-thumbnail-img" 
                           />
                           <p class="kp_page-title">{{ page || "" }}</p>
+                        </div>
                       </div>
-                    </div>
 
-                    <div class="kp_mobile-image">
-                      <img :src="getPageThumbnailPathMobile(selectedProject.nomimageprojet, selectedImageIndex)" alt="Image sélectionnée" @error="imageError($event)" class="kp_large-image-display" />
-                    </div>
-                </div>
+                      <p class="kp_page-title  unprojet--texte  titre-page-principale  titre-page-mobile ">
+                        {{ selectedProject.nomdespages[selectedImageIndex]+ ' ' || "" }}Mobile&nbsp;:  
+                      </p>
+                      <div v-if="selectedProject.versionmobile === 'oui'" class="kp_mobile-image">
+                        <img :src="getPageThumbnailPathMobile(selectedProject.nomimageprojet, selectedImageIndex)" alt="Image mobile sélectionnée" @error="imageError($event)" class="kp_large-image-display" />
+                      </div>
+                  </div>
+
+                  <div class="separator"></div>
            
-
-                <div class="kp_large-image">
-                  <img :src="getPageThumbnailPath(selectedProject.nomimageprojet, selectedImageIndex)" alt="Image sélectionnée" @error="imageError($event)" class="kp_large-image-display" />
+                <div class="kp_part-image">
+                  <p class="kp_page-title  unprojet--texte  titre-page-principale ">
+                    {{ selectedProject.nomdespages[selectedImageIndex]+ ' ' || "" }}Desktop&nbsp;:  
+                  </p>
+                  <div class="kp_large-image">
+                    <img :src="getPageThumbnailPath(selectedProject.nomimageprojet, selectedImageIndex)" alt="Image sélectionnée" @error="imageError($event)" class="kp_large-image-display" />
+                  </div>
                 </div>
 
                
@@ -114,6 +129,7 @@ export default {
      selectedProjectId: null,
      selectedImageIndex: 0,
      iconprojet,
+     windowStateClass: '',
    };
  },
 
@@ -145,8 +161,9 @@ export default {
      event.target.src = fallback;
    },
    chargerprojet(projectId) {
-     this.selectedProjectId = projectId;
-   },
+    this.selectedProjectId = projectId;
+    this.selectedImageIndex = 0;
+  },
    selectImage(index) {
      this.selectedImageIndex = index;
    },
@@ -170,7 +187,7 @@ export default {
      return `/images/technos/${tech}.png`;
    },
    getIconPath(logo) {
-     return `/images/icons/${logo}.png`; 
+     return `/images/logos/${logo}.png`; 
    },
    getPageThumbnailPath(nomimageprojet, index) {
     const suffix = index === 0 ? '' : index + 1;
@@ -294,7 +311,7 @@ export default {
    padding: 7px 45px;
    background: #f6f6f2;
    position: relative;
-   border-bottom: solid 3px #919b9c;
+   border-bottom: solid 2px #919b9c;
    position: relative;
    bottom: -2px;
    cursor: pointer;
@@ -334,23 +351,41 @@ export default {
    height: 4px;
    border: solid 1px #e68b2c;
    border-bottom: none;
-   border-top: solid 3px #e68b2c;
+   border-top: solid 2px #e68b2c;
 }
 
 
 /* Styles pour les miniatures de pages */
 .kp_pages-container {
   display: flex;
-  gap: 27px;
+  gap: 17px;
   margin: 20px 0;
   flex-wrap: wrap;
-  border-top: solid 3px #000000;
+  border-top: solid 2px #000000;
   padding-top: 30px;
   padding-bottom: 40px;
 }
 .kp_page-thumbnail {
  text-align: center;
- width: 80px;
+ width: 74px;
+  background: #ffffff;
+  border: solid 1px #ffffff;
+  border-radius: 3px;
+  padding:5px;
+  cursor: pointer;
+}
+
+.kp_page-thumbnail:hover{
+  background: #fdf9ce;
+  border: solid 1px #000000;
+  border-radius: 3px;
+  filter: drop-shadow(2px 2px 6px #00000044);
+}
+.selected-image{
+  background: #fdf9ce;
+  border: solid 1px #000000;
+  border-radius: 3px;
+  filter: drop-shadow(2px 2px 6px #00000044);
 }
 .kp_page-thumbnail-img {
   width: 70px;
@@ -358,7 +393,7 @@ export default {
     object-fit: cover;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     border-radius: 3px;
-    border: solid 3px #000000;
+    border: solid 2px #000000;
 }
 .kp_page-title {
  font-size: 0.85rem;
@@ -388,22 +423,27 @@ export default {
   font-weight: 600;
   padding-top:5px;
   padding-bottom:5px;
-  border-bottom: solid 1px #000000;
+  border-bottom: solid 2px #000000;
 }
 .unprojet--texteclient{
   margin-top:10px;
 }
 .unprojet--textetitre{
   font-size:22px;
+  margin-top:30px;
+  margin-bottom: -10px;
+  display:block;
 }
 .kp_large-image-display{
   width:100%;
 }
-.kp_large-image{
+.kp_part-image{
   width: 70%;
+}
+.kp_large-image{
   max-height: calc(100vh - 300px);
   overflow-y: scroll;
-  outline: solid 3px #1b1b17;
+  outline: solid 2px #1b1b17;
   max-width: 1300px;
 }
 .unprojet--titre-image{
@@ -475,11 +515,28 @@ export default {
     max-height: calc(100vh - 580px);
     height: 100%;
     overflow-y: scroll;
-    outline: solid 3px #1b1b17;
+    outline: solid 2px #1b1b17;
 }
 
 .titre-miniatures{
   font-size:22px;
   width:100%;
 }
+.titre-page-principale{
+  font-size:22px;
+  width:100%;
+  padding-bottom:20px;
+}
+
+.separator{
+  width: 1px;
+  height: 100%;
+  background: #000000;
+}
+.titre-page-mobile{
+  border-top: solid 2px #000000;
+  width: 100%;
+  padding-top: 25px;
+}
+
 </style>

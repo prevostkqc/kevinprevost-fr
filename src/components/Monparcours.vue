@@ -128,9 +128,26 @@
   components: {
     Navigation
   },
+ props: {
+   context: {
+     type: String,
+     default: 'monparcours',
+   },
+   title: {
+     type: String,
+     default: 'monparcours',
+   },
+   iconSource: {
+     type: String,
+     default: '/images/monparcours.png',
+   },
+   customClass: {
+     type: String,
+     default: 'kp_element--incons-zone',
+   },
+ },
   data() {
     return {
-      iconSource,
       buttonText: 'Afficher les informations',
       experiences: [
         {

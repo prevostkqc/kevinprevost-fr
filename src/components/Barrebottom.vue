@@ -19,7 +19,7 @@
           :key="app.id" 
           :class="['kp_barre-une-app', app.class]" 
           :id="`kp_barre-app--${app.id}`"
-          @click="emitDesktopClick(app.id)"> <!-- Ajout de l'appel à emitDesktopClick -->
+          @click="callBringToFront(app.id)">
           <div class="kp_barre-une-app--icn" v-if="app.isText">
             {{ app.icon }}
           </div>
@@ -152,17 +152,23 @@ export default {
   },
   methods: {
     emitClick() {
-      this.$emit('childClicked');
+        this.$emit('childClicked');
     },
-    emitDesktopClick(appId) {
-      console.log(`Barre de notification: clic détecté pour "${appId}"`);
-      this.$emit('simulateDesktopClick', appId); // Émet l'événement pour gérer le clic sur la barre de notification
+    callBringToFront(appId) {
+      this.$emit('callBringToFront', appId);
     },
     calculerBatterie() {
-      const battery = navigator.getBattery();
-      battery.then((batterie) => {
-        this.percentbattery = Math.floor(batterie.level * 100);
-      });
+      if ('getBattery' in navigator) {
+        navigator.getBattery().then((batterie) => {
+          this.percentbattery = Math.floor(batterie.level * 100);
+        }).catch((error) => {
+          console.error("Erreur lors de l'obtention de l'état de la batterie :", error);
+          this.percentbattery = null; // ou une autre valeur par défaut
+        });
+      } else {
+        console.warn("L'API Battery Status n'est pas supportée par ce navigateur.");
+        this.percentbattery = null; // ou une autre valeur par défaut
+      }
     },
     afficherLangue() {
       const lang = navigator.language.split('-');
@@ -171,10 +177,6 @@ export default {
     isWindowClosed(windowId) {
       return this.windowClasses && this.windowClasses[windowId] === 'kp_item_hide';
     },  
-    emitDesktopClick(appId) {
-      console.log(`Simulation du clic sur l'icône du bureau pour ${appId}`);
-      this.$emit('simulateDesktopClick', appId); // Emit the event to simulate a desktop click
-    },
     updateNotificationClass(windowName, newClass) {
       const notifElement = document.querySelector(`#kp_barre-app--${windowName}`);
       if (notifElement) {

@@ -45,10 +45,8 @@ props: {
 
 mounted() {
   this.$nextTick(() => {
-    console.log("Refs:", this.$refs);
     const container = this.$refs.terminalText;
     if (container) {
-      console.log("Element terminalText trouvé");
       this.ecrireTexte(container);
     } else {
       console.error('Element terminalText non trouvé');
