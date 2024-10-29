@@ -33,6 +33,8 @@ import folderIcon from '@/assets/images/folder.png';
 import cvIcon from '@/assets/images/cv.png';
 import textIcon from '@/assets/images/text.png';
 import pokecardIcon from '@/assets/images/pokecard_icn.png';
+import passionIcon from '@/assets/images/icon-heart.png';
+import paintIcon from '@/assets/images/icon-paint.png';
 
 export default {
   name: 'Desktop',
@@ -70,6 +72,22 @@ export default {
           isTextIcon: false,
           text: 'Autoportrait',
           altText: 'Ma tête',
+        },
+        {
+          id: 'paint',
+          class: 'kp_folder--paint',
+          icon: paintIcon,
+          isTextIcon: false,
+          text: 'Paint',
+          altText: 'paint',
+        },
+        {
+          id: 'passions',
+          class: 'kp_folder--passions',
+          icon: passionIcon,
+          isTextIcon: false,
+          text: 'Mes psassions',
+          altText: 'Mes passions',
         },
         {
           id: 'pokemon',

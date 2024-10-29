@@ -12,6 +12,7 @@
       </div>
       <Navigation @close="handleClose"  @resize="handleResize"  @reduct="handleReduct"  :viewName="title" :context="context" :customClass="customClass" />
     </div>
+    <FakeMenu></FakeMenu>
     <div class="kp_pokemon_zone-texte kp_element--enable">
       <p class="kp_texte-carte">
         Ayant grandi dans les années 90, je n'ai pas échappé à la folie Pokémon.<br>
@@ -37,7 +38,9 @@
 </template>
 
 <script>
-import Navigation from '@/components/Navigation.vue';
+import Navigation   from '@/components/Navigation.vue';
+import FakeMenu     from '@/components/Fakemenu.vue';
+
 import Pokemoncard1 from '@/assets/images/card_poke.png';
 import Pokemoncard3 from '@/assets/images/card_poke.png';
 import Pokemoncard2 from '@/assets/images/card_poke_sous.png';
@@ -47,7 +50,8 @@ export default {
   name: 'Cardpokemon',
   emits: ['update-class', 'close', 'resize', 'reduct'],
   components: {
-    Navigation
+    Navigation,
+    FakeMenu
   },
   props: {
     context: {

@@ -13,6 +13,8 @@
            <!-- Utilisation du composant Navigation avec le bon contexte -->
            <Navigation @close="handleClose"  @resize="handleResize"  @reduct="handleReduct"  :viewName="title" :context="context" :customClass="customClass" />
       </div>
+      
+    <FakeMenu></FakeMenu>
         <ul class="kp_folder-liste projets">
             <li 
                 :class="['kp_folder-li', { 'selected-project': project.id === selectedProjectId }]" 
@@ -96,6 +98,8 @@
 <script>
 import axios from 'axios';
 import Navigation from '@/components/Navigation.vue';
+import FakeMenu     from '@/components/Fakemenu.vue';
+
 import iconprojet from '@/assets/images/folder.png';
 import fallback from '@/assets/images/fallback.jpg';
 
@@ -104,6 +108,7 @@ export default {
  emits: ['update-class', 'close', 'resize', 'reduct'],
  components: {
    Navigation,
+    FakeMenu
  },
  props: {
    context: {
@@ -260,8 +265,6 @@ export default {
     align-items: flex-end;
   }
 }
-
-
 .kp_element--container {
    display: flex;
    flex-direction: column;

@@ -36,6 +36,17 @@
         :context="'autoportrait'"
         :title="'autoportrait'" />
     </div>
+    
+
+    <div class="container--paint"
+        v-bring-to-front-on-show
+        @click="bringToFront($event)"
+        v-show="openWindows.includes('paint')"
+        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.paint]">
+      <Paint @update-class="updateWindowClass('paint', $event)" @close="handleCloseWindow('paint')"
+        :context="'paint'"
+        :title="'paint'" />
+    </div>
 
     <div class="container--personnaliser"
         v-bring-to-front-on-show
@@ -67,6 +78,16 @@
         :title="'Pokémon Card'" />
     </div>
 
+    <div class="container--passions"
+        v-bring-to-front-on-show
+        @click="bringToFront($event)"
+        v-show="openWindows.includes('passions')"
+        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.passions]">
+      <Mespassions @update-class="updateWindowClass('passions', $event)" @close="handleCloseWindow('passions')"
+        :context="'passions'"
+        :title="'Mes passions'" />
+    </div>
+
 
     <div class="container--starting">
       <div v-show="openWindows.includes('starting')" :class="['window', windowClasses.starting]">
@@ -87,7 +108,7 @@
       <Menuderoulant :isVisible="menuIsVisible"  ref="menuDeroulant" @click="handleContainerClick" @actionSelected="handleAction"/>
     </div>
 
-    <Barrebottom :openWindows="openWindows" :windowClasses="windowClasses" @childClicked="handleContainerClick"  @callBringToFront="callBringToFront"  @openMenuDeroulant="openMenuDeroulant"  @toggleMenu="toggleMenu"  class="barrenotif" />
+    <Barrebottom :openWindows="openWindows" @handleBringToFront="handleBringToFront" :windowClasses="windowClasses" @childClicked="handleContainerClick"  @callBringToFront="callBringToFront"  @openMenuDeroulant="openMenuDeroulant"  @toggleMenu="toggleMenu"  class="barrenotif" />
   </main>
 </template>
 
@@ -98,13 +119,15 @@ import Desktop        from '@/components/Desktop.vue';
 import Terminal       from '@/components/Terminal.vue';
 import Folderprojects from '@/components/Folderprojects.vue';
 import Autoportrait   from '@/components/Autoportrait.vue';
+import Paint          from '@/components/Paint.vue';
 import Personnaliser  from '@/components/Personnaliser.vue';
 import Monparcours    from '@/components/Monparcours.vue';
 import Cardpokemon    from '@/components/Cardpokemon.vue';
 import Clipy          from '@/components/Clipy.vue';
 import Barrebottom    from '@/components/Barrebottom.vue';
 import Starting       from '@/components/Starting.vue';
-import Menuderoulant from './Menuderoulant.vue';
+import Menuderoulant  from './Menuderoulant.vue';
+import Mespassions    from './Mespassions.vue';
 
 export default {
   name: 'Home',
@@ -113,6 +136,7 @@ export default {
     Terminal,
     Folderprojects,
     Autoportrait,
+    Paint,
     Personnaliser,
     Monparcours,
     Cardpokemon,
@@ -120,6 +144,7 @@ export default {
     Barrebottom,
     Starting,
     Menuderoulant,
+    Mespassions
   },
   data() {
     return {
@@ -128,9 +153,11 @@ export default {
         terminal:     'kp_item_show',
         folder:       'kp_item_hide',
         autoportrait: 'kp_item_hide',
+        paint:        'kp_item_hide',
         personnaliser:'kp_item_hide',
         monparcours:  'kp_item_hide',
         pokemon:      'kp_item_hide',
+        passions:     'kp_item_hide',
         clipy:        'kp_item_hide',
         starting:     'kp_item_hide',
         menuderoulant:'kp_item_hide',
@@ -139,9 +166,11 @@ export default {
         terminal:     false,
         folder:       false,
         autoportrait: false,
+        paint:        false,
         personnaliser:false,
         monparcours:  false,
         pokemon:      false,
+        passions:     false,
         clipy:        false,
         starting:     false
       },
@@ -162,7 +191,20 @@ export default {
   },
   methods: {
     
-
+    handleBringToFront(appId) {
+    if (this.windowClasses[appId] === 'kp_item_hide' || this.windowClasses[appId] === 'kp_item_reduct') {
+      this.updateWindowClass(appId, 'kp_item_show');
+      if (!this.openWindows.includes(appId)) {
+        this.openWindows.push(appId);
+      }
+      this.$nextTick(() => {
+        const element = document.querySelector(`.container--${appId}`);
+        if (element) {
+          this.bringToFront({ currentTarget: element });
+        }
+      });
+    }
+  },
     updateWindowClass(windowName, newClass) {
       if (this.windowClasses.hasOwnProperty(windowName)) {
         this.$set(this.windowClasses, windowName, newClass);

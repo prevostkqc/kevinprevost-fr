@@ -13,13 +13,13 @@
         </div>
       </div>
 
-      <div class="kp_notification--applications"  @click="$emit('childClicked')">
+      <div class="kp_notification--applications">
         <article 
-          v-for="app in visibleApplications" 
+          v-for="app in applications" 
           :key="app.id" 
-          :class="['kp_barre-une-app', app.class]" 
+          :class="['kp_barre-une-app', app.class, windowClasses[app.id] === 'kp_item_hide' ? 'notif_hide' : 'notif_show']" 
           :id="`kp_barre-app--${app.id}`"
-          @click="callBringToFront(app.id)">
+          @click="callBringToFront(app.id); handleBringToFront(app.id);">
           <div class="kp_barre-une-app--icn" v-if="app.isText">
             {{ app.icon }}
           </div>
@@ -57,6 +57,8 @@ import internetIcon     from '@/assets/images/icn_internet.png';
 import textIcon         from '@/assets/images/text.png';
 import pokecardIcon     from '@/assets/images/pokecard_icn.png';
 import cvIcon           from '@/assets/images/cv.png';
+import heartIcon        from '@/assets/images/icon-heart.png';
+import paintIcon        from '@/assets/images/icon-paint.png';
 
 export default {
   name: 'Barrebottom',
@@ -92,13 +94,6 @@ export default {
           isText: false
         },
         {
-          id: 'browser',
-          class: 'kp_barre-une-app--browser',
-          icon: internetIcon,
-          title: 'Internet',
-          isText: false
-        },
-        {
           id: 'autoportrait',
           class: 'kp_barre-une-app--text',
           icon: textIcon,
@@ -106,17 +101,24 @@ export default {
           isText: false
         },
         {
-          id: 'profil',
-          class: 'kp_barre-une-app--profil',
-          icon: textIcon,
-          title: 'Profil',
-          isText: false
-        },
-        {
           id: 'pokemon',
           class: 'kp_barre-une-app--pokemon',
           icon: pokecardIcon,
           title: 'Ma passion',
+          isText: false
+        },
+        {
+          id: 'paint',
+          class: 'kp_barre-une-app--paint',
+          icon: paintIcon,
+          title: 'Paint',
+          isText: false
+        },
+        {
+          id: 'passions',
+          class: 'kp_barre-une-app--passions',
+          icon: heartIcon,
+          title: 'Mes passions',
           isText: false
         },
         {
@@ -135,10 +137,9 @@ export default {
   },
   computed: {
     visibleApplications() {
-      return this.applications.filter(app => this.openWindows.includes(app.id));
-    },
+    return this.applications.filter(app => this.openWindows.includes(app.id));
+  },
     batteryColor() {
-      // Interpolation linéaire entre vert (#12ff00) et rouge (#d90e0c)
       const green = { r: 18, g: 255, b: 0 };
       const red = { r: 217, g: 14, b: 12 };
       const percentage = this.percentbattery / 100;
@@ -157,17 +158,20 @@ export default {
     callBringToFront(appId) {
       this.$emit('callBringToFront', appId);
     },
+    handleBringToFront(appId) {
+      this.$emit('handleBringToFront', appId);
+    },
     calculerBatterie() {
       if ('getBattery' in navigator) {
         navigator.getBattery().then((batterie) => {
           this.percentbattery = Math.floor(batterie.level * 100);
         }).catch((error) => {
           console.error("Erreur lors de l'obtention de l'état de la batterie :", error);
-          this.percentbattery = null; // ou une autre valeur par défaut
+          this.percentbattery = null;
         });
       } else {
         console.warn("L'API Battery Status n'est pas supportée par ce navigateur.");
-        this.percentbattery = null; // ou une autre valeur par défaut
+        this.percentbattery = null;
       }
     },
     afficherLangue() {
@@ -180,10 +184,8 @@ export default {
     updateNotificationClass(windowName, newClass) {
       const notifElement = document.querySelector(`#kp_barre-app--${windowName}`);
       if (notifElement) {
-        console.log(`État actuel de ${windowName} avant mise à jour: ${notifElement.className}`);
         notifElement.classList.remove('notif_show', 'notif_hide');
         notifElement.classList.add(newClass);
-        console.log(`État après mise à jour de ${windowName}: ${notifElement.className}`);
       } else {
         console.error(`Élément de notification pour ${windowName} non trouvé.`);
       }
@@ -191,15 +193,13 @@ export default {
     handleCloseWindow(windowName) {
       const index = this.openWindows.indexOf(windowName);
       if (index !== -1) {
-        console.log(`Fermeture de la fenêtre "${windowName}"`);
         this.updateWindowClass(windowName, 'kp_item_hide');
-        this.updateNotificationClass(windowName, 'notif_hide');  // Ajoute la classe notif_hide à l'icône de la notification
+        this.updateNotificationClass(windowName, 'notif_hide');
         setTimeout(() => {
           this.openWindows.splice(index, 1);
-          console.log(`Fenêtre "${windowName}" retirée de openWindows. Nouvel état :`, this.openWindows);
         }, 300);
       } else {
-        console.log(`Fenêtre "${windowName}" n'était pas ouverte.`);
+        console.log(`Fenêtre "${windowName}" n'était pas ouverte.`)
       }
     },
     manageWindowNotifications() {

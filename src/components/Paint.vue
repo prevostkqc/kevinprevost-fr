@@ -1,0 +1,955 @@
+<template>
+    <section :class="['kp_content--block', 'kp_z-index', 'kp_changed__id', `kp_${context}`, 'kp_item__window', windowStateClass]" :id="`kp_${context}`">
+        <div class="kp_element--title">
+            <div class="kp_element--icon-title">
+                <p class="kp_element--title-p kp_element--enable">
+                    <div class="kp_element_title--icn">
+                        <img class="kp_icon_zone--img" :src="textIcon" alt="text">
+                    </div>
+                    <span>Kévin Prévost - Paint</span>
+                </p>
+            </div>
+            <Navigation @close="handleClose" @resize="handleResize" @reduct="handleReduct" :viewName="title" :context="context" :customClass="customClass" />
+        </div>
+        <section class="fake-menu-top-folder">
+            <div class="fake-menu--top">
+                <ul class="liste-fake-menu">
+                    <li class="liste-fake-menu--li">Fichier</li>
+                    <li class="liste-fake-menu--li">Edition</li>
+                    <li class="liste-fake-menu--li">Affichage</li>
+                    <li class="liste-fake-menu--li">Image</li>
+                    <li class="liste-fake-menu--li">Couleurs</li>
+                    <li class="liste-fake-menu--li">?</li>
+                </ul>
+            </div>
+        </section>
+        <div class="kp_content--block--content kp_element--enable">
+            <div class="paint-content">
+              <div class="outils-left">
+                <div class="outils-paint">
+                  <img v-for="(tool, index) in tools" 
+                         :key="index" 
+                         :src="tool.icon" 
+                         :alt="tool.name" 
+                         class="kp_icon_zone--paint paint-tool"
+                         :class="['tool-name--'+tool.name, { 'selected-tool': currentTool === tool.name }]"
+                         @click="selectTool(tool.name)" />
+                </div>
+                <div class="zone-size">
+                  <div class="size-paint">
+                    <input type="radio" v-model="lineWidth" name="line-size" id="size-1" class="input-size" value="1"/>
+                    <label for="size-1" class="label-size  label-size--1"></label>
+                    <input type="radio" v-model="lineWidth" name="line-size" id="size-2" class="input-size" value="7"/>
+                    <label for="size-2" class="label-size  label-size--2"></label>
+                    <input type="radio" v-model="lineWidth" name="line-size" id="size-3" class="input-size" value="15"/>
+                    <label for="size-3" class="label-size  label-size--3"></label>
+                    <input type="radio" v-model="lineWidth" name="line-size" id="size-4" class="input-size" value="25"/>
+                    <label for="size-4" class="label-size  label-size--4"></label>
+                  </div>  
+                </div>
+              </div>
+                <div class="paint-side-canva">
+                  <canvas 
+                    ref="canvas" 
+                    :width="width" 
+                    :height="height" 
+                    @mousedown="handleMouseDown" 
+                    @mousemove="handleMouseMove" 
+                    @mouseup="handleMouseUp" 
+                    @mouseleave="stopDrawing"
+                    @contextmenu.prevent
+                    class="paint-canvas"
+                  ></canvas>
+                  <div
+                    v-show="isSelecting"
+                    :style="selectionStyle"
+                    class="selection-rectangle"
+                  ></div>
+                  <div class="border-paint  border-paint--1"></div>
+                  <div class="border-paint  border-paint--2"></div>
+                  <div class="border-paint  border-paint--3"></div>
+                  <div class="border-paint  border-paint--4"></div>
+                </div>
+            </div>
+            <div class="paint-colors">
+              <div class="color-selectionne">
+                <div class="color-preview-secondary" :style="{ backgroundColor: secondaryColor }"></div>
+                <div class="color-preview" :style="{ backgroundColor: color }"></div>
+                
+              </div>
+              
+              <div class="color-pickers">
+                <div class="une-couleur" style="background: #000000" @click="setColor('#000000')" @contextmenu.prevent="setSecondaryColor('#000000')"></div>
+                <div class="une-couleur" style="background: #808080" @click="setColor('#808080')" @contextmenu.prevent="setSecondaryColor('#808080')"></div>
+                <div class="une-couleur" style="background: #800000" @click="setColor('#800000')" @contextmenu.prevent="setSecondaryColor('#800000')"></div>
+                <div class="une-couleur" style="background: #808000" @click="setColor('#808000')" @contextmenu.prevent="setSecondaryColor('#808000')"></div>
+                <div class="une-couleur" style="background: #008000" @click="setColor('#008000')" @contextmenu.prevent="setSecondaryColor('#008000')"></div>
+                <div class="une-couleur" style="background: #008080" @click="setColor('#008080')" @contextmenu.prevent="setSecondaryColor('#008080')"></div>
+                <div class="une-couleur" style="background: #000080" @click="setColor('#000080')" @contextmenu.prevent="setSecondaryColor('#000080')"></div>
+                <div class="une-couleur" style="background: #800080" @click="setColor('#800080')" @contextmenu.prevent="setSecondaryColor('#800080')"></div>
+                <div class="une-couleur" style="background: #808040" @click="setColor('#808040')" @contextmenu.prevent="setSecondaryColor('#808040')"></div>
+                <div class="une-couleur" style="background: #004040" @click="setColor('#004040')" @contextmenu.prevent="setSecondaryColor('#004040')"></div>
+                <div class="une-couleur" style="background: #004040" @click="setColor('#004040')" @contextmenu.prevent="setSecondaryColor('#004040')"></div>
+                <div class="une-couleur" style="background: #004080" @click="setColor('#004080')" @contextmenu.prevent="setSecondaryColor('#004080')"></div>
+                <div class="une-couleur" style="background: #8000ff" @click="setColor('#8000ff')" @contextmenu.prevent="setSecondaryColor('#8000ff')"></div>
+                <div class="une-couleur" style="background: #804000" @click="setColor('#804000')" @contextmenu.prevent="setSecondaryColor('#804000')"></div>
+
+                <div class="une-couleur" style="background: #ffffff" @click="setColor('#ffffff')" @contextmenu.prevent="setSecondaryColor('#ffffff')"></div>
+                <div class="une-couleur" style="background: #c0c0c0" @click="setColor('#c0c0c0')" @contextmenu.prevent="setSecondaryColor('#c0c0c0')"></div>
+                <div class="une-couleur" style="background: #ff0000" @click="setColor('#ff0000')" @contextmenu.prevent="setSecondaryColor('#ff0000')"></div>
+                <div class="une-couleur" style="background: #ffff00" @click="setColor('#ffff00')" @contextmenu.prevent="setSecondaryColor('#ffff00')"></div>
+                <div class="une-couleur" style="background: #00ff00" @click="setColor('#00ff00')" @contextmenu.prevent="setSecondaryColor('#00ff00')"></div>
+                <div class="une-couleur" style="background: #00ffff" @click="setColor('#00ffff')" @contextmenu.prevent="setSecondaryColor('#00ffff')"></div>
+                <div class="une-couleur" style="background: #0000ff" @click="setColor('#0000ff')" @contextmenu.prevent="setSecondaryColor('#0000ff')"></div>
+                <div class="une-couleur" style="background: #ff00ff" @click="setColor('#ff00ff')" @contextmenu.prevent="setSecondaryColor('#ff00ff')"></div>
+                <div class="une-couleur" style="background: #ffff80" @click="setColor('#ffff80')" @contextmenu.prevent="setSecondaryColor('#ffff80')"></div>
+                <div class="une-couleur" style="background: #00ff80" @click="setColor('#00ff80')" @contextmenu.prevent="setSecondaryColor('#00ff80')"></div>
+                <div class="une-couleur" style="background: #80ffff" @click="setColor('#80ffff')" @contextmenu.prevent="setSecondaryColor('#80ffff')"></div>
+                <div class="une-couleur" style="background: #8080ff" @click="setColor('#8080ff')" @contextmenu.prevent="setSecondaryColor('#8080ff')"></div>
+                <div class="une-couleur" style="background: #ff0080" @click="setColor('#ff0080')" @contextmenu.prevent="setSecondaryColor('#ff0080')"></div>
+                <div class="une-couleur" style="background: #ff8040" @click="setColor('#ff8040')" @contextmenu.prevent="setSecondaryColor('#ff8040')"></div>
+              </div>
+              
+            </div>
+        </div>
+        <div class="resize-handle"></div>
+    </section>
+</template>
+
+<script>
+import Navigation from '@/components/Navigation.vue';
+import textIcon from '@/assets/images/icon-paint.png';
+
+import paint1 from '@/assets/images/paint/paint-select1.png';
+import paint2 from '@/assets/images/paint/paint-select2.png';
+import paint3 from '@/assets/images/paint/paint-erase.png';
+import paint4 from '@/assets/images/paint/paint-paint.png';
+import paint5 from '@/assets/images/paint/paint-pip.png';
+import paint6 from '@/assets/images/paint/paint-zoom.png';
+import paint7 from '@/assets/images/paint/paint-pen.png';
+import paint8 from '@/assets/images/paint/paint-painting.png';
+import paint9 from '@/assets/images/paint/paint-brush.png';
+import paint10 from '@/assets/images/paint/paint-letter.png';
+import paint11 from '@/assets/images/paint/paint-line.png';
+import paint12 from '@/assets/images/paint/paint-line2.png';
+import paint13 from '@/assets/images/paint/paint-rect.png';
+import paint14 from '@/assets/images/paint/paint-shape.png';
+import paint15 from '@/assets/images/paint/paint-ellipse.png';
+import paint16 from '@/assets/images/paint/paint-egg.png';
+
+
+
+export default {
+  name: 'Paint',
+  emits: ['update-class', 'close', 'resize', 'reduct'],
+  components: {
+    Navigation,
+  },
+  props: {
+    context: {
+      type: String,
+      default: 'paint'
+    },
+    title: {
+      type: String,
+      default: 'paint'
+    },
+    customClass: {
+      type: String,
+      default: 'kp_element--incons-zone'
+    }
+  },
+  data() {
+    return {
+        windowStateClass: 'kp_item_window_hide',
+        drawing: false,
+        canvasContext: null,
+        width: 900,
+        height: 900,
+        toolSizes: {
+            pen: 4,   
+            brush: 10,
+            paintbrush: 15 
+        },
+        currentTool: 'pen',
+        lineWidth: 1,
+        textIcon,
+        color: '#000000',
+        secondaryColor: '#FFFFFF', 
+
+        isSelecting: false,
+        startX: 0,
+        startY: 0,
+        currentX: 0,
+        currentY: 0,
+        tools: [
+            { name: 'select1', icon: paint1 },
+            { name: 'select', icon: paint2 },
+            { name: 'eraser', icon: paint3 },
+            { name: 'fill', icon: paint4 },
+            { name: 'pipette', icon: paint5 },
+            { name: 'zoom', icon: paint6 },
+            { name: 'pen', icon: paint7 },
+            { name: 'painting', icon: paint8 },
+            { name: 'brush', icon: paint9 },
+            { name: 'letter', icon: paint10 },
+            { name: 'line', icon: paint11 },
+            { name: 'line2', icon: paint12 },
+            { name: 'rect', icon: paint13 },
+            { name: 'shape', icon: paint14 },
+            { name: 'ellipse', icon: paint15 },
+            { name: 'egg', icon: paint16 },
+        ]
+    };
+},
+  methods: {
+    handleClose() {
+      this.$emit('update-class', 'kp_item_hide');
+      this.$emit('close');
+    },
+    handleResize() {
+      this.windowStateClass = this.windowStateClass === 'kp_item_resize' ? '' : 'kp_item_resize';
+      this.$emit('update-class', this.windowStateClass);
+    },
+    handleReduct() {
+      this.$emit('update-class', 'kp_item_reduct');
+    },
+
+    handleMouseDown(event) {
+      if (this.currentTool === 'select') {
+        this.startSelection(event);
+      } else {
+        this.startDrawing(event);
+      }
+    },
+    handleMouseMove(event) {
+      if (this.currentTool === 'select') {
+        this.updateSelection(event);
+      } else {
+        this.draw(event);
+      }
+    },
+    handleMouseUp(event) {
+      if (this.currentTool === 'select') {
+        this.endSelection(event);
+      } else {
+        this.stopDrawing(event);
+      }
+    },
+
+    /* --------------------------------------------------- */
+    /* Sélection */
+    startSelection(event) {
+      if (this.currentTool === 'select') {
+        console.log("Début de la sélection avec coordonnées :", event.offsetX, event.offsetY);
+        this.isSelecting = true;
+        this.startX = event.offsetX;
+        this.startY = event.offsetY;
+        this.currentX = this.startX;
+        this.currentY = this.startY;
+      }
+    },
+    updateSelection(event) {
+      if (this.isSelecting) {
+        console.log("Mise à jour de la sélection - coordonnées actuelles :", event.offsetX, event.offsetY);
+        this.currentX = event.offsetX;
+        this.currentY = event.offsetY;
+        console.log("Style de sélection : ", this.selectionStyle); // Vérifiez que le style est correct
+      }
+    },
+    endSelection() {
+
+      if (this.isSelecting) {
+        console.log("Fin de la sélection");
+        this.isSelecting = false;
+        // Logique de capture ou de confirmation de la zone sélectionnée
+      }
+    },
+
+    /* --------------------------------------------------- */
+    /* Remplissage de zone */
+    fillArea(startX, startY) {
+      const canvas = this.$refs.canvas;
+      const context = this.canvasContext;
+      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      const width = imageData.width;
+      const height = imageData.height;
+      const startPixel = (startY * width + startX) * 4;
+      const targetColor = [
+        imageData.data[startPixel],
+        imageData.data[startPixel + 1],
+        imageData.data[startPixel + 2],
+        imageData.data[startPixel + 3]
+      ];
+
+      // Utilisation de `this.color`, convertie en RGBA
+      const fillColor = this.colorToRGBA(this.color);
+      console.log(`Remplissage de la zone avec la couleur : ${this.color}`);
+
+      if (this.colorsMatch(targetColor, fillColor)) return; // Evite de remplir si la couleur est la même
+
+      const pixelStack = [[startX, startY]];
+
+      while (pixelStack.length > 0) {
+        let [x, y] = pixelStack.pop();
+        let currentPixel = (y * width + x) * 4;
+
+        while (y >= 0 && this.colorsMatch(targetColor, [
+          imageData.data[currentPixel],
+          imageData.data[currentPixel + 1],
+          imageData.data[currentPixel + 2],
+          imageData.data[currentPixel + 3]
+        ])) {
+          y--;
+          currentPixel -= width * 4;
+        }
+
+        currentPixel += width * 4;
+        y++;
+
+        let reachLeft = false;
+        let reachRight = false;
+
+        while (y < height && this.colorsMatch(targetColor, [
+          imageData.data[currentPixel],
+          imageData.data[currentPixel + 1],
+          imageData.data[currentPixel + 2],
+          imageData.data[currentPixel + 3]
+        ])) {
+          // Remplissage du pixel avec `fillColor`
+          imageData.data[currentPixel] = fillColor[0];
+          imageData.data[currentPixel + 1] = fillColor[1];
+          imageData.data[currentPixel + 2] = fillColor[2];
+          imageData.data[currentPixel + 3] = fillColor[3];
+
+          if (x > 0) {
+            if (this.colorsMatch(targetColor, [
+              imageData.data[currentPixel - 4],
+              imageData.data[currentPixel - 3],
+              imageData.data[currentPixel - 2],
+              imageData.data[currentPixel - 1]
+            ])) {
+              if (!reachLeft) {
+                pixelStack.push([x - 1, y]);
+                reachLeft = true;
+              }
+            } else if (reachLeft) {
+              reachLeft = false;
+            }
+          }
+
+          if (x < width - 1) {
+            if (this.colorsMatch(targetColor, [
+              imageData.data[currentPixel + 4],
+              imageData.data[currentPixel + 5],
+              imageData.data[currentPixel + 6],
+              imageData.data[currentPixel + 7]
+            ])) {
+              if (!reachRight) {
+                pixelStack.push([x + 1, y]);
+                reachRight = true;
+              }
+            } else if (reachRight) {
+              reachRight = false;
+            }
+          }
+
+          y++;
+          currentPixel += width * 4;
+        }
+      }
+
+      context.putImageData(imageData, 0, 0);
+    },
+
+    colorToRGBA(color) {
+      // Si la couleur est en format hexadécimal (ex. : #ff0000)
+      if (color.startsWith("#")) {
+        const bigint = parseInt(color.slice(1), 16);
+        const r = (bigint >> 16) & 255;
+        const g = (bigint >> 8) & 255;
+        const b = bigint & 255;
+        return [r, g, b, 255];
+      }
+      
+      // Si la couleur est en format `rgba(r, g, b, a)`
+      if (color.startsWith("rgba")) {
+        const parts = color.match(/rgba?\((\d+), (\d+), (\d+),? ?(\d+)?\)/);
+        return [parseInt(parts[1]), parseInt(parts[2]), parseInt(parts[3]), parts[4] ? parseFloat(parts[4]) * 255 : 255];
+      }
+      
+      // Si la couleur est en format `rgb(r, g, b)`
+      if (color.startsWith("rgb")) {
+        const parts = color.match(/rgb\((\d+), (\d+), (\d+)\)/);
+        return [parseInt(parts[1]), parseInt(parts[2]), parseInt(parts[3]), 255];
+      }
+      
+      // Par défaut (si une couleur nommée est utilisée)
+      return [0, 0, 0, 255]; // noir par défaut si la couleur est invalide
+    },
+
+    colorsMatch(color1, color2) {
+      return color1[0] === color2[0] &&
+             color1[1] === color2[1] &&
+             color1[2] === color2[2] &&
+             color1[3] === color2[3];
+    },
+
+    hexToRGBA(hex) {
+      const bigint = parseInt(hex.slice(1), 16);
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+      return [r, g, b, 255];
+    },
+
+    /* --------------------------------------------------- */
+    /* Pipette */
+    pickColor(x, y) {
+      const canvas = this.$refs.canvas;
+      const context = this.canvasContext;
+      const pixelData = context.getImageData(x, y, 1, 1).data;
+      const [r, g, b, a] = pixelData;
+
+      console.log(`Couleur du pixel à (${x}, ${y}): rgba(${r}, ${g}, ${b}, ${a / 255})`);
+      if (a === 0) {
+        console.log("Pixel transparent, aucune couleur capturée.");
+        return;
+      }
+      this.color = `rgba(${r}, ${g}, ${b}, ${a / 255})`;
+      console.log(`Nouvelle couleur active: ${this.color}`);
+    },
+    setColor(newColor) {
+      this.color = newColor;  // Met à jour la couleur active avec la couleur cliquée
+      console.log(`Couleur active changée en : ${this.color}`);
+    },
+    setSecondaryColor(newColor) {
+      this.secondaryColor = newColor;
+    },
+
+    /* --------------------------------------------------- */
+    /* Outils de dessin */
+    selectTool(toolName) {
+      this.currentTool = toolName;
+      // Définir la largeur de ligne en fonction de l'outil sélectionné
+
+      switch (toolName) {
+        case 'brush':
+          break;
+        case 'paint_brush':
+          break;
+        case 'eraser':
+          break;
+        case 'pen':
+          break;
+        case 'select':
+          this.isSelecting = false;
+          break;
+        default:
+          this.lineWidth = 1;
+          break;
+      }
+      console.log(`Outil sélectionné : ${toolName}, taille : ${this.lineWidth}px`);
+    },
+
+    /* --------------------------------------------------- */
+    /* Dessin */
+    startDrawing(event) {
+      this.drawing = true;
+      this.startX = event.offsetX;
+      this.startY = event.offsetY;
+      
+      this.currentColor = (event.button === 2) ? this.secondaryColor : this.color;
+
+      if (this.currentTool === 'pipette') {
+        this.pickColor(this.startX, this.startY);
+        return;
+      }
+      
+      if (this.currentTool === 'fill') {
+        this.fillArea(this.startX, this.startY);
+        return;
+      }
+      if (this.currentTool === 'pen' || this.currentTool === 'painting' || this.currentTool === 'paint_brush') {
+        this.canvasContext.beginPath();
+        this.canvasContext.moveTo(this.startX, this.startY);
+      }
+
+      switch (this.currentTool) {
+        case 'pen':
+        case 'painting':
+          this.canvasContext.beginPath();
+          this.canvasContext.moveTo(this.startX, this.startY);
+          break;
+
+        case 'eraser':
+          this.canvasContext.clearRect(this.startX, this.startY, this.lineWidth, this.lineWidth);
+          break;
+
+        case 'line':
+        case 'curve':
+        case 'rect':
+        case 'polygon':
+        case 'ellipse':
+        case 'rounded-rect':
+          // Initialiser le point de départ
+          break;
+
+        case 'text':
+          // Texte sera ajouté dans stopDrawing
+          break;
+
+        case 'pipette':
+          // Capturer la couleur au point de clic
+          const pixelData = this.canvasContext.getImageData(this.startX, this.startY, 1, 1).data;
+          this.color = `rgba(${pixelData[0]}, ${pixelData[1]}, ${pixelData[2]}, ${pixelData[3] / 255})`;
+          break;
+
+        default:
+          break;
+      }
+    },
+
+
+    draw(event) {
+      if (!this.drawing) return;
+      console.log(`Outil actuel : ${this.currentTool}, Taille : ${this.lineWidth}px`);
+      
+      this.canvasContext.strokeStyle = this.currentColor;
+
+      switch (this.currentTool) {
+        case 'pen':
+          this.canvasContext.lineTo(event.offsetX, event.offsetY);
+          this.canvasContext.lineWidth = this.lineWidth;
+          this.canvasContext.stroke();
+          break;
+
+        case 'painting':
+            this.canvasContext.lineTo(event.offsetX, event.offsetY);
+            this.canvasContext.lineWidth = this.lineWidth;
+            this.canvasContext.stroke();
+            break;
+
+        case 'eraser':
+          this.canvasContext.clearRect(event.offsetX, event.offsetY, this.lineWidth, this.lineWidth);
+          break;
+
+        case 'spray':
+          for (let i = 0; i < 10; i++) {
+            const offsetX = event.offsetX + (Math.random() - 0.5) * this.lineWidth * 5;
+            const offsetY = event.offsetY + (Math.random() - 0.5) * this.lineWidth * 5;
+            this.canvasContext.fillStyle = this.currentColor;
+            this.canvasContext.fillRect(offsetX, offsetY, 1, 1);
+          }
+          break;
+
+        default:
+          break;
+      }
+    },
+
+    stopDrawing(event) {
+      this.drawing = false;
+      const endX = event.offsetX;
+      const endY = event.offsetY;
+
+      switch (this.currentTool) {
+        case 'pen':
+        case 'painting':
+          this.canvasContext.closePath();
+          break;
+
+        case 'line':
+          this.canvasContext.beginPath();
+          this.canvasContext.moveTo(this.startX, this.startY);
+          this.canvasContext.lineTo(endX, endY);
+          this.canvasContext.strokeStyle = this.color;
+          this.canvasContext.lineWidth = this.lineWidth;
+          this.canvasContext.stroke();
+          this.canvasContext.closePath();
+          break;
+
+        case 'rect':
+          this.canvasContext.strokeStyle = this.color;
+          this.canvasContext.lineWidth = this.lineWidth;
+          this.canvasContext.strokeRect(this.startX, this.startY, endX - this.startX, endY - this.startY);
+          break;
+
+        case 'ellipse':
+          const centerX = (this.startX + endX) / 2;
+          const centerY = (this.startY + endY) / 2;
+          const radiusX = Math.abs(endX - this.startX) / 2;
+          const radiusY = Math.abs(endY - this.startY) / 2;
+          this.canvasContext.beginPath();
+          this.canvasContext.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
+          this.canvasContext.strokeStyle = this.color;
+          this.canvasContext.lineWidth = this.lineWidth;
+          this.canvasContext.stroke();
+          break;
+
+        case 'text':
+          const text = prompt("Entrez votre texte :");
+          if (text) {
+            this.canvasContext.font = `${this.lineWidth * 5}px Arial`;
+            this.canvasContext.fillStyle = this.color;
+            this.canvasContext.fillText(text, this.startX, this.startY);
+          }
+          break;
+
+        case 'polygon':
+          this.canvasContext.beginPath();
+          this.canvasContext.moveTo(this.startX, this.startY);
+          this.canvasContext.lineTo((this.startX + endX) / 2, endY);
+          this.canvasContext.lineTo(endX, this.startY);
+          this.canvasContext.closePath();
+          this.canvasContext.strokeStyle = this.color;
+          this.canvasContext.lineWidth = this.lineWidth;
+          this.canvasContext.stroke();
+          break;
+
+        case 'rounded-rect':
+          const rectWidth = endX - this.startX;
+          const rectHeight = endY - this.startY;
+          const radius = 20;
+          this.canvasContext.beginPath();
+          this.canvasContext.moveTo(this.startX + radius, this.startY);
+          this.canvasContext.arcTo(this.startX + rectWidth, this.startY, this.startX + rectWidth, this.startY + rectHeight, radius);
+          this.canvasContext.arcTo(this.startX + rectWidth, this.startY + rectHeight, this.startX, this.startY + rectHeight, radius);
+          this.canvasContext.arcTo(this.startX, this.startY + rectHeight, this.startX, this.startY, radius);
+          this.canvasContext.arcTo(this.startX, this.startY, this.startX + rectWidth, this.startY, radius);
+          this.canvasContext.strokeStyle = this.color;
+          this.canvasContext.lineWidth = this.lineWidth;
+          this.canvasContext.stroke();
+          break;
+
+        default:
+          break;
+      }
+    },
+    clearCanvas() {
+      this.canvasContext.clearRect(0, 0, this.width, this.height);
+    }
+  },
+  mounted() {
+      const canvas = this.$refs.canvas;
+      this.canvasContext = canvas.getContext("2d", { willReadFrequently: true });
+      this.canvasContext.lineCap = "round";
+      this.currentTool = 'pen';
+      this.lineWidth = this.toolSizes.brush;
+  },
+  
+  computed: {
+    selectionStyle() {
+      const x = Math.min(this.startX, this.currentX);
+      const y = Math.min(this.startY, this.currentY);
+      const width = Math.abs(this.currentX - this.startX);
+      const height = Math.abs(this.currentY - this.startY);
+      return {
+        left: `${x}px`,
+        top: `${y}px`,
+        width: `${width}px`,
+        height: `${height}px`,
+      };
+  }
+}
+}
+</script>
+
+<style scoped>
+.kp_window--show{
+  display: block !important;
+  overflow: hidden;
+}
+.kp_content--block--content{
+  overflow: scroll;
+  width: 100%;
+  height: calc(100% - 11px);
+  transition: 0.3s;
+  position: relative;
+}
+.kp_content--block{
+  max-width: none !important;
+}
+
+.kp_image-text--show,
+.kp_text--show{
+  display: block;
+}
+.kp_content--block--content{
+  overflow: scroll;
+  overflow: scroll;
+  width: 100%;
+  height: calc(100% - 11px);
+  transition: 0.3s;
+}
+.kp_content--block{
+  position: absolute;
+  font-size: 14px;
+  letter-spacing: 0px;
+  color: black;
+  max-width: 800px;
+  width: 50%;
+  height: fit-content;
+  background: #eeecdf;
+  position: absolute;
+}
+
+
+@media screen and (max-width: 900px){
+  .kp_content--block--content{
+    overflow-y: scroll;
+    width: 100%;
+    height: calc(100% - 11px);
+    transition: 0.3s;
+    position: relative;
+    height: calc(100% - 36px) !important;
+    font-size: 9px;
+    display: flex;
+    align-items: flex-end;
+  }
+}
+
+
+
+
+.paint-side-canva{    
+    width: 900px;
+    height: 900px;
+    overflow: hidden;
+    position: relative;
+    padding-right: 8px;
+    padding-bottom: 8px;
+}
+
+.paint-canvas{
+  width: 900px;
+  height: 900px;
+  background-color: #FFFFFF;
+  position: relative;
+  top: 5px;
+  left: 5px;
+  border: none;
+  cursor: crosshair;
+  cursor: url('@/assets/images/paint/paint-cursor.png') 16 16, auto;
+}
+
+
+.paint-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ddd;
+}
+canvas {
+  border: 1px solid #000;
+}
+.outils-paint{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #aca899;
+    height: 280px;
+    width: 70px;
+    background: #ece9d8;
+    padding: 10px;
+}
+.paint-content{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    background: #808080;
+}
+.paint-tool{
+  border: 1px solid #FFFFFF00;
+  width: calc(50% - 2px);
+  cursor: pointer;
+}
+
+.selected-tool {
+  border: 1px solid #7a98af;
+  border-radius: 3px;
+  background: #ffffff;
+}
+.outils-left{
+  background: #ece9d8;
+}
+.border-paint{
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background-color: #FFFFFF;
+    position: absolute;
+}
+.border-paint--1{
+    top: 2px;
+    left: 2px;
+}
+.border-paint--2{
+    top: 2px;
+    right: 0px;
+}
+.border-paint--3{
+    bottom: 0px;
+    left: 2px;
+} 
+.border-paint--4{
+    bottom: 0px;
+    right: 0px;
+}
+.paint-colors{
+  position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: #ece9d8;
+    border-top: solid 1px #aca899;
+    display: flex;
+}
+.une-couleur{
+  border-top: solid 2px #000000;
+  border-left: solid 2px #000000;
+  border-bottom: solid 2px #cecece;
+  border-right: solid 2px #cecece;
+
+}
+.color-selectionne{
+    padding: 18px;
+    background-color: white;
+    width: fit-content;
+    border-top: solid 2px #000000;
+    border-left: solid 2px #000000;
+    border-bottom: solid 2px #cecece;
+    border-right: solid 2px #cecece;
+    position: relative;
+    left: 15px;
+    top: 22px;
+    width: 10px;
+    height: 10px;
+}
+.color-preview-secondary{
+  background-color: rgb(255, 255, 255);
+    width: 18px;
+    height: 18px;
+    border: solid 2px #ece9d8;
+    box-shadow: 2px 2px 0 0 #aca899;
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+}
+.color-preview{
+  background-color: rgb(0, 0, 0);
+    width: 18px;
+    height: 18px;
+    border: solid 2px #ece9d8;
+    box-shadow: 2px 2px 0 0 #aca899;
+    position: absolute;
+    top: 6px;
+    left: 6px;
+
+}
+.color-pickers{    
+  padding: 20px;
+    width: fit-content;
+    position: relative;
+    left: 0px;
+    top: 3px;
+    width: 12px;
+    height: 12px;
+    display: flex;
+    /* flex-direction: column-reverse; */
+    /* align-content: flex-start; */
+    width: 100%;
+    flex-wrap: wrap;
+    max-width: 360px;
+}
+.une-couleur{
+  border: solid 2px #ece9d8;
+  box-shadow: -2px -2px 0 0 #aca899;
+  width:21px;
+  height: 21px;
+  border-top:solid 2px #000000;
+  border-left: solid 2px #000000;
+  cursor: pointer;
+}
+.kp_content--block--content{
+  height: calc(100% - 36px);
+}
+.size-paint{
+  border-top: solid 1px #aca899;
+  border-left: solid 1px #aca899;
+  border-right: solid 1px #ffffff;
+  border-bottom: solid 1px #ffffff;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  height: 110px;
+}
+.input-size{
+  display: none;
+}
+.label-size{
+  width:  19px;
+  height: 19px;
+  position: relative;
+}
+.label-size:after{
+  content:"";
+  width:  5px;
+  height: 5px;
+  position: absolute;
+  background-color: #000000;
+}
+.label-size--1:after{
+  width:  5px;
+  height: 5px;
+  left:7px;
+  top:7px;
+}
+.label-size--2:after{
+  width:  8px;
+  height: 8px;
+  left:5px;
+  top:5px;
+}
+.label-size--3:after{
+  width:  11px;
+  height: 11px;
+  left:4px;
+  top:4px;
+}
+.label-size--4:after{
+  width: 15px;
+  height: 15px;
+  left:2px;
+  top:2px;
+}
+.input-size:checked + .label-size{
+  background-color: #0078d7;
+}
+.input-size:checked + .label-size:after{
+  background-color: #FFFFFF;
+}
+.selection-rectangle {
+  position: absolute;
+  border: 1px dashed #000;
+  background-color: rgba(0, 0, 255, 0.2); /* Couleur semi-transparente */
+  pointer-events: none; /* Ignore les événements */
+}
+
+.tool-name--select1,
+.tool-name--shape,
+.tool-name--egg,
+.tool-name--line2{
+  pointer-events: none;
+  filter: brightness(1.5);
+    background: #5f5d57;
+    opacity: 0.3;
+}
+
+</style>

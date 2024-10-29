@@ -12,6 +12,7 @@
       </div>
       <Navigation @close="handleClose"  @resize="handleResize"  @reduct="handleReduct"  :viewName="title" :context="context" :customClass="customClass" />
     </div>
+    <FakeMenu></FakeMenu>
 
     <div class="kp_folder-projects-zone-texte kp_quisuisje--texte kp_element--enable">
       <div class="kp_quisuisje--content">
@@ -61,6 +62,7 @@
   
   <script>
   import Navigation from '@/components/Navigation.vue';
+  import FakeMenu     from '@/components/Fakemenu.vue';
 
   
   import iconSource from '@/assets/images/sites/kevinprevost.png';
@@ -126,7 +128,8 @@
   name: 'Monparcours',
   emits: ['update-class', 'close', 'resize', 'reduct'],
   components: {
-    Navigation
+    Navigation,
+    FakeMenu
   },
  props: {
    context: {
