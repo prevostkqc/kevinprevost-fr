@@ -149,7 +149,6 @@ methods: {
   height: fit-content;
   background: white;
   position: absolute;
-  max-width: 1000px;
 }
 
 .kp_terminal_zone-titre {
@@ -166,12 +165,12 @@ color: #FFFFFF;
 }
 
 .kp_terminal_zone-texte {
-background: black;
-height: calc(100% - 51px);
-width: calc(100% - 30px);
-padding: 10px 25px 30px 5px;
-overflow-y: scroll;
-min-height: 150px;
+  background: black;
+  height: calc(100% - 51px);
+  width: calc(100% - 30px);
+  padding: 10px 25px 30px 5px;
+  overflow-y: scroll;
+  min-height: 150px;
 }
 
 .kp_terminal--texte {
@@ -202,6 +201,10 @@ font-family: 'Courier New', Courier, monospace;
 font-weight: 600;
 color: #ff7373;
 }
+.kp_terminal{
+  width:100%;
+
+}
 
 .kp_terminal-ecriture {
 border-right: solid 1px white;
@@ -209,14 +212,14 @@ animation: blinkText 1s infinite linear;
 }
 
 @keyframes blinkText {
-0% {
-  border-right: solid 1px white;
-}
-50% {
-  border-right: solid 1px black;
-}
-100% {
-  border-right: solid 1px white;
-}
+  0% {
+    border-right: solid 1px white;
+  }
+  50% {
+    border-right: solid 1px black;
+  }
+  100% {
+    border-right: solid 1px white;
+  }
 }
 </style>

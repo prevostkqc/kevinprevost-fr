@@ -1,10 +1,28 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '../components/Home.vue';
-import Portfolio from '../components/Portfolio.vue';
+import Sarting  from '../components/Starting.vue';
+import Home     from '../components/Home.vue';
 
 const routes = [
   {
     path: '/',
+    name: 'starting',
+    component: Sarting,
+    meta: {
+      title: 'Kévin Prévost - Développeur Web',
+      metaTags: [
+        {
+          name: 'description',
+          content: 'Découvrez mes projets réalisés.'
+        },
+        {
+          property: 'og:description',
+          content: 'Découvrez mon portfolio et les projets que j\'ai réalisés pour mes clients.'
+        }
+      ]
+    }
+  },
+  {
+    path: '/home',
     name: 'home',
     component: Home,
     meta: {
@@ -21,43 +39,20 @@ const routes = [
       ]
     }
   },
-  {
-    path: '/portfolio',
-    name: 'portfolio',
-    component: Portfolio,
-    meta: {
-      title: 'Kévin Prévost - Développeur Web',
-      metaTags: [
-        {
-          name: 'description',
-          content: 'Découvrez mes projets réalisés.'
-        },
-        {
-          property: 'og:description',
-          content: 'Découvrez mon portfolio et les projets que j\'ai réalisés pour mes clients.'
-        }
-      ]
-    }
-  }
 ];
 
 
-// Création du routeur
 const router = createRouter({
   history: createWebHistory(),
   routes
 });
 
-// Mise à jour du titre de la page et des meta tags après chaque navigation
 router.afterEach((to) => {
-  // Mettre à jour le titre de la page
   document.title = to.meta.title || 'Default Title';
 
-  // Supprimer les anciennes balises meta
   const oldMetaTags = document.querySelectorAll('meta[name="description"], meta[property^="og:"]');
   oldMetaTags.forEach(tag => tag.remove());
 
-  // Ajouter les nouvelles balises meta
   if (to.meta.metaTags) {
     to.meta.metaTags.forEach(tagDef => {
       const tag = document.createElement('meta');

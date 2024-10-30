@@ -79,16 +79,20 @@
           <!-- Contenu de la partie droite -->
         </div>
       </div>
+      
       <div class="kp_menu__barre-etat--bottom">
         <div class="item-action">
+            <router-link to="/" class="link-profil"></router-link>
             <img class="kp_menu__barre-etat--img-icon" :src="lockIcon" alt="Verrouiller">
             <p class="kp_menu--sortir">Fermer la session</p>
-        </div>
-        
-        <div class="item-action">
+          </div>
+      
+      
+          <div class="item-action">
+            <router-link to="/" class="link-profil"></router-link>
             <img class="kp_menu__barre-etat--img-icon" :src="exitIcon" alt="Fermer">
             <p class="kp_menu--sortir">Arrêter la navigation</p>
-        </div>
+          </div>
       </div>
     </section>
     
@@ -395,6 +399,7 @@ background-color: white;
     align-items: center;
     gap: 10px;
     padding : 0px 10px 0px 0px;
+    position: relative;
 }
 .item-action:hover{
     text-decoration: underline;
@@ -413,6 +418,14 @@ background-color: white;
 .kp_menu__barre-etat--content-left{
     padding:10px;
     width: 50%;
+}
+
+.link-profil{
+  position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
 }
 
   </style>

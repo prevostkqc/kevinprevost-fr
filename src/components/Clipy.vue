@@ -243,6 +243,10 @@
     height: 100%;
     animation: clippymove 5s infinite;
   }
+  .kp_clipy--feuille{
+    user-select: none;
+    pointer-events: none;
+  }
 
   @keyframes clippymove{
     0%{ 

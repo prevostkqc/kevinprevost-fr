@@ -1,10 +1,10 @@
 <template>
-  <section class="kp_desktop">
+  <section class="kp_desktop" @mousedown="checkForSelection">
     <article 
       v-for="item in desktopItems" 
       :key="item.id" 
-      :class="['kp_folder--un-ico', item.class]"
-      @click="handleClick(item.id); callBringToFront(item.id)
+      :class="['kp_folder--un-ico', item.class, { 'is-selecting': isSelecting }]"
+      @click="!isSelecting && handleClick(item.id); !isSelecting && callBringToFront(item.id)
       ">  <!-- Ajout de @click pour chaque icône -->
       <div class="kp_folder--un-ico-container-img">
         <div v-if="item.isTextIcon" class="kp_terminal--icn">{{ item.icon }}</div>
@@ -14,6 +14,14 @@
         {{ item.text }}
       </p>
     </article>
+    
+    <div 
+        v-if="isSelecting" 
+        :style="selectionStyle" 
+        class="selection-overlay"
+    ></div>
+  </section>
+
     <a v-if="mailLink" :href="mailLink" class="kp_hrefmailto-icon">
       <article class="kp_folder--un-ico kp_folder--mail">
         <div class="kp_folder--un-ico-container-img">
@@ -24,7 +32,6 @@
         </p>
       </article>
     </a>
-  </section>
 </template>
 
 <script>
@@ -38,6 +45,7 @@ import paintIcon from '@/assets/images/icon-paint.png';
 
 export default {
   name: 'Desktop',
+  emits: ['openWindow', 'callBringToFront'],
   data() {
     return {
       desktopItems: [
@@ -99,9 +107,34 @@ export default {
         }
       ],
       mailLink: 'mailto:contact@kevinprevost.fr?subject=Contact depuis kevinprevost.fr&body=Nom : %0D%0APrénom : %0D%0ATéléphone : %0D%0ACompagnie (facultatif) : %0D%0A%0D%0ADescription du projet : %0D%0A%0D%0A%0D%0A%0D%0A',
-      mailIcon
+      mailIcon,
+      isSelecting: false,
+      startX: 0,
+      startY: 0,
+      currentX: 0,
+      currentY: 0
     };
   },
+
+  computed: {
+    selectionStyle() {
+      const x = Math.min(this.startX, this.currentX);
+      const y = Math.min(this.startY, this.currentY);
+      const width = Math.abs(this.currentX - this.startX);
+      const height = Math.abs(this.currentY - this.startY);
+      return {
+        left: `${x}px`,
+        top: `${y}px`,
+        width: `${width}px`,
+        height: `${height}px`,
+        border: '1px dashed #FFFFFF',
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        position: 'absolute',
+        pointerEvents: 'none',
+      };
+    }
+  },
+  
   methods: {
     handleClick(id) {
       this.$emit('openWindow', id);
@@ -109,6 +142,29 @@ export default {
     
     callBringToFront(appId) {
       this.$emit('callBringToFront', appId);
+    },
+    startSelection(event) {
+      this.isSelecting = true;
+      this.startX = event.clientX;
+      this.startY = event.clientY;
+      this.currentX = this.startX;
+      this.currentY = this.startY;
+      window.addEventListener('mousemove', this.updateSelection);
+      window.addEventListener('mouseup', this.endSelection);
+    },
+    updateSelection(event) {
+      this.currentX = event.clientX;
+      this.currentY = event.clientY;
+    },
+    endSelection() {
+      this.isSelecting = false;
+      window.removeEventListener('mousemove', this.updateSelection);
+      window.removeEventListener('mouseup', this.endSelection);
+    },
+    checkForSelection(event) {
+      if (!event.target.closest('.kp_folder--un-ico')) {
+        this.startSelection(event);
+      }
     },
   }
 };
@@ -126,4 +182,23 @@ export default {
       outline: #3b93ff solid 1px;
       margin-right: 8px;
   }
+
+
+.kp_desktop {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.selection-overlay {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px dashed #ffffff;
+  pointer-events: none;
+}
+.is-selecting {
+  pointer-events: none;
+  user-select: none;
+}
 </style>

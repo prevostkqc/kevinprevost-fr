@@ -14,7 +14,22 @@
         <section class="fake-menu-top-folder">
             <div class="fake-menu--top">
                 <ul class="liste-fake-menu">
-                    <li class="liste-fake-menu--li">Fichier</li>
+                    <li class="liste-fake-menu--li  liste-fake-menu--li-nouveau">Fichier
+                        <ul class="fake-sous-menu">
+                            <li class="fake-sous-menu--li" @click="clearCanvas">
+                                <p class="p-texte">Nouveau</p>
+                                <p class="p-texte">Ctrl+N</p>
+                            </li>
+                            <li class="fake-sous-menu--li">
+                                <p class="p-texte">Ouvrir...</p>
+                                <p class="p-texte">Ctrl+O</p>
+                            </li>
+                            <li class="fake-sous-menu--li">
+                                <p class="p-texte">Enregistrer</p>
+                                <p class="p-texte">Ctrl+S</p>
+                            </li>
+                        </ul>
+                    </li>
                     <li class="liste-fake-menu--li">Edition</li>
                     <li class="liste-fake-menu--li">Affichage</li>
                     <li class="liste-fake-menu--li">Image</li>
@@ -39,11 +54,11 @@
                   <div class="size-paint">
                     <input type="radio" v-model="lineWidth" name="line-size" id="size-1" class="input-size" value="1"/>
                     <label for="size-1" class="label-size  label-size--1"></label>
-                    <input type="radio" v-model="lineWidth" name="line-size" id="size-2" class="input-size" value="7"/>
+                    <input type="radio" v-model="lineWidth" name="line-size" id="size-2" class="input-size" value="3"/>
                     <label for="size-2" class="label-size  label-size--2"></label>
-                    <input type="radio" v-model="lineWidth" name="line-size" id="size-3" class="input-size" value="15"/>
+                    <input type="radio" v-model="lineWidth" name="line-size" id="size-3" class="input-size" value="7"/>
                     <label for="size-3" class="label-size  label-size--3"></label>
-                    <input type="radio" v-model="lineWidth" name="line-size" id="size-4" class="input-size" value="25"/>
+                    <input type="radio" v-model="lineWidth" name="line-size" id="size-4" class="input-size" value="10"/>
                     <label for="size-4" class="label-size  label-size--4"></label>
                   </div>  
                 </div>
@@ -58,12 +73,13 @@
                     @mouseup="handleMouseUp" 
                     @mouseleave="stopDrawing"
                     @contextmenu.prevent
+                    :style="[canvasStyle, { cursor: cursorStyle }]"
                     class="paint-canvas"
                   ></canvas>
                   <div
-                    v-show="isSelecting"
+                  v-show="isSelecting"
+                    :class="['selection-rectangle', selectionRectangleClass]"
                     :style="selectionStyle"
-                    class="selection-rectangle"
                   ></div>
                   <div class="border-paint  border-paint--1"></div>
                   <div class="border-paint  border-paint--2"></div>
@@ -137,6 +153,12 @@ import paint14 from '@/assets/images/paint/paint-shape.png';
 import paint15 from '@/assets/images/paint/paint-ellipse.png';
 import paint16 from '@/assets/images/paint/paint-egg.png';
 
+import penCursor      from '@/assets/images/paint/cursor-pen.png';
+import brushCursor    from '@/assets/images/paint/cursor-brush.png';
+import eraserCursor   from '@/assets/images/paint/cursor-eraser.png';
+import fillCursor     from '@/assets/images/paint/cursor-fill.png';
+import pipetteCursor  from '@/assets/images/paint/cursor-pipette.png';
+import paintingCursor from '@/assets/images/paint/cursor-painting.png';
 
 
 export default {
@@ -171,17 +193,31 @@ export default {
             brush: 10,
             paintbrush: 15 
         },
+        toolCursors: {
+          pen: penCursor,
+          brush: brushCursor,
+          eraser: eraserCursor,
+          fill: fillCursor,
+          pipette: pipetteCursor,
+          painting: paintingCursor,
+          rect: 'crosshair',
+          ellipse: 'crosshair',
+          line: 'crosshair',
+          select: 'crosshair',
+        },
         currentTool: 'pen',
         lineWidth: 1,
         textIcon,
         color: '#000000',
         secondaryColor: '#FFFFFF', 
-
+        isDrawingComplete: false,
         isSelecting: false,
+        activeDrawing: false,
         startX: 0,
         startY: 0,
         currentX: 0,
         currentY: 0,
+        canvasScale: 1,
         tools: [
             { name: 'select1', icon: paint1 },
             { name: 'select', icon: paint2 },
@@ -214,61 +250,141 @@ export default {
     handleReduct() {
       this.$emit('update-class', 'kp_item_reduct');
     },
-
+    clearCanvas() {
+        const canvas = this.$refs.canvas;
+        const context = this.canvasContext;
+        context.clearRect(0, 0, canvas.width, canvas.height);
+    },
+    toggleZoom() {
+      this.canvasScale = this.canvasScale === 1 ? 1.4 : 1;
+    },
+    /* --------------------------------------------------- */
+    /* Sélection et dessin */
     handleMouseDown(event) {
-      if (this.currentTool === 'select') {
-        this.startSelection(event);
-      } else {
-        this.startDrawing(event);
-      }
+      requestAnimationFrame(() => {
+        this.activeDrawing = true;
+        this.startX = event.offsetX;
+        this.startY = event.offsetY;
+        
+        if (this.currentTool === 'rect' || this.currentTool === 'ellipse' || this.currentTool === 'line' || this.currentTool === 'select') {
+            this.isDrawingShape = true;
+            this.isSelecting = true; 
+            this.currentX = this.startX;
+            this.currentY = this.startY;
+        } else {
+            this.startDrawing(event); 
+        }
+
+        document.addEventListener('mousemove', this.handleMouseMove);
+        document.addEventListener('mouseup', this.stopDrawing);
+    });
+        
     },
     handleMouseMove(event) {
-      if (this.currentTool === 'select') {
-        this.updateSelection(event);
-      } else {
-        this.draw(event);
+        if (this.isDrawingShape && this.isSelecting) {
+            this.currentX = event.offsetX;
+            this.currentY = event.offsetY;
+        } else if (this.drawing) {
+            this.draw(event);
+        }
+    },
+    handleMouseLeave(event) {
+      if (this.currentTool !== 'line') {
+        this.stopDrawing(event);
       }
     },
     handleMouseUp(event) {
-      if (this.currentTool === 'select') {
-        this.endSelection(event);
+      if (!this.isDrawingComplete && this.isDrawingShape) {
+        this.endOverlay(event);
       } else {
         this.stopDrawing(event);
       }
     },
 
+    startOverlay(event) {
+        if (!this.isDrawingShape && (this.currentTool === 'select' || this.currentTool === 'rect' || this.currentTool === 'ellipse')) {
+            this.isDrawingShape = true;
+            this.isSelecting = true;
+            this.isDrawingComplete = false;
+            this.startX = event.offsetX;
+            this.startY = event.offsetY;
+            this.currentX = this.startX;
+            this.currentY = this.startY;
+        }
+    },
+
+    updateOverlay(event) {
+        if (this.isDrawingShape) {
+            this.currentX = event.offsetX;
+            this.currentY = event.offsetY;
+        }
+    },
+
+    endOverlay(event) {
+        if (this.isDrawingShape) {
+            const endX = event.offsetX;
+            const endY = event.offsetY;
+
+            if (this.currentTool === 'rect') {
+                this.drawRectangle(this.startX, this.startY, endX, endY);
+            } else if (this.currentTool === 'ellipse') {
+                this.drawEllipse(this.startX, this.startY, endX, endY);
+            }
+
+            this.isDrawingShape = false;
+            this.isSelecting = false;
+            this.isDrawingComplete = true;
+
+            document.removeEventListener('mousemove', this.updateOverlay);
+            document.removeEventListener('mouseup', this.endOverlay);
+        }
+    },
+    drawRectangle(startX, startY, endX, endY) {
+      const width = endX - startX;
+      const height = endY - startY;
+      this.canvasContext.beginPath();
+      this.canvasContext.rect(startX, startY, width, height);
+      this.canvasContext.strokeStyle = this.color;
+      this.canvasContext.lineWidth = this.lineWidth;
+      this.canvasContext.stroke();
+    },
+
+    drawEllipse(startX, startY, endX, endY) {
+      const centerX = (startX + endX) / 2;
+      const centerY = (startY + endY) / 2;
+      const radiusX = Math.abs(endX - startX) / 2;
+      const radiusY = Math.abs(endY - startY) / 2;
+      this.canvasContext.beginPath();
+      this.canvasContext.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
+      this.canvasContext.strokeStyle = this.color;
+      this.canvasContext.lineWidth = this.lineWidth;
+      this.canvasContext.stroke();
+    },
+
     /* --------------------------------------------------- */
     /* Sélection */
     startSelection(event) {
-      if (this.currentTool === 'select') {
-        console.log("Début de la sélection avec coordonnées :", event.offsetX, event.offsetY);
-        this.isSelecting = true;
-        this.startX = event.offsetX;
-        this.startY = event.offsetY;
-        this.currentX = this.startX;
-        this.currentY = this.startY;
-      }
+      this.isSelecting = true;
+      this.startX = event.offsetX;
+      this.startY = event.offsetY;
+      this.currentX = this.startX;
+      this.currentY = this.startY;
     },
     updateSelection(event) {
       if (this.isSelecting) {
-        console.log("Mise à jour de la sélection - coordonnées actuelles :", event.offsetX, event.offsetY);
         this.currentX = event.offsetX;
         this.currentY = event.offsetY;
-        console.log("Style de sélection : ", this.selectionStyle); // Vérifiez que le style est correct
       }
     },
     endSelection() {
-
       if (this.isSelecting) {
-        console.log("Fin de la sélection");
         this.isSelecting = false;
-        // Logique de capture ou de confirmation de la zone sélectionnée
       }
     },
 
     /* --------------------------------------------------- */
     /* Remplissage de zone */
-    fillArea(startX, startY) {
+    fillArea(startX, startY, color) {
       const canvas = this.$refs.canvas;
       const context = this.canvasContext;
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
@@ -282,11 +398,11 @@ export default {
         imageData.data[startPixel + 3]
       ];
 
-      // Utilisation de `this.color`, convertie en RGBA
-      const fillColor = this.colorToRGBA(this.color);
-      console.log(`Remplissage de la zone avec la couleur : ${this.color}`);
+      const fillColor = this.colorToRGBA(color);
+      if (this.colorsMatch(targetColor, fillColor)) return;
 
-      if (this.colorsMatch(targetColor, fillColor)) return; // Evite de remplir si la couleur est la même
+
+      if (this.colorsMatch(targetColor, fillColor)) return;
 
       const pixelStack = [[startX, startY]];
 
@@ -316,7 +432,6 @@ export default {
           imageData.data[currentPixel + 2],
           imageData.data[currentPixel + 3]
         ])) {
-          // Remplissage du pixel avec `fillColor`
           imageData.data[currentPixel] = fillColor[0];
           imageData.data[currentPixel + 1] = fillColor[1];
           imageData.data[currentPixel + 2] = fillColor[2];
@@ -363,7 +478,6 @@ export default {
     },
 
     colorToRGBA(color) {
-      // Si la couleur est en format hexadécimal (ex. : #ff0000)
       if (color.startsWith("#")) {
         const bigint = parseInt(color.slice(1), 16);
         const r = (bigint >> 16) & 255;
@@ -372,20 +486,15 @@ export default {
         return [r, g, b, 255];
       }
       
-      // Si la couleur est en format `rgba(r, g, b, a)`
       if (color.startsWith("rgba")) {
         const parts = color.match(/rgba?\((\d+), (\d+), (\d+),? ?(\d+)?\)/);
         return [parseInt(parts[1]), parseInt(parts[2]), parseInt(parts[3]), parts[4] ? parseFloat(parts[4]) * 255 : 255];
       }
-      
-      // Si la couleur est en format `rgb(r, g, b)`
       if (color.startsWith("rgb")) {
         const parts = color.match(/rgb\((\d+), (\d+), (\d+)\)/);
         return [parseInt(parts[1]), parseInt(parts[2]), parseInt(parts[3]), 255];
       }
-      
-      // Par défaut (si une couleur nommée est utilisée)
-      return [0, 0, 0, 255]; // noir par défaut si la couleur est invalide
+      return [0, 0, 0, 255];
     },
 
     colorsMatch(color1, color2) {
@@ -402,26 +511,29 @@ export default {
       const b = bigint & 255;
       return [r, g, b, 255];
     },
+    rgbToHex(r, g, b) {
+      return `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1).toUpperCase()}`;
+    },
 
     /* --------------------------------------------------- */
     /* Pipette */
-    pickColor(x, y) {
+    pickColor(x, y, button) {
       const canvas = this.$refs.canvas;
       const context = this.canvasContext;
       const pixelData = context.getImageData(x, y, 1, 1).data;
       const [r, g, b, a] = pixelData;
-
-      console.log(`Couleur du pixel à (${x}, ${y}): rgba(${r}, ${g}, ${b}, ${a / 255})`);
       if (a === 0) {
-        console.log("Pixel transparent, aucune couleur capturée.");
         return;
       }
-      this.color = `rgba(${r}, ${g}, ${b}, ${a / 255})`;
-      console.log(`Nouvelle couleur active: ${this.color}`);
+      const hexColor = this.rgbToHex(r, g, b);
+      if (button === 2) {
+        this.secondaryColor = hexColor;
+      } else {
+        this.color = hexColor;
+      }
     },
     setColor(newColor) {
-      this.color = newColor;  // Met à jour la couleur active avec la couleur cliquée
-      console.log(`Couleur active changée en : ${this.color}`);
+      this.color = newColor;
     },
     setSecondaryColor(newColor) {
       this.secondaryColor = newColor;
@@ -431,30 +543,15 @@ export default {
     /* Outils de dessin */
     selectTool(toolName) {
       this.currentTool = toolName;
-      // Définir la largeur de ligne en fonction de l'outil sélectionné
-
-      switch (toolName) {
-        case 'brush':
-          break;
-        case 'paint_brush':
-          break;
-        case 'eraser':
-          break;
-        case 'pen':
-          break;
-        case 'select':
-          this.isSelecting = false;
-          break;
-        default:
-          this.lineWidth = 1;
-          break;
-      }
-      console.log(`Outil sélectionné : ${toolName}, taille : ${this.lineWidth}px`);
+        if (toolName === 'zoom') {
+          this.toggleZoom();
+         }
     },
 
     /* --------------------------------------------------- */
     /* Dessin */
     startDrawing(event) {
+      if (!this.activeDrawing) return;
       this.drawing = true;
       this.startX = event.offsetX;
       this.startY = event.offsetY;
@@ -462,12 +559,12 @@ export default {
       this.currentColor = (event.button === 2) ? this.secondaryColor : this.color;
 
       if (this.currentTool === 'pipette') {
-        this.pickColor(this.startX, this.startY);
+        this.pickColor(this.startX, this.startY, event.button);
         return;
       }
       
       if (this.currentTool === 'fill') {
-        this.fillArea(this.startX, this.startY);
+        this.fillArea(this.startX, this.startY, this.currentColor);
         return;
       }
       if (this.currentTool === 'pen' || this.currentTool === 'painting' || this.currentTool === 'paint_brush') {
@@ -492,15 +589,12 @@ export default {
         case 'polygon':
         case 'ellipse':
         case 'rounded-rect':
-          // Initialiser le point de départ
           break;
 
         case 'text':
-          // Texte sera ajouté dans stopDrawing
           break;
 
         case 'pipette':
-          // Capturer la couleur au point de clic
           const pixelData = this.canvasContext.getImageData(this.startX, this.startY, 1, 1).data;
           this.color = `rgba(${pixelData[0]}, ${pixelData[1]}, ${pixelData[2]}, ${pixelData[3] / 255})`;
           break;
@@ -508,15 +602,18 @@ export default {
         default:
           break;
       }
+
+      document.addEventListener('mousemove', this.draw);
+      document.addEventListener('mouseup', this.stopDrawing);
     },
 
 
     draw(event) {
-      if (!this.drawing) return;
-      console.log(`Outil actuel : ${this.currentTool}, Taille : ${this.lineWidth}px`);
-      
+      if (!this.drawing || this.currentTool === 'line' || this.currentTool === 'rect' || this.currentTool === 'ellipse') return;
+     
       this.canvasContext.strokeStyle = this.currentColor;
-
+      this.canvasContext.lineWidth = this.effectiveLineWidth;
+    
       switch (this.currentTool) {
         case 'pen':
           this.canvasContext.lineTo(event.offsetX, event.offsetY);
@@ -526,7 +623,6 @@ export default {
 
         case 'painting':
             this.canvasContext.lineTo(event.offsetX, event.offsetY);
-            this.canvasContext.lineWidth = this.lineWidth;
             this.canvasContext.stroke();
             break;
 
@@ -534,7 +630,7 @@ export default {
           this.canvasContext.clearRect(event.offsetX, event.offsetY, this.lineWidth, this.lineWidth);
           break;
 
-        case 'spray':
+        case 'brush':
           for (let i = 0; i < 10; i++) {
             const offsetX = event.offsetX + (Math.random() - 0.5) * this.lineWidth * 5;
             const offsetY = event.offsetY + (Math.random() - 0.5) * this.lineWidth * 5;
@@ -550,8 +646,13 @@ export default {
 
     stopDrawing(event) {
       this.drawing = false;
+      this.canvasContext.lineWidth = this.effectiveLineWidth;
+      document.removeEventListener('mousemove', this.draw);
+      document.removeEventListener('mouseup', this.stopDrawing);
       const endX = event.offsetX;
       const endY = event.offsetY;
+
+      if (this.startX === 0 && this.startY === 0) return;
 
       switch (this.currentTool) {
         case 'pen':
@@ -625,33 +726,143 @@ export default {
         default:
           break;
       }
+      this.startX = 0;
+      this.startY = 0;
+      this.isSelecting = false;
+
+      document.removeEventListener('mousemove', this.draw);
+      document.removeEventListener('mouseup', this.stopDrawing);
     },
     clearCanvas() {
       this.canvasContext.clearRect(0, 0, this.width, this.height);
     }
+  },
+  beforeDestroy() {
+    window.removeEventListener('mouseleave', this.stopDrawing);
   },
   mounted() {
       const canvas = this.$refs.canvas;
       this.canvasContext = canvas.getContext("2d", { willReadFrequently: true });
       this.canvasContext.lineCap = "round";
       this.currentTool = 'pen';
-      this.lineWidth = this.toolSizes.brush;
-  },
+      this.lineWidth = 1;
+
+
+      this.canvasContext.fillStyle = "#FFFFFF";
+      this.canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+
+
+      window.addEventListener('mouseleave', (event) => {
+        if (this.activeDrawing) {
+          this.stopDrawing(event); 
+        }
+      });
+    },
   
-  computed: {
-    selectionStyle() {
-      const x = Math.min(this.startX, this.currentX);
-      const y = Math.min(this.startY, this.currentY);
-      const width = Math.abs(this.currentX - this.startX);
-      const height = Math.abs(this.currentY - this.startY);
-      return {
-        left: `${x}px`,
-        top: `${y}px`,
-        width: `${width}px`,
-        height: `${height}px`,
-      };
+    computed: {
+      canvasStyle() {
+        return {
+          transform: `scale(${this.canvasScale})`,
+          transformOrigin: 'top left', 
+        };
+      },
+      selectionStyle() {
+        const x = Math.min(this.startX, this.currentX);
+        const y = Math.min(this.startY, this.currentY);
+        const width = Math.abs(this.currentX - this.startX);
+        const height = Math.abs(this.currentY - this.startY);
+
+        if (this.currentTool === 'select') {
+          return {
+            left: `${x}px`,
+            top: `${y}px`,
+            width: `${width}px`,
+            height: `${height}px`,
+            border: '1px dashed #000',
+            backgroundColor: 'rgba(0, 0, 255, 0.2)',
+          };
+        } else if (this.currentTool === 'rect') {
+          return {
+            left: `${x}px`,
+            top: `${y}px`,
+            width: `${width}px`,
+            height: `${height}px`,
+            border: '1px dashed #000',
+            backgroundColor: 'rgba(0, 0, 255, 0.0)',
+          };
+        }else if (this.currentTool === 'ellipse') {
+          return {
+            left: `${x}px`,
+            top: `${y}px`,
+            width: `${width}px`,
+            height: `${height}px`,
+            border: '1px dashed #000',
+            backgroundColor: 'rgba(0, 0, 255, 0.0)',
+            borderRadius: '50%',
+          };
+        }
+        return {};
+      },
+      effectiveLineWidth() {
+        return this.currentTool === 'painting' ? this.lineWidth * 5 : this.lineWidth;
+      },
+      cursorStyle() {
+      const cursor = this.toolCursors[this.currentTool];
+        return cursor && cursor.includes('.png') 
+          ? `url(${cursor}) 16 16, auto` 
+          : cursor || 'default'; 
+      },
+      selectionRectangleClass() {
+        switch (this.currentTool) {
+            case 'select':
+                return 'selection-select';
+            case 'rect':
+                return 'selection-rect';
+            case 'ellipse':
+                return 'selection-ellipse';
+            default:
+                return '';
+        }
+      },
+      selectionStyle() {
+        const x = Math.min(this.startX, this.currentX);
+        const y = Math.min(this.startY, this.currentY);
+        const width = Math.abs(this.currentX - this.startX);
+        const height = Math.abs(this.currentY - this.startY);
+
+        if (this.currentTool === 'select') {
+            return {
+                left: `${x}px`,
+                top: `${y}px`,
+                width: `${width}px`,
+                height: `${height}px`,
+                border: '1px dashed #000',
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            };
+        } else if (this.currentTool === 'rect') {
+            return {
+                left: `${x}px`,
+                top: `${y}px`,
+                width: `${width}px`,
+                height: `${height}px`,
+                border: '2px solid #000',
+                border: `${this.lineWidth}px solid ${this.isUsingSecondaryColor ? this.secondaryColor : this.color}`,
+                backgroundColor: 'rgba(0, 0, 0, 0.0)',
+            };
+        } else if (this.currentTool === 'ellipse') {
+            return {
+                left: `${x}px`,
+                top: `${y}px`,
+                width: `${width}px`,
+                height: `${height}px`,
+                border: `${this.lineWidth}px solid ${this.isUsingSecondaryColor ? this.secondaryColor : this.color}`,
+                backgroundColor: 'rgba(0, 0, 0, 0.0)',
+                borderRadius: '50%',
+            };
+        }
+        return {};
+    },
   }
-}
 }
 </script>
 
@@ -713,12 +924,12 @@ export default {
 
 
 .paint-side-canva{    
-    width: 900px;
-    height: 900px;
-    overflow: hidden;
-    position: relative;
-    padding-right: 8px;
-    padding-bottom: 8px;
+  width: fit-content;
+  height: fit-content;
+  /* overflow: hidden; */
+  position: relative;
+  padding-right: 8px;
+  padding-bottom: 8px;
 }
 
 .paint-canvas{
@@ -749,7 +960,7 @@ canvas {
     justify-content: center;
     align-items: center;
     border-top: 1px solid #aca899;
-    height: 280px;
+    height: 277px;
     width: 70px;
     background: #ece9d8;
     padding: 10px;
@@ -770,6 +981,9 @@ canvas {
   border: 1px solid #7a98af;
   border-radius: 3px;
   background: #ffffff;
+}
+.kp_icon_zone--paint:hover{
+  border: 1px solid #7a98af7d;
 }
 .outils-left{
   background: #ece9d8;
@@ -937,8 +1151,6 @@ canvas {
 }
 .selection-rectangle {
   position: absolute;
-  border: 1px dashed #000;
-  background-color: rgba(0, 0, 255, 0.2); /* Couleur semi-transparente */
   pointer-events: none; /* Ignore les événements */
 }
 
@@ -951,5 +1163,13 @@ canvas {
     background: #5f5d57;
     opacity: 0.3;
 }
+
+.selection-rectangle {
+    position: absolute;
+    pointer-events: none;
+    background-color: none;
+}
+
+
 
 </style>

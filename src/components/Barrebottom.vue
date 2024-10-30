@@ -241,7 +241,6 @@ export default {
 
       battery.addEventListener('chargingchange', () => {
         this.batteryIcon = (battery.charging && this.percentbattery < 100) ? this.batteryIconLoad : batteryIcon;
-        console.log(`La batterie est en charge : ${battery.charging}`);
       });
     });
   }

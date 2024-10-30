@@ -483,8 +483,6 @@ export default {
     handleCloseWindow(windowName) {
       const index = this.openWindows.indexOf(windowName);
       
-      console.log(`Fermeture de la fenêtre "${windowName}"`);
-      
       this.updateNotificationClass(windowName, 'notif_hide');
       
       if (index !== -1) {
@@ -606,4 +604,14 @@ export default {
   width:100%;
   max-width: 600px;
 }
+
+.container--terminal .kp_item__window_draggable {
+    top: 200px;
+    left: 200px;  
+}
+.container--folder{
+  top: 50px;
+  left: 130px;  
+}
+
 </style>

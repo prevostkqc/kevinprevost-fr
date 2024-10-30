@@ -119,7 +119,6 @@ export default {
      this.selectedProjectId = projectId;
    },
    setCompagnieProjet(client) {
-     console.log('Projet sélectionné:', client);
      this.$emit('projet-selectionne', client);
      this.$emit('update-class', 'kp_item_show');
    },

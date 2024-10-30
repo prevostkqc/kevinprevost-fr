@@ -3,7 +3,22 @@
     <section class="fake-menu-top-folder">
             <div class="fake-menu--top">
                 <ul class="liste-fake-menu">
-                    <li class="liste-fake-menu--li"><span class="under-windows">F</span>ichier</li>
+                    <li class="liste-fake-menu--li"><span class="under-windows">F</span>ichier
+                        <ul class="fake-sous-menu">
+                            <li class="fake-sous-menu--li">
+                                <p class="p-texte">Nouveau</p>
+                                <p class="p-texte">Ctrl+N</p>
+                            </li>
+                            <li class="fake-sous-menu--li">
+                                <p class="p-texte">Ouvrir...</p>
+                                <p class="p-texte">Ctrl+O</p>
+                            </li>
+                            <li class="fake-sous-menu--li">
+                                <p class="p-texte">Enregistrer</p>
+                                <p class="p-texte">Ctrl+S</p>
+                            </li>
+                        </ul>
+                    </li>
                     <li class="liste-fake-menu--li"><span class="under-windows">E</span>dition</li>
                     <li class="liste-fake-menu--li">Affic<span class="under-windows">h</span>age</li>
                     <li class="liste-fake-menu--li">Fa<span class="under-windows">v</span>oris</li>
@@ -113,4 +128,7 @@ export default {
 </script>
 
 <style scoped>
+
+
+
 </style>

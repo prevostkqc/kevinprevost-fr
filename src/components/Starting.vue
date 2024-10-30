@@ -1,54 +1,81 @@
 <template>
     <!-- Starting -->
-    <div v-if="showAnimation">
-      <div :class="customClass"></div>
+    <!-- <div v-if="showAnimation"> -->
+    <div>
       <section :class="['kp_starting', `kp_${context}`]">
-        <div class="kp_ecran-container">
-          <img class="kp_ecran kp_ecran--step1" :src="screenOffImage" alt="écran">
-          <img class="kp_ecran kp_ecran--step0 kp_ecran--step3" :src="screenImage2" alt="écran click">
-          <img class="kp_ecran kp_ecran--step0 kp_ecran--step2" :src="screenImage1" alt="écran click">
-          <img class="kp_ecran kp_ecran--step0 kp_ecran--step5" :src="screenImage41" alt="écran click">
-          <img class="kp_ecran kp_ecran--step0 kp_ecran--step4" :src="screenImage5" alt="écran click">
-          <img class="kp_ecran kp_ecran--step0 kp_ecran--step6" :src="screenImage6" alt="écran click">
+        <div class="kp_container-home">
+          <div class="kp_container--left">
+            <img :src="logo" alt="Kévin Prévost" class="kp_starting--logo"/>
+            <div class="kp_container--left-text">
+              <h1>Kévin Prévost</h1>
+              <h2>Développeur web</h2>
+            </div>
+          </div>
+            
+          <div class="kp_separation">
+            <div class="kp_sep"></div>
+          </div>
+
+          <div class="kp_container--right">
+            <router-link to="/home" class="link-profil">
+            <div class="kp_right-content">
+                <div class="kp_photo-container">
+                  <img class="kp_photo" :src="maphoto" alt="Kévin Prévost">
+                </div>
+                <div class="kp_titre-profil-barre">
+                  <h3 class="session-titre">Kévin Prévost</h3>
+                  <h4 class="session-sstitre">Entrer dans mon univers</h4>
+                </div>
+            </div>
+          </router-link>
+          </div>
+          <div class="open-light"></div>
+
+          <div class="part  part--top">
+            <div class="part-color"></div>
+            <div class="part-line"></div>
+          </div>
+          <div class="part  part--bottom">
+            <div class="part-line"></div>
+            <div class="part-color"></div>
+          </div>
+            
         </div>
       </section>
+      <div class="kp_starting--screen-off">
+      </div>
     </div>
     <!-- Starting -->
   </template>
   
   <script>
-  // Import des images
-  import screenOffImage from '@/assets/images/ecran_eteint.png';
-  import screenImage1 from '@/assets/images/ecran1.png';
-  import screenImage2 from '@/assets/images/ecran2.png';
-  import screenImage41 from '@/assets/images/ecran41.png';
-  import screenImage5 from '@/assets/images/ecran5.png';
-  import screenImage6 from '@/assets/images/ecran6.png';
+  import logo from '@/assets/images/logo.png';
+  import maphoto from '@/assets/images/kevinprevost.jpg';
   
   export default {
     name: 'Starting',
     props: {
       context: {
         type: String,
-        default: 'starting'
+        default: 'Kévin prévost'
       },
       customClass: {
         type: String,
         default: ''
+      },
+      goToHome() {
+        this.$router.push('/home'); // Navigue vers la vue "Home"
       }
     },
     data() {
       return {
         showAnimation: false,
-        screenOffImage,
-        screenImage1,
-        screenImage2,
-        screenImage41,
-        screenImage5,
-        screenImage6
+        logo,
+        maphoto
       };
     },
     methods: {
+      /*
       checkAndShowAnimation() {
         const ANIMATION_INTERVAL = 15 * 60 * 1000;
         const lastAnimationTime = localStorage.getItem('lastAnimationTime');
@@ -62,177 +89,255 @@
           }, 5000);
         }
       }
+        */
     },
     mounted() {
+      /*
       this.checkAndShowAnimation();
+      */
     }
   };
   </script>
   
   <style scoped>
+  *{
+    font-family: Tahoma;
+  }
   .kp_starting {
     width: 100vw;
     height: 100vh;
-    background: rgb(0, 0, 0);
-    background-image: url('@/assets/images/windows-spring.jpg');
-    background-size: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    z-index: 99999;
-    display: flex;
-    overflow: hidden;
-    animation: fadeIn 1s 3.5s forwards;
+    background: #010101;
   }
-  
-  .kp_ecran-container {
-    width: 60vw;
-    height: 90vh;
-    top: 0;
-    left: 0;
-    margin: auto;
-    position: relative;
-    padding-top: 5vh;
-    max-width: 1200px;
+  h1{
+    font-size: 2.5rem;
+    color: #fff;
+    margin: 0;
+  }
+  h2{
+    font-size: 1.95rem;
+    color: #fff;
+    margin: 0;
+  }
+  .kp_container-home {
     display: flex;
-    justify-content: center;  
-    align-items: center;     
-    overflow: hidden;         
-    animation: entrerdanslecran 2.5s 3s forwards;
-    filter: drop-shadow(0 0 2.5rem #000);
-}
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    animation: changeColor 1s forwards;
+    animation-delay: 2s;
+  }
+  @keyframes changeColor {
+    0% { 
+      background: #010101;
+      flex-wrap: wrap;
+    }
+    100% { 
+      background: #5a7edc;
+    }
+  }
+  .kp_separation{
+    width:2px;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    pointer-events: none;
+  }
+  .kp_sep{
+    position: relative;
+    width:2px;
+    height:0;
+    background: #5a7edc;
+    background: rgb(90,126,220);
+    background: linear-gradient(0deg, rgba(90,126,220,0) 0%, rgba(140,169,236,1) 20%, rgba(140,169,236,1) 80%, rgba(175,200,247,0) 100%);
+    animation: sepanim 1.0s forwards;
+    animation-delay: 1.5s;
+  }
+  @keyframes sepanim{
+    0% { height: 0;}
+    100% { height: 80%;}
+  }
 
-.kp_ecran {
+  .kp_container--left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    flex-direction: column;
+    width:100%;
+    max-width: 100%;
+    animation: leftmove 1.5s forwards linear;
+    padding-left: 10vw;
+    margin-right: -10vw;
+    user-select: none;
+    pointer-events: none;
+  }
+  @keyframes leftmove{
+    0% {
+      max-width: 100%;
+    }
+    100% {   
+      max-width: 50%;
+    }
+  }
+
+  .kp_starting--logo {
+    width: 100%;
+    max-height: 100%;
+    max-width: 500px;
+    object-fit: contain;
+    animation: fadeinUp 0.8s forwards;
+    opacity:0;
+    animation-delay: 0.3s;
+  }
+  .kp_container--left-text{
+    opacity: 0;
+    animation: fadein 0.7s forwards;
+    animation-delay: 1s;
+    position: relative;
+    top:-40px;
+    left:-14px;
+  }
+  @keyframes fadein{
+    from { opacity: 0;}
+    to { opacity: 1;}
+  }
+  @keyframes fadeinUp{
+    from { opacity: 0; transform: translateY(5%);}
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .kp_container--right {
+    display: flex;
+    opacity:0;
+    max-width: 25%;
+    width: 0%;
+    height: 100%;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    animation: rightmove 2s forwards;
+    animation-delay:1.7s;
+  }
+  @keyframes rightmove{
+    0% {
+      width:0%;
+      opacity: 0;
+    }
+    40% {
+      width:25%;
+      opacity: 0;
+    }
+    100% { 
+      width:25%;
+      opacity: 1;
+    }
+  }
+
+  .part{    
     position: absolute;
     width: 100%;
-    height: 100%;
-    object-fit: contain;  
-    object-position: center; 
+    height: 80px;
+    z-index: 1;
+    user-select: none;
     pointer-events: none;
-}
-  
-  
-  .kp_ecran--step0 {
-    opacity: 0;
   }
-  
-  .kp_ecran--step2 {
-    animation: step2 0.5s 0.5s forwards;
+  .part-color{
+    background: #00309c;
+    width: 100%;
+    height: 80px;
   }
-  
-  .kp_ecran--step3 {
-    animation: step3 0.1s 0.5s forwards;
+  .part-line {
+    background: rgb(90,126,220);
+    background: linear-gradient(90deg, rgba(90,126,220,0) 0%, rgba(175,200,247,1) 30%, rgba(175,200,247,1) 70%, rgba(175,200,247,0) 100%);
+    width: 100%;
+    height: 2px;
   }
-  
-  .kp_ecran--step4 {
-    animation: step4 0.5s 1s forwards;
+
+  .part--top{
+    top: 0;
+    transform: translateY(-100%);
+    animation: upscreen 1s forwards;
+    animation-delay: 2s;
+  } 
+  .part--bottom{
+    bottom: 0;
+    transform: translateY(100%);
+    animation: downscreen 1s forwards;
+    animation-delay: 2s;
   }
-  
-  .kp_ecran--step5 {
-    animation: step5 1s 0.5s forwards;
+  @keyframes upscreen{
+    0% { transform: translateY(-100%);}
+    100% { transform: translateY(0%);}
   }
-  
-  .kp_ecran--step6 {
-    animation: step6 0.5s 1.5s forwards;
+  @keyframes downscreen{
+    0% { transform: translateY(100%);}
+    100% { transform: translateY(0%);}
   }
-  
-  @keyframes step2 {
-    0% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-    }
+
+  .open-light{
+    background: radial-gradient(circle, rgba(146, 178, 239, 1) 0%, rgba(146, 178, 239, 0) 45%);
+    position: absolute;
+    height: 45vw;
+    width: 45vw;
+    z-index: 0;
+    opacity:0;
+    top: -18vw;
+    left: -17vw;
+    user-select: none;
+    border-radius: 100%;
+    pointer-events: none;
+    animation: fadein 1s forwards;
+    animation-delay: 2s;
   }
-  
-  @keyframes step3 {
-    0% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 1;
-    }
+
+  .kp_right-content{
+    gap: 20px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    margin-left: 50px;
+    padding: 10px 20px;
+    align-items: center;
+    justify-content: flex-start;
+    border-radius: 10px 0 0 10px;
+    background: rgb(18,66,166);
+    background: linear-gradient(90deg, rgba(18,66,166,1) 0%, rgba(25,72,171,1) 39%, rgba(90,126,220,1) 84%);
   }
-  
-  @keyframes step4 {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
+  .kp_right-content:hover{
+    background: linear-gradient(90deg, rgb(21, 75, 193) 0%, rgb(31, 89, 214) 39%, rgba(90,126,220,1) 84%);
   }
+    
   
-  @keyframes step5 {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
+  .kp_photo-container{
+    width: 100%;
+    height: fit-content;
+    margin: auto 0;
+    max-width: 180px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 2px;
+    background: #ffee00;
+    outline: solid 3px #ffb600;
+    border-radius: 10px;
   }
-  
-  @keyframes step6 {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
+  .kp_photo{
+    width:100%;
   }
-  
-  @keyframes fadeIn {
-    0% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-      pointer-events: none;
-    }
+  .kp_titre-profil-barre,
+  .link-profil{
+    text-decoration: none;
   }
-  
-  @keyframes entrerdanslecran {
-    0% {
-      transform: scale(1);
-      opacity: 1;
-      top: 0;
-    }
-    20% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 0;
-      transform: scale(10);
-      top: 40%;
-    }
+  .session-titre{
+    font-size: 1.5em; 
   }
-  
-  @keyframes entrerdanslecranmobile {
-    0% {
-      transform: scale(1);
-      opacity: 1;
-      top: 25vh;
-    }
-    20% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 0;
-      transform: scale(10);
-      top: 300%;
-    }
-  }
-  
-  @media screen and (max-width: 900px) {
-    .kp_ecran-container {
-      animation: entrerdanslecranmobile 2.5s 3s forwards;
-      top: 25vh;
-    }
+  .session-sstitre{
+    font-size: 1.2em; 
+    padding-top:10px;
   }
   </style>
   

@@ -173,7 +173,6 @@ export default {
      this.selectedImageIndex = index;
    },
    setCompagnieProjet(client) {
-     console.log('Projet sélectionné:', client);
      this.$emit('projet-selectionne', client);
      this.$emit('update-class', 'kp_item_show');
    },
