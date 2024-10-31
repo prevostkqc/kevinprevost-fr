@@ -1027,7 +1027,7 @@ background-color: white;
     min-width: 90vw !important;
   }
   .kp_terminal--texte{
-    padding-bottom:20px;
+    padding-bottom:70px;
   }
   .kp_icon_zone--resize{
     display: none;
@@ -1493,7 +1493,7 @@ background-color: white;
   #kp_terminal{
     max-height: calc(100vh - 50px) !important;
     height: fit-content !important;
-    overflow-y: scroll;
+    max-height: calc(100vh - 50px) !important;
   }
   .kp_barre-une-app{
     min-width: 20px;
@@ -1524,5 +1524,16 @@ background-color: white;
   }
   .p-texte-pad{
     display:none;
+  }
+
+  .kp_terminal_zone-texte{
+    background: black;
+    height: calc(100% - 51px);
+    width: calc(100% - 30px);
+    padding: 10px 25px 30px 5px;
+    overflow-y: scroll;
+    min-height: 150px;
+    max-height: calc(100vh - 50px);
+    padding-bottom: 50px !important;
   }
 }

@@ -49,7 +49,7 @@
                 <div class="passion-demonstaration">
                   <div class="part--passion">
                     <p class="kp_p-black kp_bold  hide-mobile   text-passion">Survolez la carte pour la voir briller.</p>
-                    <p class="kp_p-black kp_bold  hide-desktop  text-passion">Cliquez sur les coins de la carte pour la voir briller.</p>
+                    <p class="kp_p-black kp_bold  hide-desktop  text-passion">Déplacez votre doigt sur la carte pour la voir briller.</p>
                   </div>                    
                   <div class="part--passion"></div>
                 </div>

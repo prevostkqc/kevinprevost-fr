@@ -1,5 +1,6 @@
 <template>
-  <main class="kp_main">
+  <Starting v-show="showStarting" @close="handleCloseStarting" />
+  <main class="kp_main" v-show="!showStarting">
     <!-- Appel à Desktop avec écoute de l'événement openWindow -->
     <Desktop @openWindow="toggleWindow" ref="desktop"  @callBringToFront="callBringToFront"  />
 
@@ -89,12 +90,6 @@
     </div>
 
 
-    <div class="container--starting">
-      <div v-show="openWindows.includes('starting')" :class="['window', windowClasses.starting]">
-        <Starting @update-class="updateWindowClass('starting', $event)" />
-      </div>
-    </div>
-
     <div class="scanlines-v"></div>
 
     <div
@@ -105,7 +100,7 @@
     <div 
       class="container--menuderoulant" 
       :class="['window', 'kp_item__window_draggable']">
-      <Menuderoulant :isVisible="menuIsVisible"  ref="menuDeroulant" @click="handleContainerClick" @actionSelected="handleAction"/>
+      <Menuderoulant :isVisible="menuIsVisible" @fermersession="fermersession"  ref="menuDeroulant" @click="handleContainerClick" @actionSelected="handleAction"/>
     </div>
 
     <Barrebottom :openWindows="openWindows" @handleBringToFront="handleBringToFront" :windowClasses="windowClasses" @childClicked="handleContainerClick"  @callBringToFront="callBringToFront"  @openMenuDeroulant="openMenuDeroulant"  @toggleMenu="toggleMenu"  class="barrenotif" />
@@ -184,13 +179,30 @@ export default {
       isBeingDragged: false,
       barrenotifClass: 'barrenotifClass',
       menuIsVisible: true,
+      showStarting: true,
     };
   },
   mounted() {
     this.initDragAndResize();
+
+    
+    const lastVisit = localStorage.getItem('lastVisit');
+    const cooldownTime = 15 * 60 * 1000;
+    if (!lastVisit || Date.now() - lastVisit > cooldownTime) {
+      localStorage.setItem('lastVisit', Date.now());
+    } else {
+      this.showStarting = false;
+    }
   },
   methods: {
     
+    fermersession(){
+      this.showStarting = true;
+    },
+    handleCloseStarting() {
+      localStorage.setItem('hasVisited', true);
+      this.showStarting = false;
+    },
     handleBringToFront(appId) {
     if (this.windowClasses[appId] === 'kp_item_hide' || this.windowClasses[appId] === 'kp_item_reduct') {
       this.updateWindowClass(appId, 'kp_item_show');

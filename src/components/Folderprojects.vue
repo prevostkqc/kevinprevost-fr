@@ -206,26 +206,6 @@ export default {
     this.loadProjects();
     this.adjustContainerHeight();
     window.addEventListener('resize', this.adjustContainerHeight);
-
-    if (window.innerWidth <= 960) {  // défilement automatique uniquement sur mobile
-        const listElement = this.$refs.folderList;
-
-        if (listElement) {
-            // Démarrer au bas de la liste
-            listElement.scrollTop = listElement.scrollHeight;
-            let scrollDirection = -1;
-
-            // Intervalle de défilement avec référence pour pouvoir le stopper
-            this.scrollInterval = setInterval(() => {
-                if (listElement.scrollTop <= 0) {
-                    scrollDirection = 1;  // changer de direction pour descendre
-                } else if (listElement.scrollTop + listElement.clientHeight >= listElement.scrollHeight) {
-                    scrollDirection = -1;  // changer de direction pour remonter
-                }
-                listElement.scrollTop += 2 * scrollDirection;  // ajustez la vitesse avec 2 pour plus de fluidité
-            }, 50);
-        }
-    }
   },
   updated() {
     this.adjustContainerHeight();
@@ -548,7 +528,7 @@ export default {
     position: relative;
   }
   
-  .kp_part-image{
+  .kp_mobile-image{
     max-height: calc(100vh - 280px);
     width: calc(100% + 37px);
     left: -18px;

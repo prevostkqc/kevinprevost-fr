@@ -5,24 +5,6 @@ import Home     from '../components/Home.vue';
 const routes = [
   {
     path: '/',
-    name: 'starting',
-    component: Sarting,
-    meta: {
-      title: 'Kévin Prévost - Développeur Web',
-      metaTags: [
-        {
-          name: 'description',
-          content: 'Découvrez mes projets réalisés.'
-        },
-        {
-          property: 'og:description',
-          content: 'Découvrez mon portfolio et les projets que j\'ai réalisés pour mes clients.'
-        }
-      ]
-    }
-  },
-  {
-    path: '/home',
     name: 'home',
     component: Home,
     meta: {
@@ -39,6 +21,10 @@ const routes = [
       ]
     }
   },
+  {
+    path: '/:catchAll(.*)',
+    redirect: '/'
+  }
 ];
 
 

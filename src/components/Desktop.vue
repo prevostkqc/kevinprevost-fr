@@ -79,7 +79,7 @@ export default {
           class: 'kp_folder--passions',
           icon: passionIcon,
           isTextIcon: false,
-          text: 'Mes psassions',
+          text: 'Mes passions',
           altText: 'Mes passions',
         },
         {

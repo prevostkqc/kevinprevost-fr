@@ -221,6 +221,7 @@ export default {
         currentX: 0,
         currentY: 0,
         canvasScale: 1,
+        previewLine: null,
         tools: [
             { name: 'select1', icon: paint1 },
             { name: 'select', icon: paint2 },
@@ -298,13 +299,33 @@ export default {
     },
     handleMouseMove(event) {
         if (this.isDrawingShape && this.isSelecting) {
-            this.currentX = event.offsetX;
-            this.currentY = event.offsetY;
+          this.currentX = event.offsetX;
+          this.currentY = event.offsetY;
         } else if (this.drawing) {
+          if (this.currentTool === 'line') {
+            this.previewLine = { startX: this.startX, startY: this.startY, endX: event.offsetX, endY: event.offsetY };
+            this.drawPreviewLine();
+          } else {
             this.draw(event);
+          }
         }
     },
+    drawPreviewLine() {
+      if (!this.previewLine) return;
+      const { startX, startY, endX, endY } = this.previewLine;
+      this.clearCanvas();
+      this.canvasContext.beginPath();
+      this.canvasContext.moveTo(startX, startY);
+      this.canvasContext.lineTo(endX, endY);
+      this.canvasContext.strokeStyle = this.color;
+      this.canvasContext.lineWidth = this.lineWidth;
+      this.canvasContext.stroke();
+      this.canvasContext.closePath();
+    },
     handleMouseLeave(event) {
+      if (this.currentTool === 'line') {
+        this.previewLine = null;
+      }
       if (this.currentTool !== 'line') {
         this.stopDrawing(event);
       }
@@ -573,6 +594,8 @@ export default {
       this.startY = event.offsetY;
       
       this.currentColor = (event.button === 2) ? this.secondaryColor : this.color;
+      
+      this.currentColor = this.currentTool === 'eraser' ? '#FFFFFF' : this.currentColor;
 
       if (this.currentTool === 'pipette') {
         this.pickColor(this.startX, this.startY, event.button);
@@ -596,7 +619,10 @@ export default {
           break;
 
         case 'eraser':
-          this.canvasContext.clearRect(this.startX, this.startY, this.lineWidth, this.lineWidth);
+          // this.canvasContext.clearRect(this.startX, this.startY, this.lineWidth, this.lineWidth);
+          
+          this.canvasContext.beginPath();
+          this.canvasContext.moveTo(this.startX, this.startY);
           break;
 
         case 'line':
@@ -627,8 +653,11 @@ export default {
     draw(event) {
       if (!this.drawing || this.currentTool === 'line' || this.currentTool === 'rect' || this.currentTool === 'ellipse') return;
      
+      
+      const drawingColor = this.currentTool === 'eraser' ? '#FFFFFF' : this.currentColor;
       this.canvasContext.strokeStyle = this.currentColor;
       this.canvasContext.lineWidth = this.effectiveLineWidth;
+      
     
       switch (this.currentTool) {
         case 'pen':
@@ -643,7 +672,10 @@ export default {
             break;
 
         case 'eraser':
-          this.canvasContext.clearRect(event.offsetX, event.offsetY, this.lineWidth, this.lineWidth);
+          
+          // this.canvasContext.clearRect(event.offsetX, event.offsetY, this.lineWidth, this.lineWidth);
+          this.canvasContext.lineTo(event.offsetX, event.offsetY);
+          this.canvasContext.stroke();
           break;
 
         case 'brush':
@@ -677,6 +709,9 @@ export default {
           break;
 
         case 'line':
+
+          const endX = event.offsetX;
+          const endY = event.offsetY;
           this.canvasContext.beginPath();
           this.canvasContext.moveTo(this.startX, this.startY);
           this.canvasContext.lineTo(endX, endY);
@@ -763,16 +798,18 @@ export default {
       this.currentTool = 'pen';
       this.lineWidth = 1;
 
+      // Ajuste la largeur et la hauteur pour mobile en prenant 90% de l'écran
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+      this.width = screenWidth < 900 ? screenWidth * 0.9 : 900;
+      this.height = this.width;
 
-      this.width = window.innerWidth * 0.9; // Utilise 90% de la largeur de l'écran
-      this.height = this.width; // Maintenir un aspect carré pour le canvas
-      this.canvasContext = canvas.getContext("2d");
-
+      canvas.width = this.width;
+      canvas.height = this.height;
 
       this.canvasContext.fillStyle = "#FFFFFF";
       this.canvasContext.fillRect(0, 0, canvas.width, canvas.height);
-
-
+      
       window.addEventListener('mouseleave', (event) => {
         if (this.activeDrawing) {
           this.stopDrawing(event); 
@@ -781,6 +818,12 @@ export default {
     },
   
     computed: {
+      cursorStyle() {
+        const cursor = this.toolCursors[this.currentTool];
+        return cursor && cursor.includes('.png') 
+            ? `url(${cursor}) 16 16, auto` 
+            : cursor || 'default'; 
+      },
       canvasStyle() {
         return {
           transform: `scale(${this.canvasScale})`,
@@ -962,7 +1005,6 @@ export default {
   left: 5px;
   border: none;
   cursor: crosshair;
-  cursor: url('@/assets/images/paint/paint-cursor.png') 16 16, auto;
 }
 
 
@@ -1233,6 +1275,21 @@ canvas {
   }
   .color-pickers{
     max-width: 290px;
+  }
+  .paint-canvas {
+    width: 100%; /* Prend toute la largeur disponible */
+    height: auto; /* S'ajuste à la hauteur */
+    max-width: 100vw; /* Limite maximale de largeur */
+    background-color: #FFFFFF;
+    cursor: crosshair;
+  }
+  .paint-side-canva{
+    width: 100%;
+    height: 100%;
+    /* overflow: hidden; */
+    position: relative;
+    padding-right: 8px;
+    padding-bottom: 8px;
   }
 }
 

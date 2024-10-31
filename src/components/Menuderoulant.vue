@@ -98,14 +98,14 @@
       
       <div class="kp_menu__barre-etat--bottom">
         <div class="item-action">
-            <router-link to="/" class="link-profil"></router-link>
+            <div class="link-profil"  @click="fermersession" ></div>
             <img class="kp_menu__barre-etat--img-icon" :src="lockIcon" alt="Verrouiller">
             <p class="kp_menu--sortir">Fermer la session</p>
           </div>
       
       
           <div class="item-action">
-            <router-link to="/" class="link-profil"></router-link>
+            <div class="link-profil" @click="fermersession"></div>
             <img class="kp_menu__barre-etat--img-icon" :src="exitIcon" alt="Fermer">
             <p class="kp_menu--sortir">Arrêter la navigation</p>
           </div>
@@ -148,6 +148,9 @@ export default {
       };
   },
   methods: {
+    fermersession(){
+      this.$emit('fermersession');
+    },
     toggleClass(menuIsVisible) {
       this.localIsVisible = menuIsVisible;
       this.updateMenuClass(menuIsVisible);

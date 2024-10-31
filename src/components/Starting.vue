@@ -19,7 +19,7 @@
           </div>
 
           <div class="kp_container--right">
-            <router-link to="/home" class="link-profil">
+            <div @click="handleClose" class="link-profil">
               <div>
 
                 <div class="kp_right-content">
@@ -39,7 +39,7 @@
                   </div>
                 </div>
               </div>
-            </router-link>
+            </div>
           
           </div>
 
@@ -90,6 +90,9 @@
       };
     },
     methods: {
+      handleClose() {
+        this.$emit('close');
+      },
       /*
       checkAndShowAnimation() {
         const ANIMATION_INTERVAL = 15 * 60 * 1000;
@@ -491,7 +494,7 @@
     .kp_right-content{
       flex-wrap: wrap;
         background: #1141a5;
-        width: calc(100% - 100px);
+        width: calc(100% - 60px);
         border-radius: 10px;
         margin: auto;
     }
