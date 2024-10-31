@@ -4,7 +4,11 @@
       <div class="kp_element--title">
           <div class="kp_element--icon-title kp_element--enable">
               <p class="kp_ascii--titre">
-                  <div class="kp_terminal--icn">KP:\</div><span>Kévin Prévost - Développeur front-end</span>
+                  <!-- <div class="kp_terminal--icn">KP:\</div> -->
+                  <div class="kp_element_title--icn">
+                       <img class="kp_icon_zone--img" :src="iconprojet" alt="text">
+                   </div>
+                  <span>Kévin Prévost - Développeur front-end</span>
               </p>
           </div>
           <Navigation @close="handleClose" @resize="handleResize" @reduct="handleReduct" :viewName="title" :context="context" :customClass="customClass" />
@@ -19,6 +23,8 @@
 
 <script>
 import Navigation from '@/components/Navigation.vue';
+
+import iconprojet from '@/assets/images/icon-terminalkp.png';
 
 export default {
 name: 'Terminal',
@@ -42,6 +48,11 @@ props: {
     default: 'kp_element--incons-zone'
   }
 },
+ data() {
+   return {
+     iconprojet,
+   };
+ },
 
 mounted() {
   this.$nextTick(() => {
@@ -145,7 +156,7 @@ methods: {
   left:100px;
 }
 .kp_terminal {
-  width: 50%;
+  width: 800px;
   height: fit-content;
   background: white;
   position: absolute;

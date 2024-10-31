@@ -60,16 +60,32 @@
           
           
   
-          <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--quisuisje" @click="emitAction('monparcours')">
+          <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--quisuisje" @click="emitAction('passions')">
             <div class="kp_menu__barre-etat--un-ico-container-img">
               <img class="kp_menu__barre-etat--img" :src="pokemon" alt="Ma passion">
             </div>
             <div>
               <p class="kp_menu__barre-etat--un-ico-container--text">
-                Ma passion
+                Mes passions
               </p>
               <p class="kp_menu__barre-etat--un-ico-container--desc">
-                Découvrez ma passion
+                Découvrez mes passions
+              </p>
+            </div>
+          </article>
+
+          
+  
+          <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--quisuisje" @click="emitAction('paint')">
+            <div class="kp_menu__barre-etat--un-ico-container-img">
+              <img class="kp_menu__barre-etat--img" :src="paint" alt="paint">
+            </div>
+            <div>
+              <p class="kp_menu__barre-etat--un-ico-container--text">
+                Paint
+              </p>
+              <p class="kp_menu__barre-etat--un-ico-container--desc">
+                Une âme d'artiste ?
               </p>
             </div>
           </article>
@@ -100,10 +116,11 @@
   
   <script>
 import maphoto from '@/assets/images/kevinprevost.jpg';
-import folder from '@/assets/images/folder.png';
-import mail from '@/assets/images/mail.png';
+import folder from '@/assets/images/icon-archive.png';
+import mail from '@/assets/images/icon-mail.png';
 import cv from '@/assets/images/cv.png';
-import pokemon from '@/assets/images/pokecard_icn.png';
+import pokemon from '@/assets/images/icon-heart.png';
+import paint from '@/assets/images/icon-paint.png';
 
 import exitIcon from '@/assets/images/exit-icon.png';
 import lockIcon from '@/assets/images/lock-icon.png';
@@ -127,6 +144,7 @@ export default {
         exitIcon,
         lockIcon,
         pokemon,
+        paint,
       };
   },
   methods: {
@@ -426,6 +444,19 @@ background-color: white;
     bottom: 0;
     right: 0;
     left: 0;
+}
+
+@media screen and (max-width: 960px){
+  .kp_menu__barre-etat--bottom{
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 20px;
+  }
+}
+@media screen and (max-width: 400px){
+  .kp_menu__barre-etat--content-right{
+    display: none;
+  }
 }
 
   </style>

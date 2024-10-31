@@ -5,11 +5,13 @@
       <section :class="['kp_starting', `kp_${context}`]">
         <div class="kp_container-home">
           <div class="kp_container--left">
+            <div class="open-light"></div>
             <img :src="logo" alt="Kévin Prévost" class="kp_starting--logo"/>
             <div class="kp_container--left-text">
               <h1>Kévin Prévost</h1>
               <h2>Développeur web</h2>
             </div>
+            
           </div>
             
           <div class="kp_separation">
@@ -18,18 +20,29 @@
 
           <div class="kp_container--right">
             <router-link to="/home" class="link-profil">
-            <div class="kp_right-content">
-                <div class="kp_photo-container">
-                  <img class="kp_photo" :src="maphoto" alt="Kévin Prévost">
+              <div>
+
+                <div class="kp_right-content">
+                  <div class="kp_photo-container">
+                    <img class="kp_photo" :src="maphoto" alt="Kévin Prévost">
+                  </div>
+                  <div class="kp_titre-profil-barre">
+                    <h3 class="session-titre">Kévin Prévost</h3>
+                    <h4 class="session-sstitre">Développeur Web</h4>
+                    <div class="btn-windows-xp  btn-windows-xp-ok" ><span class="btn-windows-xp--texte">Se connecter</span></div>
+                  </div>
                 </div>
-                <div class="kp_titre-profil-barre">
-                  <h3 class="session-titre">Kévin Prévost</h3>
-                  <h4 class="session-sstitre">Entrer dans mon univers</h4>
+                <div class="message-alerte">
+                  <div class="texte-alerte">
+                    <img :src="caution" alt="Kévin Prévost" class="kp_caution"/>
+                    <p>Pour une expérience optimale, visitez ce site depuis un ordinateur plutôt que sur un téléphone.</p>
+                  </div>
                 </div>
-            </div>
-          </router-link>
+              </div>
+            </router-link>
+          
           </div>
-          <div class="open-light"></div>
+
 
           <div class="part  part--top">
             <div class="part-color"></div>
@@ -51,6 +64,7 @@
   <script>
   import logo from '@/assets/images/logo.png';
   import maphoto from '@/assets/images/kevinprevost.jpg';
+  import caution from '@/assets/images/icon-caution.png';
   
   export default {
     name: 'Starting',
@@ -71,7 +85,8 @@
       return {
         showAnimation: false,
         logo,
-        maphoto
+        maphoto,
+        caution
       };
     },
     methods: {
@@ -109,12 +124,12 @@
     background: #010101;
   }
   h1{
-    font-size: 2.5rem;
+    font-size: 40px;
     color: #fff;
     margin: 0;
   }
   h2{
-    font-size: 1.95rem;
+    font-size: 31px;
     color: #fff;
     margin: 0;
   }
@@ -155,10 +170,37 @@
     animation: sepanim 1.0s forwards;
     animation-delay: 1.5s;
   }
+
   @keyframes sepanim{
     0% { height: 0;}
     100% { height: 80%;}
   }
+
+  @media screen and (min-width: 960px) {
+
+    .kp_container--left {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: fit-content;
+      flex-direction: column;
+      width:100%;
+      max-width: 100%;
+      animation: leftmove 1.5s forwards linear;
+      user-select: none;
+      pointer-events: none;
+    }
+    @keyframes leftmove{
+      0% {
+        max-width: 100%;
+      }
+      100% {   
+        max-width: 50%;
+      }
+    }
+  }
+
+@media screen and (max-width: 960px) {
 
   .kp_container--left {
     display: flex;
@@ -167,10 +209,8 @@
     width: fit-content;
     flex-direction: column;
     width:100%;
-    max-width: 100%;
+    max-width: 80%;
     animation: leftmove 1.5s forwards linear;
-    padding-left: 10vw;
-    margin-right: -10vw;
     user-select: none;
     pointer-events: none;
   }
@@ -179,9 +219,10 @@
       max-width: 100%;
     }
     100% {   
-      max-width: 50%;
+      max-width: 80%;
     }
   }
+}
 
   .kp_starting--logo {
     width: 100%;
@@ -204,38 +245,79 @@
     from { opacity: 0;}
     to { opacity: 1;}
   }
-  @keyframes fadeinUp{
-    from { opacity: 0; transform: translateY(5%);}
-    to { opacity: 1; transform: translateY(0); }
+  @media screen and (min-width: 960px) {
+      @keyframes fadeinUp{
+        from { opacity: 0; transform: translateY(5%);}
+        to { opacity: 1; transform: translateY(0); }
+      }
+  }
+  @media screen and (max-width: 960px) {
+    @keyframes fadeinUp{
+        from { opacity: 0;}
+        to { opacity: 1; }
+      }
   }
 
-  .kp_container--right {
-    display: flex;
-    opacity:0;
-    max-width: 25%;
-    width: 0%;
-    height: 100%;
-    overflow: hidden;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    animation: rightmove 2s forwards;
-    animation-delay:1.7s;
-  }
-  @keyframes rightmove{
-    0% {
-      width:0%;
-      opacity: 0;
+
+  @media screen and (min-width: 960px) {
+    .kp_container--right {
+      display: flex;
+      opacity:0;
+      max-width: 25%;
+      width: 0%;
+      height: 100%;
+      overflow: hidden;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      animation: rightmove 2s forwards;
+      animation-delay:1.7s;
     }
-    40% {
-      width:25%;
-      opacity: 0;
+    @keyframes rightmove{
+      0% {
+        width:0%;
+        opacity: 0;
+      }
+      40% {
+        width:25%;
+        opacity: 0;
+      }
+      100% { 
+        width:25%;
+        opacity: 1;
+      }
     }
-    100% { 
-      width:25%;
-      opacity: 1;
+}
+@media screen and (max-width: 960px) {
+    .kp_container--right {
+      display: flex;
+      opacity:0;
+      max-width: 100%;
+      width: 100%;
+      height: 0%;
+      overflow: hidden;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      animation: rightmove 2s forwards;
+      animation-delay:1.7s;
+      width: calc(100% - 20px);
     }
-  }
+    @keyframes rightmove{
+      0% {
+        height:0%;
+        opacity: 0;
+      }
+      40% {
+        height:33%;
+        opacity: 0;
+      }
+      100% { 
+        height:33%;
+        opacity: 1;
+      }
+    }
+}
 
   .part{    
     position: absolute;
@@ -259,13 +341,13 @@
 
   .part--top{
     top: 0;
-    transform: translateY(-100%);
+    transform: translateY(-110%);
     animation: upscreen 1s forwards;
     animation-delay: 2s;
   } 
   .part--bottom{
     bottom: 0;
-    transform: translateY(100%);
+    transform: translateY(110%);
     animation: downscreen 1s forwards;
     animation-delay: 2s;
   }
@@ -338,6 +420,87 @@
   .session-sstitre{
     font-size: 1.2em; 
     padding-top:10px;
+  }
+
+.message-alerte{
+  display:none;
+}
+  @media screen and (max-width: 960px) {
+    
+    .message-alerte{
+      display: flex;
+      border-top: solid 1px white;
+      border-bottom: solid 1px white;
+      padding: 15px 0;
+      max-width: calc(100% - 20px);
+      margin: 20px auto 0;
+    }
+    .texte-alerte{
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+    }
+    .texte-alerte p{
+      line-height: 1.5;
+      font-size:14px;
+    }
+    .kp_container-home{
+      flex-wrap: wrap;
+      align-content: center;
+    }
+    .kp_container--left {
+      max-width: 100%;
+      width:100%;
+    }
+    .kp_container--right {
+      max-width: 100%;
+      width:100%;
+    }
+    .kp_separation,
+    .kp_container--left-text{
+      display:none;
+    }
+    .kp_right-content{
+      flex-wrap: wrap;
+        background: #1141a5;
+        width: calc(100% - 100px);
+        border-radius: 10px;
+        margin: auto;
+    }
+    .kp_titre-profil-barre{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+    .btn-windows-xp {
+      margin:20px 0 0;
+    }
+    .kp_photo-container{
+      width: 80px;
+    }
+    .session-titre{
+      font-size:20px;
+    }
+    .session-sstitre{
+      font-size:16px;
+    }
+    .kp_right-content{
+      flex-wrap: wrap;
+        background: #1141a5;
+        width: calc(100% - 100px);
+        border-radius: 10px;
+        margin: auto;
+    }
+    .open-light{
+      width: 100vw;
+      height: 100vh;
+      top: -50vh;
+      left: -50vw;
+    }
   }
   </style>
   

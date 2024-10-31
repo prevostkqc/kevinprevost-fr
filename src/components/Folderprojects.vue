@@ -15,7 +15,7 @@
       </div>
       
     <FakeMenu></FakeMenu>
-        <ul class="kp_folder-liste projets">
+        <ul class="kp_folder-liste projets" ref="folderList">
             <li 
                 :class="['kp_folder-li', { 'selected-project': project.id === selectedProjectId }]" 
                 v-for="project in projects" 
@@ -43,7 +43,7 @@
                             <p class="unprojet--texte  unprojet-nomtechno">{{ tech }}</p>
                         </li>
                     </ul>
-                    <div class="btn-windows-xp  btn-windows-xp-ok"><span class="btn-windows-xp--texte">Voir le projet en ligne</span></div>
+                    <a class="btn-windows-xp  btn-windows-xp-ok" :href="selectedProject.lienprojet" target="_blank"><span class="btn-windows-xp--texte">Voir le projet en ligne</span></a>
 
                     <!-- Boucle pour afficher les miniatures du projet sélectionné -->
                       <div class="kp_pages-container" v-if="selectedProject.nomdespages && selectedProject.nomdespages.length > 1">
@@ -100,7 +100,7 @@ import axios from 'axios';
 import Navigation from '@/components/Navigation.vue';
 import FakeMenu     from '@/components/Fakemenu.vue';
 
-import iconprojet from '@/assets/images/folder.png';
+import iconprojet from '@/assets/images/icon-archive.png';
 import fallback from '@/assets/images/fallback.jpg';
 
 export default {
@@ -206,12 +206,35 @@ export default {
     this.loadProjects();
     this.adjustContainerHeight();
     window.addEventListener('resize', this.adjustContainerHeight);
+
+    if (window.innerWidth <= 960) {  // défilement automatique uniquement sur mobile
+        const listElement = this.$refs.folderList;
+
+        if (listElement) {
+            // Démarrer au bas de la liste
+            listElement.scrollTop = listElement.scrollHeight;
+            let scrollDirection = -1;
+
+            // Intervalle de défilement avec référence pour pouvoir le stopper
+            this.scrollInterval = setInterval(() => {
+                if (listElement.scrollTop <= 0) {
+                    scrollDirection = 1;  // changer de direction pour descendre
+                } else if (listElement.scrollTop + listElement.clientHeight >= listElement.scrollHeight) {
+                    scrollDirection = -1;  // changer de direction pour remonter
+                }
+                listElement.scrollTop += 2 * scrollDirection;  // ajustez la vitesse avec 2 pour plus de fluidité
+            }, 50);
+        }
+    }
   },
   updated() {
     this.adjustContainerHeight();
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.adjustContainerHeight);
+    if (this.scrollInterval) {
+        clearInterval(this.scrollInterval);
+    }
   }
 };
 </script>
@@ -290,70 +313,6 @@ export default {
    margin: 10px;
    background: white;
    border: solid 2px #91a7b4;
-}
-.kp_folder-liste{
-  width: calc(100% - 37px);
-    position: relative;
-    left: 0px;
-    top: 0;
-    background-color: #eeecdf;
-    display: flex;
-    flex-wrap: wrap;
-    z-index: 10;
-    justify-content: flex-start;
-    align-items: flex-end;
-    margin: 10px 10px 0;
-}
-
-.kp_folder-li{
- border: solid 2px #91a7b4;
-   border-radius: 5px 5px 0 0;
-   color: #000000;
-   border-bottom: none;
-   padding: 7px 45px;
-   background: #f6f6f2;
-   position: relative;
-   border-bottom: solid 2px #919b9c;
-   position: relative;
-   bottom: -2px;
-   cursor: pointer;
-   height: 16px;
- }
-
-.kp_folder-li:hover,
-.selected-project{
-   border: solid 2px #91a7b4;
-   border-radius: 5px 5px 0 0;
-   color: #000000;
-   border-bottom: solid 2px white;
-   padding: 7px 45px 7px;
-   background: white;
-   position: relative;    
-   height: 17px;
-}
-
-.kp_folder-li::before{
- content: "";
-   position: absolute;
-   top: -2px;
-   left: -1px;
-   width: 100%;
-   height: 100%;
-}
-.kp_folder-li:hover::before,
-.selected-project::before{
- content: "";
-   position: absolute;
-   top: -2px;
-   left: -1px;
-   width: 100%;
-   height: 100%;
-   background: #ffc73c;
-   border-radius: 5px 5px 0 0;
-   height: 4px;
-   border: solid 1px #e68b2c;
-   border-bottom: none;
-   border-top: solid 2px #e68b2c;
 }
 
 
@@ -539,6 +498,65 @@ export default {
   border-top: solid 2px #000000;
   width: 100%;
   padding-top: 25px;
+}
+
+@media screen and (max-width:960px){
+  .kp_folder{
+    height: calc(100vh - 47px) !important;
+  }
+  .kp_folder-liste{
+    flex-direction: column-reverse;
+    height: 52px;
+    width: fit-content;
+    overflow-x: scroll;
+    width: fit-content;
+  }
+  .kp_folder-li{
+    padding: 15px 20px;
+    max-width: 100px;
+    width: 100px;
+  }
+  .kp_folder-li:hover{
+    padding: 15px 20px;
+    max-width: 100px;
+    width: 100px;
+  }
+  .selected-project{
+    padding: 15px 20px;
+    max-width: 100px;
+    width: 100px;
+  }
+
+  .container-mesreals{
+    position: relative;
+    top: -110px;
+  }
+  .kp_line-projet{
+    flex-wrap: wrap;
+  }
+  .kp_texte-image{
+    width: 100%;
+  }
+  .kp_pages-container{
+    gap: 6px;
+  }
+
+  .kp_mobile-image{
+    max-height: calc(100vh - 280px);
+    width: calc(100% + 37px);
+    left: -18px;
+    position: relative;
+  }
+  
+  .kp_part-image{
+    max-height: calc(100vh - 280px);
+    width: calc(100% + 37px);
+    left: -18px;
+    position: relative;
+  }
+  .kp_element--container{
+    padding-bottom: 70px !important;
+  }
 }
 
 </style>

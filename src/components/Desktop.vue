@@ -36,12 +36,13 @@
 
 <script>
 import mailIcon from '@/assets/images/mail.png';
-import folderIcon from '@/assets/images/folder.png';
+import folderIcon from '@/assets/images/icon-archive.png';
 import cvIcon from '@/assets/images/cv.png';
 import textIcon from '@/assets/images/text.png';
 import pokecardIcon from '@/assets/images/pokecard_icn.png';
 import passionIcon from '@/assets/images/icon-heart.png';
 import paintIcon from '@/assets/images/icon-paint.png';
+import terminalIcon from '@/assets/images/icon-terminalkp.png';
 
 export default {
   name: 'Desktop',
@@ -52,8 +53,8 @@ export default {
         {
           id: 'terminal',
           class: 'kp_folder--terminal',
-          icon: 'KP:\\',
-          isTextIcon: true,
+          icon: terminalIcon,
+          isTextIcon: false,
           text: 'qui suis-je ?',
           altText: 'Terminal',
         },
@@ -74,12 +75,12 @@ export default {
           altText: 'Mon parcours',
         },
         {
-          id: 'autoportrait',
-          class: 'kp_folder--autoportrait',
-          icon: textIcon,
+          id: 'passions',
+          class: 'kp_folder--passions',
+          icon: passionIcon,
           isTextIcon: false,
-          text: 'Autoportrait',
-          altText: 'Ma tête',
+          text: 'Mes psassions',
+          altText: 'Mes passions',
         },
         {
           id: 'paint',
@@ -90,21 +91,13 @@ export default {
           altText: 'paint',
         },
         {
-          id: 'passions',
-          class: 'kp_folder--passions',
-          icon: passionIcon,
+          id: 'autoportrait',
+          class: 'kp_folder--autoportrait',
+          icon: textIcon,
           isTextIcon: false,
-          text: 'Mes psassions',
-          altText: 'Mes passions',
+          text: 'Autoportrait',
+          altText: 'Ma tête',
         },
-        {
-          id: 'pokemon',
-          class: 'kp_folder--pokemon',
-          icon: pokecardIcon,
-          isTextIcon: false,
-          text: 'Mes passions',
-          altText: 'Ma passion',
-        }
       ],
       mailLink: 'mailto:contact@kevinprevost.fr?subject=Contact depuis kevinprevost.fr&body=Nom : %0D%0APrénom : %0D%0ATéléphone : %0D%0ACompagnie (facultatif) : %0D%0A%0D%0ADescription du projet : %0D%0A%0D%0A%0D%0A%0D%0A',
       mailIcon,

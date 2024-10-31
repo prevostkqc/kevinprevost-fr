@@ -128,7 +128,6 @@ export default {
     font-family: monospace;
     background: white;
     color: black;
-    max-width: 800px;
     &:hover .kp_image_ascii--content {
       filter: drop-shadow(3px 3px 2px black);
     }
@@ -166,9 +165,8 @@ export default {
     font-family: monospace;
     background: white;
     color: black;
-    max-width: 800px;
-    width: 50%;
-    height: fit-content;
+    width: 800px;
+    height: 800px;
     background: white;
     position: absolute;
   }

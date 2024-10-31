@@ -276,7 +276,7 @@
   }
 
   
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 960px) {
     .kp_clipy {
       width: 50px;
       bottom: 50px;
@@ -285,9 +285,17 @@
     .kp_clipy--bulle {
       max-width: 50vw;
       min-width: 50vw;
+      right: -30px;
+      bottom: 145px;
     }
     .kp_clipy--bulle::after {
       right: 40px;
+    }
+
+    .kp_clipy__zone{
+      bottom: 16px;
+      right: 40px;
+      transform: scale(0.8);
     }
   }
   </style>

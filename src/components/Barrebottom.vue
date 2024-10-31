@@ -52,8 +52,9 @@
 import logo2024         from '@/assets/images/logo-2024.png';
 import batteryIcon      from '@/assets/images/icn_batteryvide.png';
 import batteryIconLoad  from '@/assets/images/icn_batteryvide_load.png';
-import folderIcon       from '@/assets/images/folder.png';
+import folderIcon       from '@/assets/images/icon-archive.png';
 import internetIcon     from '@/assets/images/icn_internet.png';
+import terminalIcon     from '@/assets/images/icon-terminalkp.png';
 import textIcon         from '@/assets/images/text.png';
 import pokecardIcon     from '@/assets/images/pokecard_icn.png';
 import cvIcon           from '@/assets/images/cv.png';
@@ -82,9 +83,9 @@ export default {
         {
           id: 'terminal',
           class: 'kp_barre-une-app--terminal',
-          icon: 'KP:\\',
+          icon: terminalIcon,
           title: 'Qui suis-je ?',
-          isText: true
+          isText: false
         },
         {
           id: 'folder',

@@ -65,7 +65,7 @@
   import FakeMenu     from '@/components/Fakemenu.vue';
 
   
-  import iconSource from '@/assets/images/sites/kevinprevost.png';
+  import iconSource from '@/assets/images/cv.png';
 
   import technoajax             from '@/assets/images/logos-technos/ajax.png';
   import technoaspnet           from '@/assets/images/logos-technos/aspnet.png';
@@ -140,10 +140,6 @@
      type: String,
      default: 'monparcours',
    },
-   iconSource: {
-     type: String,
-     default: '/images/monparcours.png',
-   },
    customClass: {
      type: String,
      default: 'kp_element--incons-zone',
@@ -152,6 +148,7 @@
   data() {
     return {
       buttonText: 'Afficher les informations',
+      iconSource,
       experiences: [
         {
           logo: sitekevinprevost,
@@ -323,7 +320,6 @@
         background: white;
         width: 60vw;
         height: 60vh;
-        max-width: 930px;
     }
     .kp_quisuisje--content{
         background: white;

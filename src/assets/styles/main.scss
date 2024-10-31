@@ -30,7 +30,6 @@ body{
 .kp_item__window {
     border: solid 4px #ffffff;
     outline: solid 1px #9b9b9b;
-    min-width: 700px;
     min-height: 200px;
     background-color: white;
     overflow: hidden;
@@ -1012,6 +1011,7 @@ background-color: white;
   }
   .kp_notification--applications {
     left: 146px;
+  background: #FFFFFF;
   }
   .kp_notification--titre-span {
     font-size: 16px;
@@ -1143,7 +1143,6 @@ background-color: white;
 
 
 .window-behind .kp_element--title {
-  cursor: grabbing;
   background: #5c83c6 !important;
 }
 .window-behind:before{
@@ -1171,6 +1170,74 @@ background-color: white;
 
 
 
+
+
+.kp_folder-liste{
+  width: calc(100% - 37px);
+    position: relative;
+    left: 0px;
+    top: 0;
+    background-color: #eeecdf;
+    display: flex;
+    flex-wrap: wrap;
+    z-index: 10;
+    justify-content: flex-start;
+    align-items: flex-end;
+    margin: 10px 10px 0;
+}
+
+.kp_folder-li{
+ border: solid 2px #91a7b4;
+   border-radius: 5px 5px 0 0;
+   color: #000000;
+   border-bottom: none;
+   padding: 7px 45px;
+   background: #f6f6f2;
+   position: relative;
+   border-bottom: solid 2px #919b9c;
+   position: relative;
+   bottom: -2px;
+   cursor: pointer;
+   height: 16px;
+ }
+
+.kp_folder-li:hover,
+.selected-project{
+   border: solid 2px #91a7b4;
+   border-radius: 5px 5px 0 0;
+   color: #000000;
+   border-bottom: solid 2px white;
+   padding: 7px 45px 7px;
+   background: white;
+   position: relative;    
+   height: 16px;
+}
+
+.kp_folder-li::before{
+ content: "";
+   position: absolute;
+   top: -2px;
+   left: -1px;
+   width: 100%;
+   height: 100%;
+}
+.kp_folder-li:hover::before,
+.selected-project::before{
+ content: "";
+   position: absolute;
+   top: -2px;
+   left: -1px;
+   width: 100%;
+   height: 100%;
+   background: #ffc73c;
+   border-radius: 5px 5px 0 0;
+   height: 4px;
+   border: solid 1px #e68b2c;
+   border-bottom: none;
+   border-top: solid 2px #e68b2c;
+}
+
+
 /* Bouton windows */
 .btn-windows-xp{
   font-size: 16px;
@@ -1182,6 +1249,8 @@ background-color: white;
   cursor: pointer;
   position: relative;
   margin: 20px 0;
+  display:block;
+  text-decoration: none;
 }
 .btn-windows-xp--texte{
   color: #000000;
@@ -1400,4 +1469,60 @@ background-color: white;
 }
 .fake-sous-menu--li:hover p{
   color:#FFFFFF;
+}
+.kp_icon_zone--img-normale{
+  display:block;
+}
+.kp_item_resize .kp_icon_zone--img-normale{
+  display:none;
+}
+.kp_icon_zone--img-resizing{
+  display:none;
+}
+.kp_item_resize .kp_icon_zone--img-resizing{
+  display:block;
+}
+
+
+@media screen and (max-width:960px){
+  .window,
+  #kp_terminal{
+    top:0 !important;
+    left:0 !important
+  }
+  #kp_terminal{
+    max-height: calc(100vh - 50px) !important;
+    height: fit-content !important;
+    overflow-y: scroll;
+  }
+  .kp_barre-une-app{
+    min-width: 20px;
+    width: 22px;
+    padding: 5px 14px 3px 6px;
+  }
+  .kp_notification--titre-p,
+  .kp_notification--titre{
+    display: none;
+  }
+  .kp_notification--titre{
+    padding: 0 31px !important;
+    left: -12px !important;
+  }
+  .kp_notification--applications{
+    left: 44px;
+    background: none;
+  }
+  .resize-handle{
+    display: none;
+  }.kp_content--block{
+    width:calc(100vw - 5px) !important;
+
+  }
+  .kp_item__window,
+  .kp_item__window_draggable {
+    width: calc(100vw + 5px) !important;
+  }
+  .p-texte-pad{
+    display:none;
+  }
 }

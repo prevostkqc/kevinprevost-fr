@@ -72,6 +72,9 @@
                     @mousemove="handleMouseMove" 
                     @mouseup="handleMouseUp" 
                     @mouseleave="stopDrawing"
+                    @touchstart="handleTouchStart"
+                    @touchmove="handleTouchMove"
+                    @touchend="handleTouchEnd"
                     @contextmenu.prevent
                     :style="[canvasStyle, { cursor: cursorStyle }]"
                     class="paint-canvas"
@@ -98,32 +101,32 @@
                 <div class="une-couleur" style="background: #000000" @click="setColor('#000000')" @contextmenu.prevent="setSecondaryColor('#000000')"></div>
                 <div class="une-couleur" style="background: #808080" @click="setColor('#808080')" @contextmenu.prevent="setSecondaryColor('#808080')"></div>
                 <div class="une-couleur" style="background: #800000" @click="setColor('#800000')" @contextmenu.prevent="setSecondaryColor('#800000')"></div>
-                <div class="une-couleur" style="background: #808000" @click="setColor('#808000')" @contextmenu.prevent="setSecondaryColor('#808000')"></div>
+                <div class="une-couleur  hide-mobile" style="background: #808000" @click="setColor('#808000')" @contextmenu.prevent="setSecondaryColor('#808000')"></div>
                 <div class="une-couleur" style="background: #008000" @click="setColor('#008000')" @contextmenu.prevent="setSecondaryColor('#008000')"></div>
-                <div class="une-couleur" style="background: #008080" @click="setColor('#008080')" @contextmenu.prevent="setSecondaryColor('#008080')"></div>
+                <div class="une-couleur  hide-mobile" style="background: #008080" @click="setColor('#008080')" @contextmenu.prevent="setSecondaryColor('#008080')"></div>
                 <div class="une-couleur" style="background: #000080" @click="setColor('#000080')" @contextmenu.prevent="setSecondaryColor('#000080')"></div>
                 <div class="une-couleur" style="background: #800080" @click="setColor('#800080')" @contextmenu.prevent="setSecondaryColor('#800080')"></div>
-                <div class="une-couleur" style="background: #808040" @click="setColor('#808040')" @contextmenu.prevent="setSecondaryColor('#808040')"></div>
+                <div class="une-couleur  hide-mobile" style="background: #808040" @click="setColor('#808040')" @contextmenu.prevent="setSecondaryColor('#808040')"></div>
                 <div class="une-couleur" style="background: #004040" @click="setColor('#004040')" @contextmenu.prevent="setSecondaryColor('#004040')"></div>
-                <div class="une-couleur" style="background: #004040" @click="setColor('#004040')" @contextmenu.prevent="setSecondaryColor('#004040')"></div>
-                <div class="une-couleur" style="background: #004080" @click="setColor('#004080')" @contextmenu.prevent="setSecondaryColor('#004080')"></div>
+                <div class="une-couleur  hide-mobile" style="background: #004040" @click="setColor('#004040')" @contextmenu.prevent="setSecondaryColor('#004040')"></div>
+                <div class="une-couleur  hide-mobile" style="background: #004080" @click="setColor('#004080')" @contextmenu.prevent="setSecondaryColor('#004080')"></div>
                 <div class="une-couleur" style="background: #8000ff" @click="setColor('#8000ff')" @contextmenu.prevent="setSecondaryColor('#8000ff')"></div>
-                <div class="une-couleur" style="background: #804000" @click="setColor('#804000')" @contextmenu.prevent="setSecondaryColor('#804000')"></div>
+                <div class="une-couleur  hide-mobile" style="background: #804000" @click="setColor('#804000')" @contextmenu.prevent="setSecondaryColor('#804000')"></div>
 
                 <div class="une-couleur" style="background: #ffffff" @click="setColor('#ffffff')" @contextmenu.prevent="setSecondaryColor('#ffffff')"></div>
-                <div class="une-couleur" style="background: #c0c0c0" @click="setColor('#c0c0c0')" @contextmenu.prevent="setSecondaryColor('#c0c0c0')"></div>
+                <div class="une-couleur  hide-mobile" style="background: #c0c0c0" @click="setColor('#c0c0c0')" @contextmenu.prevent="setSecondaryColor('#c0c0c0')"></div>
                 <div class="une-couleur" style="background: #ff0000" @click="setColor('#ff0000')" @contextmenu.prevent="setSecondaryColor('#ff0000')"></div>
                 <div class="une-couleur" style="background: #ffff00" @click="setColor('#ffff00')" @contextmenu.prevent="setSecondaryColor('#ffff00')"></div>
                 <div class="une-couleur" style="background: #00ff00" @click="setColor('#00ff00')" @contextmenu.prevent="setSecondaryColor('#00ff00')"></div>
                 <div class="une-couleur" style="background: #00ffff" @click="setColor('#00ffff')" @contextmenu.prevent="setSecondaryColor('#00ffff')"></div>
                 <div class="une-couleur" style="background: #0000ff" @click="setColor('#0000ff')" @contextmenu.prevent="setSecondaryColor('#0000ff')"></div>
                 <div class="une-couleur" style="background: #ff00ff" @click="setColor('#ff00ff')" @contextmenu.prevent="setSecondaryColor('#ff00ff')"></div>
-                <div class="une-couleur" style="background: #ffff80" @click="setColor('#ffff80')" @contextmenu.prevent="setSecondaryColor('#ffff80')"></div>
-                <div class="une-couleur" style="background: #00ff80" @click="setColor('#00ff80')" @contextmenu.prevent="setSecondaryColor('#00ff80')"></div>
-                <div class="une-couleur" style="background: #80ffff" @click="setColor('#80ffff')" @contextmenu.prevent="setSecondaryColor('#80ffff')"></div>
-                <div class="une-couleur" style="background: #8080ff" @click="setColor('#8080ff')" @contextmenu.prevent="setSecondaryColor('#8080ff')"></div>
+                <div class="une-couleur  hide-mobile" style="background: #ffff80" @click="setColor('#ffff80')" @contextmenu.prevent="setSecondaryColor('#ffff80')"></div>
+                <div class="une-couleur  hide-mobile" style="background: #00ff80" @click="setColor('#00ff80')" @contextmenu.prevent="setSecondaryColor('#00ff80')"></div>
+                <div class="une-couleur  hide-mobile" style="background: #80ffff" @click="setColor('#80ffff')" @contextmenu.prevent="setSecondaryColor('#80ffff')"></div>
+                <div class="une-couleur  hide-mobile" style="background: #8080ff" @click="setColor('#8080ff')" @contextmenu.prevent="setSecondaryColor('#8080ff')"></div>
                 <div class="une-couleur" style="background: #ff0080" @click="setColor('#ff0080')" @contextmenu.prevent="setSecondaryColor('#ff0080')"></div>
-                <div class="une-couleur" style="background: #ff8040" @click="setColor('#ff8040')" @contextmenu.prevent="setSecondaryColor('#ff8040')"></div>
+                <div class="une-couleur  hide-mobile" style="background: #ff8040" @click="setColor('#ff8040')" @contextmenu.prevent="setSecondaryColor('#ff8040')"></div>
               </div>
               
             </div>
@@ -257,6 +260,19 @@ export default {
     },
     toggleZoom() {
       this.canvasScale = this.canvasScale === 1 ? 1.4 : 1;
+    },
+
+
+    handleTouchStart(event) {
+      const touch = event.touches[0];
+      this.handleMouseDown({ offsetX: touch.clientX, offsetY: touch.clientY });
+    },
+    handleTouchMove(event) {
+      const touch = event.touches[0];
+      this.handleMouseMove({ offsetX: touch.clientX, offsetY: touch.clientY });
+    },
+    handleTouchEnd(event) {
+      this.handleMouseUp();
     },
     /* --------------------------------------------------- */
     /* Sélection et dessin */
@@ -748,6 +764,11 @@ export default {
       this.lineWidth = 1;
 
 
+      this.width = window.innerWidth * 0.9; // Utilise 90% de la largeur de l'écran
+      this.height = this.width; // Maintenir un aspect carré pour le canvas
+      this.canvasContext = canvas.getContext("2d");
+
+
       this.canvasContext.fillStyle = "#FFFFFF";
       this.canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -899,8 +920,8 @@ export default {
   letter-spacing: 0px;
   color: black;
   max-width: 800px;
-  width: 50%;
-  height: fit-content;
+  width: 1200px;
+  height: 1100px;
   background: #eeecdf;
   position: absolute;
 }
@@ -1169,7 +1190,51 @@ canvas {
     pointer-events: none;
     background-color: none;
 }
-
+@media screen and (max-width:960px){
+  .paint-content[data-v-71e02281] {
+      display: flex;
+      height: 100%;
+      width: 100%;
+      background: #808080;
+      flex-direction: column;
+  }
+  .size-paint{
+    flex-direction: row;
+    padding: 0px;
+    height: 40px; 
+  }
+  .outils-paint{
+    display: flex;
+    height: 78px;
+    width: 360px;
+    padding: 0;
+  }
+  .paint-tool{
+    width: 42px;
+  }
+  .kp_content--block--content.kp_element--enable{
+    overflow: hidden;
+  }
+  .kp_paint{
+    height: calc(100vh - 47px) !important;
+  }
+  .paint-colors{
+    bottom: 30px;
+  }
+  .une-couleur{
+    width: 30px;
+    height: 30px;
+  }
+  .hide-mobile{
+    display:none; 
+  }
+  .kp_content--block{
+    width: calc(100vw - 50px) !important;
+  }
+  .color-pickers{
+    max-width: 290px;
+  }
+}
 
 
 </style>

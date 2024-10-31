@@ -604,7 +604,9 @@ export default {
   width:100%;
   max-width: 600px;
 }
-
+.container--terminal .window{
+  width: 800px;
+}
 .container--terminal .kp_item__window_draggable {
     top: 200px;
     left: 200px;  
@@ -612,6 +614,18 @@ export default {
 .container--folder{
   top: 50px;
   left: 130px;  
+}
+.container--monparcours {
+  top: 280px;
+  left: 280px;  
+}
+.container--autoportrait {
+  top: 220px;
+  left: 500px;  
+}
+.container--paint{
+  top: 80px;
+  left: 180px;  
 }
 
 </style>

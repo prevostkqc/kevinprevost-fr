@@ -8,7 +8,8 @@
     <div :class="['kp_icon_zone', `kp_icon_zone--resize`, `kp_icon--resize-${context}`]" 
          :id="`kp_action--resize--${context}`"
          @click="handleAction('resize')">
-      <img class="kp_icon_zone--img" :src="navigationResize" alt="resize">
+         <img class="kp_icon_zone--img  kp_icon_zone--img-normale" :src="navigationResized" alt="resize">
+         <img class="kp_icon_zone--img  kp_icon_zone--img-resizing" :src="navigationResize" alt="resize">
     </div>
     <div :class="['kp_icon_zone', `kp_icon_zone--close`, `kp_icon--close-${context}`]" 
          :id="`kp_action--close--${context}`"
@@ -19,9 +20,10 @@
 </template>
 
 <script>
-import navigationClose from '@/assets/images/close_icn.svg';
-import navigationResize from '@/assets/images/resize_icn.svg';
-import navigationReduct from '@/assets/images/reduct_icn.svg';
+import navigationClose    from '@/assets/images/close_icn.svg';
+import navigationResize   from '@/assets/images/resize_icn.svg';
+import navigationResized  from '@/assets/images/resized_icn.svg';
+import navigationReduct   from '@/assets/images/reduct_icn.svg';
 
 export default {
   name: 'Navigation',
@@ -39,6 +41,7 @@ export default {
     return {
       navigationClose,
       navigationResize,
+      navigationResized,
       navigationReduct
     };
   },
