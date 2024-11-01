@@ -14,8 +14,11 @@
           <Navigation @close="handleClose" @resize="handleResize" @reduct="handleReduct" :viewName="title" :context="context" :customClass="customClass" />
       </div>
       <div class="kp_terminal_zone-texte kp_element--enable">
+
+        <div class="kp_terminal-content">
           <!-- Ajout de ref pour l'accès via JavaScript -->
           <p ref="terminalText" class="kp_terminal--texte"></p>
+        </div>
       </div>
       <div class="resize-handle"></div>
   </section>

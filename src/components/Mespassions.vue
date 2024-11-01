@@ -842,6 +842,8 @@ export default {
   .kp_content--block{
     height: calc(100vh - 46px) !important;
     width: calc(100vw - 50px) !important;
+    max-height: calc(100vh - 200px);
+    overflow: scroll;
   }
   .passion-demonstaration--pokemon{
     gap: 50px;

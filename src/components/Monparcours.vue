@@ -15,7 +15,6 @@
     <FakeMenu></FakeMenu>
 
     <div class="kp_folder-projects-zone-texte kp_quisuisje--texte kp_element--enable">
-      <div class="kp_quisuisje--content">
         <!-- Boucle pour afficher chaque expérience -->
         <article class="kp_cv-experience--line" v-for="(experience, index) in experiences" :key="index">
           <div class="kp_cv-experience-line">
@@ -53,7 +52,6 @@
             </div>
           </div>
         </article>
-      </div>
     </div>
 
     <div class="resize-handle"></div>
@@ -324,7 +322,6 @@
     .kp_quisuisje--content{
         background: white;
         height:100%;
-        overflow: hidden;
         overflow-y: scroll;
     }
     .kp_compagnie-img-nom{

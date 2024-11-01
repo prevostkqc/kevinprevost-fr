@@ -222,6 +222,7 @@ export default {
         currentY: 0,
         canvasScale: 1,
         previewLine: null,
+        needsUpdate: false,
         tools: [
             { name: 'select1', icon: paint1 },
             { name: 'select', icon: paint2 },
@@ -266,36 +267,49 @@ export default {
 
     handleTouchStart(event) {
       const touch = event.touches[0];
-      this.handleMouseDown({ offsetX: touch.clientX, offsetY: touch.clientY });
+      const { offsetX, offsetY } = this.getCanvasCoords(touch.clientX, touch.clientY);
+      this.handleMouseDown({ offsetX, offsetY });
     },
     handleTouchMove(event) {
       const touch = event.touches[0];
-      this.handleMouseMove({ offsetX: touch.clientX, offsetY: touch.clientY });
+      const { offsetX, offsetY } = this.getCanvasCoords(touch.clientX, touch.clientY);
+      this.handleMouseMove({ offsetX, offsetY });
     },
-    handleTouchEnd(event) {
+    handleTouchEnd() {
       this.handleMouseUp();
     },
+    getCanvasCoords(clientX, clientY) {
+    const canvas = this.$refs.canvas;
+    const rect = canvas.getBoundingClientRect();
+    return {
+      offsetX: clientX - rect.left,
+      offsetY: clientY - rect.top
+    };
+  },
     /* --------------------------------------------------- */
     /* Sélection et dessin */
     handleMouseDown(event) {
-      requestAnimationFrame(() => {
-        this.activeDrawing = true;
-        this.startX = event.offsetX;
-        this.startY = event.offsetY;
-        
-        if (this.currentTool === 'rect' || this.currentTool === 'ellipse' || this.currentTool === 'line' || this.currentTool === 'select') {
-            this.isDrawingShape = true;
-            this.isSelecting = true; 
-            this.currentX = this.startX;
-            this.currentY = this.startY;
-        } else {
-            this.startDrawing(event); 
-        }
+      if (!this.needsUpdate) {
+        this.needsUpdate = true;
+        requestAnimationFrame(() => {
+            this.needsUpdate = false; // Réinitialise après le rendu
+          this.activeDrawing = true;
+          this.startX = event.offsetX;
+          this.startY = event.offsetY;
+          
+          if (this.currentTool === 'rect' || this.currentTool === 'ellipse' || this.currentTool === 'line' || this.currentTool === 'select') {
+              this.isDrawingShape = true;
+              this.isSelecting = true; 
+              this.currentX = this.startX;
+              this.currentY = this.startY;
+          } else {
+              this.startDrawing(event); 
+          }
 
-        document.addEventListener('mousemove', this.handleMouseMove);
-        document.addEventListener('mouseup', this.stopDrawing);
-    });
-        
+          document.addEventListener('mousemove', this.handleMouseMove);
+          document.addEventListener('mouseup', this.stopDrawing);
+        });
+      }
     },
     handleMouseMove(event) {
         if (this.isDrawingShape && this.isSelecting) {
@@ -422,39 +436,35 @@ export default {
     /* --------------------------------------------------- */
     /* Remplissage de zone */
     fillArea(startX, startY, color) {
-      const canvas = this.$refs.canvas;
-      const context = this.canvasContext;
-      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-      const width = imageData.width;
-      const height = imageData.height;
-      const startPixel = (startY * width + startX) * 4;
-      const targetColor = [
-        imageData.data[startPixel],
-        imageData.data[startPixel + 1],
-        imageData.data[startPixel + 2],
-        imageData.data[startPixel + 3]
-      ];
+    const canvas = this.$refs.canvas;
+    const context = this.canvasContext;
+    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    const width = imageData.width;
+    const height = imageData.height;
+    const stack = [[startX, startY]];  // Utilisation d'une pile pour éviter la récursivité excessive
 
-      const fillColor = this.colorToRGBA(color);
-      if (this.colorsMatch(targetColor, fillColor)) return;
+    const targetColor = this.getPixelColor(imageData, startX, startY);
+    const fillColor = this.colorToRGBA(color);
 
+    if (this.colorsMatch(targetColor, fillColor)) return;
 
-      if (this.colorsMatch(targetColor, fillColor)) return;
+    const maxDepth = 5000; // Limiter la profondeur pour éviter les ralentissements
 
-      const pixelStack = [[startX, startY]];
+    while (stack.length > 0) {
+        let [x, y] = stack.pop();
+        if (stack.length > maxDepth) break;
 
-      while (pixelStack.length > 0) {
-        let [x, y] = pixelStack.pop();
         let currentPixel = (y * width + x) * 4;
 
+        // Parcours vers le haut pour trouver la limite de la zone
         while (y >= 0 && this.colorsMatch(targetColor, [
-          imageData.data[currentPixel],
-          imageData.data[currentPixel + 1],
-          imageData.data[currentPixel + 2],
-          imageData.data[currentPixel + 3]
+            imageData.data[currentPixel],
+            imageData.data[currentPixel + 1],
+            imageData.data[currentPixel + 2],
+            imageData.data[currentPixel + 3]
         ])) {
-          y--;
-          currentPixel -= width * 4;
+            y--;
+            currentPixel -= width * 4;
         }
 
         currentPixel += width * 4;
@@ -463,76 +473,75 @@ export default {
         let reachLeft = false;
         let reachRight = false;
 
+        // Parcours vers le bas pour remplir la zone et vérifier les limites latérales
         while (y < height && this.colorsMatch(targetColor, [
-          imageData.data[currentPixel],
-          imageData.data[currentPixel + 1],
-          imageData.data[currentPixel + 2],
-          imageData.data[currentPixel + 3]
+            imageData.data[currentPixel],
+            imageData.data[currentPixel + 1],
+            imageData.data[currentPixel + 2],
+            imageData.data[currentPixel + 3]
         ])) {
-          imageData.data[currentPixel] = fillColor[0];
-          imageData.data[currentPixel + 1] = fillColor[1];
-          imageData.data[currentPixel + 2] = fillColor[2];
-          imageData.data[currentPixel + 3] = fillColor[3];
+            this.setPixelColor(imageData, x, y, fillColor);
 
-          if (x > 0) {
-            if (this.colorsMatch(targetColor, [
-              imageData.data[currentPixel - 4],
-              imageData.data[currentPixel - 3],
-              imageData.data[currentPixel - 2],
-              imageData.data[currentPixel - 1]
-            ])) {
-              if (!reachLeft) {
-                pixelStack.push([x - 1, y]);
-                reachLeft = true;
-              }
-            } else if (reachLeft) {
-              reachLeft = false;
+            if (x > 0 && this.colorsMatch(this.getPixelColor(imageData, x - 1, y), targetColor)) {
+                if (!reachLeft) {
+                    stack.push([x - 1, y]);
+                    reachLeft = true;
+                }
+            } else {
+                reachLeft = false;
             }
-          }
 
-          if (x < width - 1) {
-            if (this.colorsMatch(targetColor, [
-              imageData.data[currentPixel + 4],
-              imageData.data[currentPixel + 5],
-              imageData.data[currentPixel + 6],
-              imageData.data[currentPixel + 7]
-            ])) {
-              if (!reachRight) {
-                pixelStack.push([x + 1, y]);
-                reachRight = true;
-              }
-            } else if (reachRight) {
-              reachRight = false;
+            if (x < width - 1 && this.colorsMatch(this.getPixelColor(imageData, x + 1, y), targetColor)) {
+                if (!reachRight) {
+                    stack.push([x + 1, y]);
+                    reachRight = true;
+                }
+            } else {
+                reachRight = false;
             }
-          }
 
-          y++;
-          currentPixel += width * 4;
+            y++;
+            currentPixel += width * 4;
         }
-      }
+    }
 
-      context.putImageData(imageData, 0, 0);
-    },
+    context.putImageData(imageData, 0, 0);
+},
+getPixelColor(imageData, x, y) {
+  const index = (y * imageData.width + x) * 4;
+  return [
+    imageData.data[index],
+    imageData.data[index + 1],
+    imageData.data[index + 2],
+    imageData.data[index + 3],
+  ];
+},
 
-    colorToRGBA(color) {
-      if (color.startsWith("#")) {
-        const bigint = parseInt(color.slice(1), 16);
-        const r = (bigint >> 16) & 255;
-        const g = (bigint >> 8) & 255;
-        const b = bigint & 255;
-        return [r, g, b, 255];
-      }
-      
-      if (color.startsWith("rgba")) {
-        const parts = color.match(/rgba?\((\d+), (\d+), (\d+),? ?(\d+)?\)/);
-        return [parseInt(parts[1]), parseInt(parts[2]), parseInt(parts[3]), parts[4] ? parseFloat(parts[4]) * 255 : 255];
-      }
-      if (color.startsWith("rgb")) {
-        const parts = color.match(/rgb\((\d+), (\d+), (\d+)\)/);
-        return [parseInt(parts[1]), parseInt(parts[2]), parseInt(parts[3]), 255];
-      }
-      return [0, 0, 0, 255];
-    },
+setPixelColor(imageData, x, y, color) {
+  const index = (y * imageData.width + x) * 4;
+  imageData.data[index] = color[0];
+  imageData.data[index + 1] = color[1];
+  imageData.data[index + 2] = color[2];
+  imageData.data[index + 3] = color[3];
+},
+
+colorsMatch(color1, color2) {
+  return color1[0] === color2[0] &&
+         color1[1] === color2[1] &&
+         color1[2] === color2[2] &&
+         color1[3] === color2[3];
+},
+
+colorToRGBA(color) {
+    if (color.startsWith("#")) {
+      const bigint = parseInt(color.slice(1), 16);
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+      return [r, g, b, 255];
+    }
+    return [0, 0, 0, 255]; // Couleur par défaut en cas d'erreur
+  },
 
     colorsMatch(color1, color2) {
       return color1[0] === color2[0] &&
@@ -820,9 +829,7 @@ export default {
     computed: {
       cursorStyle() {
         const cursor = this.toolCursors[this.currentTool];
-        return cursor && cursor.includes('.png') 
-            ? `url(${cursor}) 16 16, auto` 
-            : cursor || 'default'; 
+        return cursor ? `url(${cursor}) 16 16, auto` : 'default';
       },
       canvasStyle() {
         return {
@@ -874,7 +881,7 @@ export default {
       const cursor = this.toolCursors[this.currentTool];
         return cursor && cursor.includes('.png') 
           ? `url(${cursor}) 16 16, auto` 
-          : cursor || 'default'; 
+          : cursor || 'aircross'; 
       },
       selectionRectangleClass() {
         switch (this.currentTool) {
@@ -1233,12 +1240,13 @@ canvas {
     background-color: none;
 }
 @media screen and (max-width:960px){
-  .paint-content[data-v-71e02281] {
+  .paint-content{
       display: flex;
       height: 100%;
       width: 100%;
       background: #808080;
       flex-direction: column;
+      
   }
   .size-paint{
     flex-direction: row;
@@ -1290,6 +1298,7 @@ canvas {
     position: relative;
     padding-right: 8px;
     padding-bottom: 8px;
+    height: calc(100vh - 370px);
   }
 }
 
