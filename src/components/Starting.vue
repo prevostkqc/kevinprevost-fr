@@ -64,7 +64,7 @@
   <script>
   import logo from '@/assets/images/logo.png';
   import maphoto from '@/assets/images/kevinprevost.jpg';
-  import caution from '@/assets/images/icon-caution.png';
+  import caution from '@/assets/images/icon-caution-blue.png';
   
   export default {
     name: 'Starting',

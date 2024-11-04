@@ -1158,7 +1158,7 @@ canvas {
   cursor: pointer;
 }
 .kp_content--block--content{
-  height: calc(100% - 36px);
+  height: calc(100% - 66px);
 }
 .size-paint{
   border-top: solid 1px #aca899;
@@ -1227,7 +1227,8 @@ canvas {
 .tool-name--select1,
 .tool-name--shape,
 .tool-name--egg,
-.tool-name--line2{
+.tool-name--line2,
+tool-name--letter{
   pointer-events: none;
   filter: brightness(1.5);
     background: #5f5d57;
@@ -1264,6 +1265,7 @@ canvas {
   }
   .kp_content--block--content.kp_element--enable{
     overflow: hidden;
+
   }
   .kp_paint{
     height: calc(100vh - 47px) !important;
@@ -1299,6 +1301,14 @@ canvas {
     padding-right: 8px;
     padding-bottom: 8px;
     height: calc(100vh - 370px);
+  }
+
+  .tool-name--ellipse,
+  .tool-name--fill{
+    pointer-events: none;
+    filter: brightness(1.5);
+    background: #5f5d57;
+    opacity: 0.3;
   }
 }
 

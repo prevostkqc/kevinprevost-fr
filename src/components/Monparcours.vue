@@ -155,13 +155,12 @@
           company: 'Freelance',
           location: 'Québec, Paris, Bordeaux',
           responsibilities: [
-            'Responsable des Développeurs Front-end, Intégrateurs et Webdesigner.',
-            'Intégration CSS, développement Front-end en collaboration avec l\'équipe Back-end.',
-            'Optimisation multi supports (responsive) pour une meilleure expérience utilisateur.',
-            'Gestion d\'équipe et communication permanente pour tenir les délais.',
-            'Mise en place de points quotidiens et hebdomadaires pour suivre l\'avancement.',
-            'Création et gestion d\'un espace Notion pour simplifier les échanges.',
-            'Communication interservices pour la gestion des projets.'
+            "Développement de sites web, e-commerce, elearning, API, etc. Pour de nombreux clients à travers le monde." ,
+            "Intégration CSS, développement Front-end/Back-end, mise en ligne et maintenance de sites web.",
+            "Optimisation multi supports (responsive) de l'ensemble des affichages pour une meilleure expérience utilisateur.",
+            "Conception de médias, maquettes, illustrations, animations, etc.",
+            "Rédaction de cahiers des charges, mise en place de plannings, réalisation de devis, respect des délais annoncés.",
+            "Mise à disposition d'un outil permettant des recettes après livraison simples et efficaces."
           ],
           technos: [
             {
@@ -172,20 +171,37 @@
                 { name: 'HTML5', logo: technohtml5 },
                 { name: 'Vue.js', logo: technovuejs },
                 { name: 'TypeScript', logo: technotypescript },
+                { name: 'Three.js', logo: technothreejs }, 
                 { name: 'PHP', logo: technophp },
                 { name: 'MySQL', logo: technomysql },
-                { name: 'Three.js', logo: technothreejs },
-                { name: 'Python', logo: technopython }
+                { name: 'Python', logo: technopython },
+                { name: 'Ajax', logo: technoajax },
+                { name: 'ASP.NET', logo: technoaspnet },
+                { name: 'Azure DevOps', logo: technoazuredevops },
+                { name: 'Visual Studio Code', logo: technovisualstudiocode },
+                { name: 'Visual Studio', logo: technovisualstudio },
+                { name: 'PHPStorm', logo: technophpstorm },
+                { name: 'jQuery', logo: technojquery },
+                { name: 'JSON', logo: technojson },
+                { name: 'Razor', logo: technorazor },
+                { name: 'Webflow', logo: technowebflow },
+                { name: 'Woocommerce', logo: technowoocommerce },
+                { name: 'Wordpress', logo: technowordpress },
+                { name: 'CakePHP', logo: technocakephp },
+                { name: 'Sublime Text', logo: technosublimtext },
               ]
             },
             {
               name: 'Outils',
               items: [
+                { name: 'Notion', logo: technonotion },
                 { name: 'Figma', logo: technofigma },
                 { name: 'Photoshop', logo: technophotoshop },
-                { name: 'Notion', logo: technonotion },
-                { name: 'Visual Studio Code', logo: technovisualstudiocode },
-                { name: 'Git', logo: technogit }
+                { name: 'Illustrator', logo: technoillustrator },
+                { name: 'Adobe XD', logo: technoxd },
+                { name: 'Git', logo: technogit },
+                { name: 'GitHub', logo: technogithub },
+                { name: 'GitKraken', logo: technogitkraken },
               ]
             }
           ]
@@ -197,24 +213,35 @@
           company: 'GROUPE CYBERTEK',
           location: 'Bordeaux',
           responsibilities: [
-            'Responsable des Développeurs Front-end, Intégrateurs et Webdesigner.',
-            'Intégration CSS, développement Front-end en collaboration avec l\'équipe Back-end.',
-            'Optimisation multi supports pour une meilleure expérience utilisateur.',
-            'Gestion d\'équipe pour tenir les délais et résoudre les problèmes.'
+            "Responsable des Développeurs Front-end, Integrateurs et Webdesigner.",
+            "Intégration CSS, développement Front-end en collaboration avec l'équipe Back-end.",
+            "Optimisation multi supports (responsive) de l'ensemble des affichages pour une meilleure expérience utilisateur.",
+            "Gestion d'équipe basée sur une organisation et une communication permanente pour tenir les délais annoncés et trouver des solutions aux éventuels problèmes rencontrés.", 
+            "Mise en place de points quotidiens et hebdomadaires pour s'assurer de la bonne avancée de chaque projet.", 
+            "Création et gestion d'un espace Notion pour simplifier les échanges concernant les projets et l'équipe.", 
+            "Communication interservices pour la gestion des projets."
           ],
           technos: [
             {
               name: 'Code',
               items: [
                 { name: 'CSS3', logo: technocss3 },
-                { name: 'ASP.NET', logo: technohtml5 }
+                { name: 'Javascript', logo: technojs },
+                { name: 'HTML5', logo: technohtml5 },
+                { name: 'Vue.js', logo: technovuejs },
+                { name: 'Three.js', logo: technothreejs },
+                { name: 'jQuery', logo: technojquery },
+                { name: 'JSON', logo: technojson },
+                { name: 'Razor', logo: technorazor },
               ]
             },
             {
               name: 'Outils',
               items: [
+                { name: 'Notion', logo: technonotion },
                 { name: 'Figma', logo: technofigma },
-                { name: 'Photoshop', logo: technophotoshop }
+                { name: 'Photoshop', logo: technophotoshop },
+                { name: 'Illustrator', logo: technoillustrator },
               ]
             }
           ]
@@ -226,9 +253,9 @@
           company: 'Shopîles - Neadly',
           location: 'Bordeaux',
           responsibilities: [
-            'Développement de solutions, Front-end/Back-end pour les différents sites de la compagnie.',
-            'Mise en place d\'outils pour simplifier la gestion de projets.',
-            'Création d\'une API et d\'un service de paiement simplifié pour les entreprises.'
+            "Développement de solutions, Front-end/Back-end pour les différents sites de la compagnie.", 
+            "Mise en place d'outils pour simplifier la gestion de projets.",
+            "Création d'une API et d'un service de paiement simplifié pour les entreprises",
           ],
           technos: [
             {
@@ -257,9 +284,42 @@
           company: 'Scalian',
           location: 'Bordeaux',
           responsibilities: [
-            'Développement de solutions Front-end/Back-end pour plusieurs sites.',
-            'Échange avec plusieurs prestataires pour adapter leurs problèmes à nos solutions.',
-            'Correction de base de données corrompues et nettoyage de code pour une meilleure optimisation.'
+            "Développement de solutions Front-end/Back-end pour plusieurs des sites gérés par la compagnie.",
+            "Échange avec plusieurs prestataires de services pour adapter leurs problèmes à nos solutions.",
+            "Correction de base de données corrompues et nettoyage de code pour une meilleure optimisation."
+          ],
+          technos: [
+            {
+              name: 'Code',
+              items: [
+                { name: 'Javascript', logo: technojs },
+                { name: 'HTML5', logo: technohtml5 },
+                { name: 'CSS3', logo: technocss3 },
+                { name: 'PHP', logo: technophp },
+                { name: 'MySQL', logo: technomysql }
+              ]
+            },
+            {
+              name: 'Outils',
+              items: [
+                { name: 'PHPStorm', logo: technophotoshop },
+                { name: 'Git', logo: technogit }
+              ]
+            }
+          ]
+        },
+        {
+          logo: sitescalian,
+          date: '2016',
+          title: 'Développeur web',
+          company: 'Scalian',
+          location: 'Bordeaux',
+          responsibilities: [
+            "Développement Front-end/Back-end pour différents clients de la société.",
+            "Développement de nouvelles fonctionnalités et API.",
+            "Rédaction et création de plusieurs bases de données.",
+            "Développement de plusieurs back offices Front-end/Back-end.", 
+            "Réalisation de plusieurs newsletters responsives."
           ],
           technos: [
             {
@@ -318,6 +378,9 @@
         background: white;
         width: 60vw;
         height: 60vh;
+
+        height: fit-content;
+        max-height: calc(100vh - 50px);
     }
     .kp_quisuisje--content{
         background: white;
@@ -447,6 +510,14 @@
     }
     .kp_projet-technos--visuel li:hover{
        background: #ceffd9;
+    }
+
+    .kp_folder-projects-zone-texte{
+      background: #ffffff;
+      border: solid 1px #b5b5b5;
+      overflow-y: scroll;
+      height: 100%;
+      max-height: calc(100vh - 180px);
     }
     
     @media screen and (max-width: 900px){

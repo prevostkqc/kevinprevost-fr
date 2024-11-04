@@ -61,8 +61,9 @@
                             <div class="kp_card-pokemon--container">
                                 <img class="kp_card-pokemon--img" :src="Pokemoncard2" alt="carte Pokémon">
                                 <div class="kp_card-pokemon--holo" ref="cardHolo">
-                                    <div class="kp_card-pokemon--glow" ref="cardGlow"></div>
                                 </div>                    
+                                <div class="kp_card-pokemon--glow" ref="cardGlow"></div>
+                                <img class="kp_card-pokemon--img kp_card-pokemon--cadre  kp_card-pokemon--dracaufeu" :src="Pokemoncard3" alt="carte Pokémon" ref="carCadre">
                                 <img class="kp_card-pokemon--img kp_card-pokemon--cadre" :src="Pokemoncard1" alt="carte Pokémon" ref="carCadre">
                                 <div class="kp_card-pokemon--glow2" ref="cardGlow2"></div>
                             </div>
@@ -172,8 +173,9 @@ import FakeMenu     from '@/components/Fakemenu.vue';
 
 import textIcon     from    '@/assets/images/icon-heart.png'; 
 
-import Pokemoncard1 from '@/assets/images/card_poke.png';
+import Pokemoncard1 from '@/assets/images/card_poke-cadre.png';
 import Pokemoncard2 from '@/assets/images/card_poke_sous.png';
+import Pokemoncard3 from '@/assets/images/dracaufeu.png';
 import PokemonBack  from '@/assets/images/card_poke_3.png';
 import pokecardIcon from '@/assets/images/pokecard_icn.png';
 
@@ -216,6 +218,7 @@ export default {
         windowStateClass: 'kp_item_window_hide',
         Pokemoncard1,
         Pokemoncard2,
+        Pokemoncard3,
         pokecardIcon,
         PokemonBack,
         Gameboy,
@@ -378,11 +381,11 @@ export default {
   font-size: 14px;
   letter-spacing: 0px;
   color: black;
-  max-width: 800px;
   width: 1500px;
   height: fit-content;
   background: #eeecdf;
   position: absolute;
+  width: calc(100vw - 200px);
 }
 
 .containers-liste-onglets{
@@ -579,6 +582,18 @@ export default {
   background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.2) 0%, transparent);
   background-image: linear-gradient(90deg, transparent 10%, transparent 7%, rgb(177 0 0 / 42%) 70%, transparent 50%, transparent 53%, rgba(222, 255, 10, 0.48) 90%, transparent 100%);
   transform: rotate(45deg);
+  pointer-events: none;
+  position: absolute;
+    top: -100%;
+    left: 40%;
+    width: 100%;
+    height: 200%;
+    background: #fff;
+    opacity: 0.5;
+    background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.2) 0%, transparent);
+    background-image: linear-gradient(90deg, transparent 0%, transparent 7%, rgb(177 0 0 / 42%) 29%, transparent 50%, transparent 53%, rgba(222, 255, 10, 0.48) 56%, transparent 100%);
+    transform: rotate(45deg);
+    pointer-events: none;
 }
 .kp_card-pokemon--glow2  {
   position: absolute;
@@ -592,6 +607,7 @@ export default {
     mix-blend-mode: plus-lighter;
     border-radius: 100%;
     filter: blur(10px);
+    pointer-events: none;
 }
 
 .kp_card-pokemon--holo{
@@ -608,9 +624,13 @@ export default {
   top: 10px;
   left: 10px;
   perspective: 10000px;
+  width:100%;
+
+  background-image: url(/src/assets/images/pokemon_holo_move.webp), url(/src/assets/images/pokemon_holo_fix.webp), linear-gradient(125deg, rgb(239 255 77) 15%, rgb(255 166 0) 30%, rgb(228 212 191) 40%, rgba(0, 255, 138, 0.25) 60%, rgb(68 144 162 / 75%) 70%, rgba(204, 76, 250, 0.3137254902) 85%);
 }
 .kp_card-pokemon--cadre{
-  filter:drop-shadow(5px 5px 3px #000000AA)
+  filter:drop-shadow(5px 5px 3px #000000AA);
+  pointer-events: none;
 }
 
 .kp_content--block--content.kp_element--enable{
@@ -751,6 +771,14 @@ export default {
   width: 100%;
   background: #787676;
 }
+.kp_card-pokemon--dracaufeu{
+  transition: 0.3s;
+  pointer-events: inherit;
+}
+.kp_card-pokemon--dracaufeu:hover{
+  transform: scale(1.03) translate(-1%, 0%);
+  transition: 0.3s;
+}
 
 
 
@@ -763,8 +791,9 @@ export default {
 
 
 
-
-
+.kp_element--title{
+  position: sticky;
+}
 
 
 /* -------------------- */
@@ -795,8 +824,6 @@ export default {
   gap: 50px;
 }
 /* -------------------- */
-.largediv {
-}
 
 .kp_bold--passion{
   color: #000000;
@@ -842,7 +869,8 @@ export default {
   .kp_content--block{
     height: calc(100vh - 46px) !important;
     width: calc(100vw - 50px) !important;
-    max-height: calc(100vh - 200px);
+    max-height: calc(100vh - 48px);
+    width: 100%;
     overflow: scroll;
   }
   .passion-demonstaration--pokemon{
