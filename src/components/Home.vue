@@ -89,6 +89,28 @@
         :title="'Mes passions'" />
     </div>
 
+    <div class="container--media"
+        v-bring-to-front-on-show
+        @click="bringToFront($event)"
+        v-show="openWindows.includes('media')"
+        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.media]">
+      <Media @update-class="updateWindowClass('media', $event)" @close="handleCloseWindow('media')"
+        :context="'media'"
+        :title="'Mes media'" />
+    </div>
+
+    
+
+    <div class="container--mail"
+        v-bring-to-front-on-show
+        @click="bringToFront($event)"
+        v-show="openWindows.includes('mail')"
+        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.mail]">
+      <Mail @update-class="updateWindowClass('mail', $event)" @close="handleCloseWindow('mail')"
+        :context="'mail'"
+        :title="'mail'" />
+    </div>
+
 
     <div class="scanlines-v"></div>
 
@@ -121,8 +143,10 @@ import Cardpokemon    from '@/components/Cardpokemon.vue';
 import Clipy          from '@/components/Clipy.vue';
 import Barrebottom    from '@/components/Barrebottom.vue';
 import Starting       from '@/components/Starting.vue';
-import Menuderoulant  from './Menuderoulant.vue';
-import Mespassions    from './Mespassions.vue';
+import Menuderoulant  from '@/components/Menuderoulant.vue';
+import Mespassions    from '@/components/Mespassions.vue';
+import Mail           from '@/components/mail.vue';
+import Media          from '@/components/Lecteurmedia.vue';
 
 export default {
   name: 'Home',
@@ -139,7 +163,9 @@ export default {
     Barrebottom,
     Starting,
     Menuderoulant,
-    Mespassions
+    Mespassions,
+    Mail,
+    Media,
   },
   data() {
     return {
@@ -156,6 +182,8 @@ export default {
         clipy:        'kp_item_hide',
         starting:     'kp_item_hide',
         menuderoulant:'kp_item_hide',
+        mail:         'kp_item_hide',
+        media:        'kp_item_hide',
       },
       windowMinimized: {
         terminal:     false,
@@ -167,7 +195,9 @@ export default {
         pokemon:      false,
         passions:     false,
         clipy:        false,
-        starting:     false
+        starting:     false,
+        mail:         false,
+        media:        false,
       },
       zIndexCounter: 10, 
       isDragging: false,

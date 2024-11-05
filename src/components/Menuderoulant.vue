@@ -26,8 +26,8 @@
           </article>
           
   
-          <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--contact">
-            <a :href="mailLink" class="kp_hrefmailto">
+          <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--contact" @click="emitAction('mail')">
+            <a :href="maillink" class="kp_hrefmailto">
             </a>
             <div class="kp_menu__barre-etat--un-ico-container-img">
                 <img class="kp_menu__barre-etat--img" :src="mail" alt="Me contacter">
@@ -132,6 +132,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    maillink: {
+        type: String,
+        default: 'mailto:kevin@example.com'
+    }
   },
   data() {
     return {
@@ -139,7 +143,7 @@ export default {
         folder,
         mail,
         cv,
-        mailLink: 'mailto:contact@kevinprevost.fr?subject=Contact depuis kevinprevost.fr&body=Nom : %0D%0APrénom : %0D%0ATéléphone : %0D%0ACompagnie (facultatif) : %0D%0A%0D%0ADescription du projet : %0D%0A%0D%0A%0D%0A%0D%0A',
+        mail,
         localIsVisible: true, 
         exitIcon,
         lockIcon,

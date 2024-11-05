@@ -531,8 +531,9 @@ p, div, span{
     pointer-events: initial;
   }
   .kp_element--icon-title p{
-    display:flex;
     gap: 5px;
+    display:flex;
+    align-items: center;
     filter: drop-shadow(1px 1px 0px black);
   }
   .kp_element--disable{
@@ -634,7 +635,7 @@ p, div, span{
     font-size: 14px;
  }
  .kp_barre-une-app--img{
-    width:19px;
+    width:25px;
  }
 
   /* Elements */
@@ -1481,6 +1482,10 @@ background-color: white;
 }
 .kp_item_resize .kp_icon_zone--img-resizing{
   display:block;
+}
+.kp_element_title--icn .kp_icon_zone--img{
+  width:25px;
+
 }
 
 

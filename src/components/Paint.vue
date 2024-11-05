@@ -92,6 +92,7 @@
             </div>
             <div class="paint-colors">
               <div class="color-selectionne">
+                <!-- <input type="color" id="color-modif" v-model="color-modif"> -->
                 <div class="color-preview-secondary" :style="{ backgroundColor: secondaryColor }"></div>
                 <div class="color-preview" :style="{ backgroundColor: color }"></div>
                 
@@ -1228,7 +1229,7 @@ canvas {
 .tool-name--shape,
 .tool-name--egg,
 .tool-name--line2,
-tool-name--letter{
+.tool-name--letter{
   pointer-events: none;
   filter: brightness(1.5);
     background: #5f5d57;
@@ -1287,9 +1288,9 @@ tool-name--letter{
     max-width: 290px;
   }
   .paint-canvas {
-    width: 100%; /* Prend toute la largeur disponible */
-    height: auto; /* S'ajuste à la hauteur */
-    max-width: 100vw; /* Limite maximale de largeur */
+    width: 100%;
+    height: auto; 
+    max-width: 100vw;
     background-color: #FFFFFF;
     cursor: crosshair;
   }
@@ -1304,7 +1305,8 @@ tool-name--letter{
   }
 
   .tool-name--ellipse,
-  .tool-name--fill{
+  .tool-name--fill,
+  .tool-name--rect{
     pointer-events: none;
     filter: brightness(1.5);
     background: #5f5d57;

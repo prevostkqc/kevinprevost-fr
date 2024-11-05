@@ -22,33 +22,38 @@
     ></div>
   </section>
 
-    <a v-if="mailLink" :href="mailLink" class="kp_hrefmailto-icon">
-      <article class="kp_folder--un-ico kp_folder--mail">
-        <div class="kp_folder--un-ico-container-img">
-          <img class="kp_folder--img" :src="mailIcon" alt="Me contacter">
-        </div>
-        <p class="kp_folder--un-ico-container-text">
-          Me contacter
-        </p>
-      </article>
-    </a>
 </template>
 
 <script>
-import mailIcon from '@/assets/images/mail.png';
+import mailIcon from '@/assets/images/icon-mail.png';
 import folderIcon from '@/assets/images/icon-archive.png';
 import cvIcon from '@/assets/images/cv.png';
 import textIcon from '@/assets/images/text.png';
-import pokecardIcon from '@/assets/images/pokecard_icn.png';
 import passionIcon from '@/assets/images/icon-heart.png';
 import paintIcon from '@/assets/images/icon-paint.png';
 import terminalIcon from '@/assets/images/icon-terminalkp.png';
+import mediaIcon from '@/assets/images/icon-media.png';
 
 export default {
   name: 'Desktop',
   emits: ['openWindow', 'callBringToFront'],
+  props: {
+    isSelecting: {
+      type: Boolean,
+      default: false
+    },
+    maillink: {
+      type: String,
+      default: ''
+    },
+    windowStateClass: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
+      
       desktopItems: [
         {
           id: 'terminal',
@@ -98,14 +103,30 @@ export default {
           text: 'Autoportrait',
           altText: 'Ma tête',
         },
+        {
+          id: 'mail',
+          class: 'kp_folder--mail',
+          icon: mailIcon,
+          isTextIcon: false,
+          text: 'Me contacter',
+          altText: 'Mail',
+        },
+        {
+          id: 'media',
+          class: 'kp_folder--Media',
+          icon: mediaIcon,
+          isTextIcon: false,
+          text: 'Lecteur Média',
+          altText: 'Mail',
+        },
       ],
-      mailLink: 'mailto:contact@kevinprevost.fr?subject=Contact depuis kevinprevost.fr&body=Nom : %0D%0APrénom : %0D%0ATéléphone : %0D%0ACompagnie (facultatif) : %0D%0A%0D%0ADescription du projet : %0D%0A%0D%0A%0D%0A%0D%0A',
-      mailIcon,
-      isSelecting: false,
-      startX: 0,
-      startY: 0,
-      currentX: 0,
-      currentY: 0
+      // mailLink: 'mailto:contact@kevinprevost.fr?subject=Contact depuis kevinprevost.fr&body=Nom : %0D%0APrénom : %0D%0ATéléphone : %0D%0ACompagnie (facultatif) : %0D%0A%0D%0ADescription du projet : %0D%0A%0D%0A%0D%0A%0D%0A',
+      // mailIcon,
+      // isSelecting: false,
+      // startX: 0,
+      // startY: 0,
+      // currentX: 0,
+      // currentY: 0
     };
   },
 
@@ -193,5 +214,8 @@ export default {
 .is-selecting {
   pointer-events: none;
   user-select: none;
+}
+.kp_folder--media{
+  display:none;
 }
 </style>

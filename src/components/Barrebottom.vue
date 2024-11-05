@@ -60,6 +60,7 @@ import pokecardIcon     from '@/assets/images/pokecard_icn.png';
 import cvIcon           from '@/assets/images/cv.png';
 import heartIcon        from '@/assets/images/icon-heart.png';
 import paintIcon        from '@/assets/images/icon-paint.png';
+import mailIcon         from '@/assets/images/icon-mail.png';
 
 export default {
   name: 'Barrebottom',
@@ -127,6 +128,13 @@ export default {
           class: 'kp_barre-une-app--quisuisje',
           icon: cvIcon,
           title: 'Mon parcours',
+          isText: false
+        },
+        {
+          id: 'mail',
+          class: 'kp_barre-une-app--mail',
+          icon: mailIcon,
+          title: 'Contactez-moi',
           isText: false
         }
       ],
