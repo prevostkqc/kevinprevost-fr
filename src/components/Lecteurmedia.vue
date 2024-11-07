@@ -15,9 +15,9 @@
         <section class="fake-menu-top-folder">
             <div class="fake-menu--top">
                 <ul class="liste-fake-menu">
-                    <li class="liste-fake-menu--li  liste-fake-menu--li-nouveau">Fichier
+                    <li class="liste-fake-menu--li  liste-fake-menu--li-nouveau"><span class="under-windows">F</span>ichier
                         <ul class="fake-sous-menu">
-                            <li class="fake-sous-menu--li" @click="clearCanvas">
+                            <li class="fake-sous-menu--li">
                                 <p class="p-texte">Nouveau</p>
                                 <p class="p-texte">Ctrl+N</p>
                             </li>
@@ -31,20 +31,91 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="liste-fake-menu--li">Edition</li>
-                    <li class="liste-fake-menu--li">Affichage</li>
-                    <li class="liste-fake-menu--li">Image</li>
-                    <li class="liste-fake-menu--li">Couleurs</li>
-                    <li class="liste-fake-menu--li">?</li>
+                    <li class="liste-fake-menu--li">Affic<span class="under-windows">h</span>age</li>
+                    <li class="liste-fake-menu--li"><span class="under-windows">L</span>ecture</li>
+                    <li class="liste-fake-menu--li"><span class="under-windows">O</span>utils</li>
+                    <li class="liste-fake-menu--li"><span class="under-windows">?</span></li>
                 </ul>
             </div>
         </section>
 
-        <div class="kp_content--block--content kp_element--enable kp_content--media">
-            <div class="media-player-animation">
-                <canvas ref="visualizerCanvas" class="visualizer"></canvas>
+        <div class="music-player">
+            <div class="part-top">
+                <section class="part-left">
+                </section>
+                <section class="part-midddle">
+                    <div class="visualizer">
+                        <div class="visualizer-top">
+                            <p class="trackinfo--title">{{ currentTrack.title }}</p>
+                            <p class="trackinfo--artist">{{ currentTrack.artist }}</p>
+                        </div>
+                    </div>
+                </section>
+                <section class="part-right">
+                    <div class="playlist">
+                        <ul>
+                            <li v-for="(track, index) in playlist" :key="index" @click="selectTrack(index)" :class="{ playing: currentTrackIndex === index }">
+                                <p>
+                                    <strong>{{ track.title }}</strong> - {{ track.artist }} - 
+                                    <span v-if="track.duration">{{ formatTime(track.duration) }}</span>
+                                    <span v-else>Chargement...</span>
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
             </div>
+            <div class="part-bottom">
+                <div class="progress-bar-container" @click="seekTo($event)">
+                    <!-- Barre de progression statique pour l'apparence -->
+                    <div class="progress-bar-background"></div>
+                    
+                    <!-- Jauge masquée pour capturer les interactions -->
+                    <input 
+                        type="range" 
+                        min="0" 
+                        max="100" 
+                        step="0.1" 
+                        v-model="progress" 
+                        @input="seek" 
+                        class="hidden-range" 
+                        ref="hiddenRange"
+                    />
+
+                    <!-- Barre de progression dynamique et curseur -->
+                    <div class="progress-bar" :style="{ width: progress + '%' }"></div>
+                    <img class="progress-cursor" :src="iconcursor" :style="{ left: progress + '%' }" alt="Curseur">
+                </div>
+                <div class="controls">
+                    <button @click="prevTrack">
+                        <img :src="iconprev" alt="Précédent" />
+                    </button>
+                    <button @click="playPause">
+                        <img v-if="!isPlaying" :src="iconplay" alt="Play" />
+                        <img v-else :src="iconpause" alt="Pause" />
+                    </button>
+                    <button @click="nextTrack">
+                        <img :src="iconnext" alt="Suivant" />
+                    </button>
+                    <!-- Jauge de volume séparée -->
+                    <input type="range" min="0" max="1" step="0.01" v-model="volume" @input="updateVolume" />
+                    <button @click="toggleMute">
+                        <img v-if="!isMuted" :src="iconmute" alt="Mute" />
+                        <img v-else :src="iconvolume" alt="Unmute" />
+                    </button>
+                </div>
+            </div>
+            <audio ref="audio" :src="currentTrack.path" @timeupdate="updateProgress"></audio>
+            
+            <div class="track-info">
+                <p> {{ formatTime(currentTime) }}-{{ formatTime(duration - currentTime) }} /{{ formatTime(duration) }}</p>
+            </div>
+
+
+
+           
         </div>
+
         
 
         <div class="resize-handle"></div>
@@ -56,6 +127,19 @@
 
 import Navigation   from  '@/components/Navigation.vue';
 import textIcon     from  '@/assets/images/icon-media.png'; 
+
+import track1       from '@/assets/audio/99redballons-nena.mp3';
+import track2       from '@/assets/audio/foulesentimentale-alainsouchon.mp3';
+
+import iconmute     from '@/assets/images/windowsmedia/valumeon.png';
+import iconvolume   from '@/assets/images/windowsmedia/volumeoff.png';
+import iconplay     from '@/assets/images/windowsmedia/play.png';
+import iconpause    from '@/assets/images/windowsmedia/pause.png';
+import iconprev     from '@/assets/images/windowsmedia/precedente.png';
+import iconnext     from '@/assets/images/windowsmedia/suivante.png';
+import iconcursor   from '@/assets/images/windowsmedia/volume-cursor.png';
+import jaugefull    from '@/assets/images/windowsmedia/jaugefull.png';
+import jaugeempty   from '@/assets/images/windowsmedia/jaugeempty.png';
 
 export default {
   name: 'Media',
@@ -84,17 +168,59 @@ export default {
     data() {
         return {
             textIcon,
-            particles: [],
-            maxParticles: 100, // Limite du nombre de particules pour éviter la surcharge
-            canvasContext: null,
-            canvasWidth: 0,
-            canvasHeight: 0,
-            localWindowStateClass: this.windowStateClass,
+            iconmute,
+            iconvolume,
+            iconplay,
+            iconpause,
+            iconprev,
+            iconnext,
+            iconcursor,
+            jaugefull,
+            jaugeempty,
+
+
+            isPlaying: false,
+            progress: 0,
+            currentTime: 0,
+            duration: 0,
+            volume: 1,
+            isMuted: false,
+            currentTrackIndex: 0,
+            playlist: [
+                { title: '99 Red Balloons', artist: 'Nena', path: track1 },
+                { title: 'Foule Sentimentale', artist: 'Alain Souchon', path: track2 },
+            ],
         };
     },
+    computed: {
+        currentTrack() {
+            return this.playlist[this.currentTrackIndex];
+        },
+    },
     mounted() {
-        this.setupCanvas();
-        this.startAnimation();
+        const audio = this.$refs.audio;
+        audio.volume = this.volume;
+        this.playlist.forEach((track, index) => {
+            const tempAudio = new Audio(track.path);
+            tempAudio.addEventListener('loadedmetadata', () => {
+            this.playlist[index].duration = tempAudio.duration || 0;
+            });
+        });
+
+        audio.addEventListener('loadedmetadata', () => {
+            this.duration = audio.duration;
+        });
+    },
+    watch: {
+        currentTrackIndex(newIndex) {
+            const newTrack = this.playlist[newIndex];
+            if (!newTrack.duration) {
+            const tempAudio = new Audio(newTrack.path);
+            tempAudio.addEventListener('loadedmetadata', () => {
+                this.playlist[newIndex].duration = tempAudio.duration || 0;
+            });
+            }
+        }
     },
     methods: {
         handleClose() {
@@ -107,85 +233,112 @@ export default {
             } else {
                 this.localWindowStateClass = 'kp_item_resize';
             }
-            this.$emit('update-class', this.localWindowStateClass); // Émettez la valeur locale
+            this.$emit('update-class', this.localWindowStateClass);
         },
         handleReduct() {
             this.$emit('update-class', 'kp_item_reduct');
         },
 
-        setupCanvas() {
-            const canvas = this.$refs.visualizerCanvas;
-            this.canvasContext = canvas.getContext("2d");
-            canvas.width = this.$refs.visualizerCanvas.parentElement.offsetWidth;
-            canvas.height = this.$refs.visualizerCanvas.parentElement.offsetHeight;
-            this.canvasWidth = canvas.width;
-            this.canvasHeight = canvas.height;
+
+
+       
+
+
+
+
+
+        selectTrack(index) {
+            this.currentTrackIndex = index;
+            this.resetAudio(true);
         },
-        startAnimation() {
-            this.animate();
-        },
-        animate() {
-        const ctx = this.canvasContext;
-        ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-        if (this.particles.length < this.maxParticles) {
-            this.generateParticles();
+        playPause() {
+        const audio = this.$refs.audio;
+        if (audio.paused) {
+            audio.play();
+            this.isPlaying = true;
+        } else {
+            audio.pause();
+            this.isPlaying = false;
         }
-        this.particles = this.particles.filter(particle => {
-            particle.update();
-            particle.draw(ctx);
-            return particle.alpha > 0;
-        });
-
-        requestAnimationFrame(this.animate.bind(this));
         },
-        generateParticles() {
-            const numberOfParticles = Math.min(10 + Math.floor(Math.random() * 30), this.maxParticles - this.particles.length); 
-            const baseX = Math.random() * this.canvasWidth;
-            const baseY = Math.random() * this.canvasHeight;
+        updateProgress() {
+            const audio = this.$refs.audio;
+            this.currentTime = audio.currentTime;
+            this.duration = audio.duration;
+            this.progress = (audio.currentTime / audio.duration) * 100;
+        },
 
-            for (let i = 0; i < numberOfParticles; i++) {
-                const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 4 + 1.5;
-                const size = Math.random() * 25 + 50;
-                this.particles.push(new Particle(baseX, baseY, angle, speed, size));
+        seekTo(event) {
+            const rect = event.currentTarget.getBoundingClientRect();
+            const offsetX = event.clientX - rect.left;
+            const percentage = offsetX / rect.width;
+            this.progress = percentage * 100;
+            this.$refs.audio.currentTime = percentage * this.$refs.audio.duration;
+        },
+        seek() {
+            const audio = this.$refs.audio;
+            audio.currentTime = (this.progress / 100) * audio.duration;
+        },
+        updateVolume() {
+            this.$refs.audio.volume = this.volume;
+            this.isMuted = this.volume === 0;
+        },
+        toggleMute() {
+            const audio = this.$refs.audio;
+            audio.muted = !audio.muted;
+            this.isMuted = audio.muted;
+        },
+        formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const sec = Math.floor(seconds % 60);
+            return `${minutes}:${sec < 10 ? '0' + sec : sec}`;
+        },
+
+        nextTrack() {
+            if (this.currentTrackIndex < this.playlist.length - 1) {
+            this.currentTrackIndex++;
+            this.resetAudio();
             }
         },
-    },
-    beforeDestroy() {
-        cancelAnimationFrame(this.animationId);
-    },
-};
-class Particle {
-    constructor(x, y, angle, speed, size) {
-        this.x = x;
-        this.y = y;
-        this.size = size;
-        this.angle = angle;
-        this.speed = speed;
-        this.alpha = 1;
 
-        this.color = {
-            r: Math.floor(Math.random() * 156),
-            g: Math.floor(Math.random() * 156),
-            b: Math.floor(Math.random() * 156)
-        };
+        prevTrack() {
+            if (this.currentTrackIndex > 0) {
+            this.currentTrackIndex--;
+            this.resetAudio();
+            }
+        },
+
+        resetAudio(playImmediately = false) {
+            const audio = this.$refs.audio;
+            audio.currentTime = 0;
+            this.currentTime = 0;
+            this.progress = 0;
+            audio.load();
+
+            audio.oncanplay = () => {
+            if (playImmediately || this.isPlaying) {
+                audio.play();
+                this.isPlaying = true;
+            }
+            audio.oncanplay = null;
+            };
+        },
+
+        playPause() {
+            const audio = this.$refs.audio;
+            if (audio.paused) {
+            audio.play();
+            this.isPlaying = true;
+            } else {
+            audio.pause();
+            this.isPlaying = false;
+            }
+        },
+
+
+
     }
-    update() {
-        // Met à jour la position de la particule
-        this.x += Math.cos(this.angle) * this.speed;
-        this.y += Math.sin(this.angle) * this.speed;
-        this.alpha -= 0.02;
-    }
-    draw(ctx) {
-        ctx.save();
-        ctx.globalAlpha = this.alpha;
-        ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.alpha})`;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-    }
-}
+};
 </script>
 
 <style scoped>    
@@ -225,15 +378,125 @@ class Particle {
 
 
 
-.media-player-animation {
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-    background-color: #000; /* Fond noir pour un meilleur contraste */
+
+
+
+
+
+.controls img {
+  width: 24px;
+  height: 24px;
 }
-.visualizer {
+
+
+.music-player {
+  padding: 20px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+}
+.track-info {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+button {
+  background-color: #666;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #888;
+}
+button.onmute {
+  background-color: #d9534f; /* Couleur rouge pour indiquer que le son est coupé */
+}
+input[type="range"] {
+  width: 100px;
+}
+
+/* ----------------- */
+/* Playlist */
+.playlist {
+  margin-top: 20px;
+  color: white;
+}
+
+.playlist ul {
+  list-style: none;
+  padding: 0;
+}
+
+.playlist li {
+  padding: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.playlist li:hover {
+  background-color: #444;
+}
+
+.playlist li.playing {
+  background-color: #666;
+  font-weight: bold;
+}
+
+
+/* ----------------- */
+/* Visualizer */
+.part-top{
+    display: flex;
+    justify-content: space-between;
+}
+
+/* ----------------- */
+/* progress bar */
+.progress-bar-container {
     width: 100%;
+    height: 10px;
+    position: relative;
+    background-color: #444;
+    cursor: pointer;
+}
+
+.hidden-range {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
     height: 100%;
-    display: block;
+    opacity: 0; /* Rendre invisible mais cliquable */
+    z-index: 3;
+    cursor: pointer;
+}
+
+.progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: red;
+    transition: width 0.1s linear;
+    z-index: 1;
+}
+
+.progress-cursor {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    transition: left 0.1s linear;
+    z-index: 2;
+    pointer-events: none;
 }
 </style>

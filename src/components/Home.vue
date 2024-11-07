@@ -11,7 +11,7 @@
     </div>
     
     <div class="container--terminal">
-      <div v-if="!showStarting" @click="bringToFront($event)" v-show="openWindows.includes('terminal')" :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.terminal]">
+      <div @click="bringToFront($event)" v-show="openWindows.includes('terminal')" :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.terminal]">
         <Terminal @update-class="updateWindowClass('terminal', $event)" @close="handleCloseWindow('terminal')" 
         :context="'terminal'"
         :title="'terminal'" />

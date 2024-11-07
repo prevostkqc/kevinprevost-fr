@@ -27,8 +27,6 @@
           
   
           <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--contact" @click="emitAction('mail')">
-            <a :href="maillink" class="kp_hrefmailto">
-            </a>
             <div class="kp_menu__barre-etat--un-ico-container-img">
                 <img class="kp_menu__barre-etat--img" :src="mail" alt="Me contacter">
               </div>

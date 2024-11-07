@@ -4,7 +4,7 @@
       v-for="item in desktopItems" 
       :key="item.id" 
       :class="['kp_folder--un-ico', item.class, { 'is-selecting': isSelecting }]"
-      @click="!isSelecting && handleClick(item.id); !isSelecting && callBringToFront(item.id)
+      @click="!localIsSelecting  && handleClick(item.id); !localIsSelecting  && callBringToFront(item.id)
       ">  <!-- Ajout de @click pour chaque icône -->
       <div class="kp_folder--un-ico-container-img">
         <div v-if="item.isTextIcon" class="kp_terminal--icn">{{ item.icon }}</div>
@@ -16,7 +16,7 @@
     </article>
     
     <div 
-        v-if="isSelecting" 
+        v-if="localIsSelecting" 
         :style="selectionStyle" 
         class="selection-overlay"
     ></div>
@@ -120,13 +120,11 @@ export default {
           altText: 'Mail',
         },
       ],
-      // mailLink: 'mailto:contact@kevinprevost.fr?subject=Contact depuis kevinprevost.fr&body=Nom : %0D%0APrénom : %0D%0ATéléphone : %0D%0ACompagnie (facultatif) : %0D%0A%0D%0ADescription du projet : %0D%0A%0D%0A%0D%0A%0D%0A',
-      // mailIcon,
-      // isSelecting: false,
-      // startX: 0,
-      // startY: 0,
-      // currentX: 0,
-      // currentY: 0
+      localIsSelecting: this.isSelecting, // Copie locale de isSelecting
+      startX: 0,
+      startY: 0,
+      currentX: 0,
+      currentY: 0,
     };
   },
 
@@ -158,7 +156,7 @@ export default {
       this.$emit('callBringToFront', appId);
     },
     startSelection(event) {
-      this.isSelecting = true;
+      this.localIsSelecting = true;
       this.startX = event.clientX;
       this.startY = event.clientY;
       this.currentX = this.startX;
@@ -171,7 +169,7 @@ export default {
       this.currentY = event.clientY;
     },
     endSelection() {
-      this.isSelecting = false;
+      this.localIsSelecting = false;
       window.removeEventListener('mousemove', this.updateSelection);
       window.removeEventListener('mouseup', this.endSelection);
     },
@@ -214,8 +212,5 @@ export default {
 .is-selecting {
   pointer-events: none;
   user-select: none;
-}
-.kp_folder--media{
-  display:none;
 }
 </style>

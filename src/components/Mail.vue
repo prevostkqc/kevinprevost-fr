@@ -17,7 +17,7 @@
                 <ul class="liste-fake-menu">
                     <li class="liste-fake-menu--li  liste-fake-menu--li-nouveau">Fichier
                         <ul class="fake-sous-menu">
-                            <li class="fake-sous-menu--li" @click="clearCanvas">
+                            <li class="fake-sous-menu--li">
                                 <p class="p-texte">Nouveau</p>
                                 <p class="p-texte">Ctrl+N</p>
                             </li>
@@ -33,8 +33,6 @@
                     </li>
                     <li class="liste-fake-menu--li">Edition</li>
                     <li class="liste-fake-menu--li">Affichage</li>
-                    <li class="liste-fake-menu--li">Image</li>
-                    <li class="liste-fake-menu--li">Couleurs</li>
                     <li class="liste-fake-menu--li">?</li>
                 </ul>
             </div>

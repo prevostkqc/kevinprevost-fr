@@ -14,7 +14,7 @@
         <section class="fake-menu-top-folder">
             <div class="fake-menu--top">
                 <ul class="liste-fake-menu">
-                    <li class="liste-fake-menu--li  liste-fake-menu--li-nouveau">Fichier
+                    <li class="liste-fake-menu--li  liste-fake-menu--li-nouveau"><span class="under-windows">F</span>ichier
                         <ul class="fake-sous-menu">
                             <li class="fake-sous-menu--li" @click="clearCanvas">
                                 <p class="p-texte">Nouveau</p>
@@ -30,11 +30,11 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="liste-fake-menu--li">Edition</li>
-                    <li class="liste-fake-menu--li">Affichage</li>
-                    <li class="liste-fake-menu--li">Image</li>
-                    <li class="liste-fake-menu--li">Couleurs</li>
-                    <li class="liste-fake-menu--li">?</li>
+                    <li class="liste-fake-menu--li">E<span class="under-windows">d</span>ition</li>
+                    <li class="liste-fake-menu--li">Affic<span class="under-windows">h</span>age</li>
+                    <li class="liste-fake-menu--li"><span class="under-windows">I</span>mage</li>
+                    <li class="liste-fake-menu--li"><span class="under-windows">C</span>ouleurs</li>
+                    <li class="liste-fake-menu--li"><span class="under-windows">?</span></li>
                 </ul>
             </div>
         </section>
