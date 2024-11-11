@@ -64,4 +64,9 @@ export default {
 </script>
 
 <style scoped>
+
+.kp_icon--resize-media{
+    pointer-events: none;
+    display: none;
+}
 </style>

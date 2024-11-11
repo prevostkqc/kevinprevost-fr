@@ -61,6 +61,7 @@ import cvIcon           from '@/assets/images/cv.png';
 import heartIcon        from '@/assets/images/icon-heart.png';
 import paintIcon        from '@/assets/images/icon-paint.png';
 import mailIcon         from '@/assets/images/icon-mail.png';
+import mediaIcon        from '@/assets/images/icon-media.png';
 
 export default {
   name: 'Barrebottom',
@@ -135,6 +136,13 @@ export default {
           class: 'kp_barre-une-app--mail',
           icon: mailIcon,
           title: 'Contactez-moi',
+          isText: false
+        },
+        {
+          id: 'media',
+          class: 'kp_barre-une-app--media',
+          icon: mediaIcon,
+          title: 'Lecteur média',
           isText: false
         }
       ],
@@ -471,5 +479,11 @@ padding-right: 20px;
     /* outline: solid 1px rgb(7,42,23); */
     background: rgb(7,42,23);
 background: linear-gradient(180deg, rgba(7,42,23,1) 0%, rgba(51,115,51,1) 5%, rgba(28,146,28,1) 17%, rgba(28,146,28,1) 85%, rgba(18,93,18,1) 100%);
+  }
+
+  @media screen and (max-width: 960px) {
+    .kp_barre-une-app--title{
+      display:none;
+    }
   }
 </style>

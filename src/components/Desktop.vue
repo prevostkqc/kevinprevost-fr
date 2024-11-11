@@ -5,7 +5,7 @@
       :key="item.id" 
       :class="['kp_folder--un-ico', item.class, { 'is-selecting': isSelecting }]"
       @click="!localIsSelecting  && handleClick(item.id); !localIsSelecting  && callBringToFront(item.id)
-      ">  <!-- Ajout de @click pour chaque icône -->
+      ">
       <div class="kp_folder--un-ico-container-img">
         <div v-if="item.isTextIcon" class="kp_terminal--icn">{{ item.icon }}</div>
         <img v-else :class="['kp_folder--img', item.imageClass]" :src="item.icon" :alt="item.altText" />
@@ -60,7 +60,7 @@ export default {
           class: 'kp_folder--terminal',
           icon: terminalIcon,
           isTextIcon: false,
-          text: 'qui suis-je ?',
+          text: 'Qui suis-je ?',
           altText: 'Terminal',
         },
         {
@@ -88,6 +88,14 @@ export default {
           altText: 'Mes passions',
         },
         {
+          id: 'mail',
+          class: 'kp_folder--mail',
+          icon: mailIcon,
+          isTextIcon: false,
+          text: 'Me contacter',
+          altText: 'Mail',
+        },
+        {
           id: 'paint',
           class: 'kp_folder--paint',
           icon: paintIcon,
@@ -104,20 +112,12 @@ export default {
           altText: 'Ma tête',
         },
         {
-          id: 'mail',
-          class: 'kp_folder--mail',
-          icon: mailIcon,
-          isTextIcon: false,
-          text: 'Me contacter',
-          altText: 'Mail',
-        },
-        {
           id: 'media',
           class: 'kp_folder--Media',
           icon: mediaIcon,
           isTextIcon: false,
           text: 'Lecteur Média',
-          altText: 'Mail',
+          altText: 'Média',
         },
       ],
       localIsSelecting: this.isSelecting, // Copie locale de isSelecting
@@ -212,5 +212,29 @@ export default {
 .is-selecting {
   pointer-events: none;
   user-select: none;
+}
+
+@media (max-width: 960px) {
+  .kp_desktop {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+    gap: 20px;
+  }
+  .kp_folder--un-ico{
+    height: 50px;
+  }
+  .kp_notification--applications{
+    position: absolute;
+    left: 190px;
+    top: 3px;
+    display: flex;
+    gap: 2px;
+    margin-left: 12px;
+    width: calc(100% - 60px);
+    overflow-x: scroll;
+  }
 }
 </style>
