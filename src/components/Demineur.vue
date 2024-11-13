@@ -291,6 +291,9 @@ export default {
             if (!this.hasGameStarted) {
                 this.hasGameStarted = true;
                 this.startTimer();
+                if (cell.mine) {
+                    this.moveMine(row, col);
+                }
             }
 
             cell.revealed = true;
@@ -303,6 +306,24 @@ export default {
                 this.revealAdjacentCells(row, col);
             }
             this.checkVictory();
+        },
+        moveMine(originalRow, originalCol) {
+            this.board[originalRow][originalCol].mine = false;
+            for (let row = 0; row < this.rows; row++) {
+                for (let col = 0; col < this.cols; col++) {
+                    if (!this.board[row][col].mine) {
+                        this.board[row][col].mine = true;
+                        this.board.forEach((r, rowIndex) => {
+                            r.forEach((cell, colIndex) => {
+                                if (!cell.mine) {
+                                    cell.adjacentMines = this.countAdjacentMines(rowIndex, colIndex);
+                                }
+                            });
+                        });
+                        return;
+                    }
+                }
+            }
         },
         initializeBoard() {
             if (this.intervalId) {
