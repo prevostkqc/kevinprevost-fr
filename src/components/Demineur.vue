@@ -15,6 +15,8 @@
             <Navigation @close="handleClose" @resize="handleResize" @reduct="handleReduct" :viewName="title"
                 :context="context" :customClass="customClass" />
         </div>
+        
+        <input type="checkbox" id="toggletriche" class="toggletriche" />
         <section class="fake-menu-top-folder">
             <div class="fake-menu--top">
                 <ul class="liste-fake-menu">
@@ -35,11 +37,18 @@
                             </li>
                         </ul>
                     </li>
+                    
+                    <li class="liste-fake-menu--li  liste-fake-menu--li-nouveau">
+                        Triche
+                        <label class="fake-sous-menu" for="toggletriche">
+                            <div class="fake-sous-menu--li p-texte  triche-disable">Activer</div>
+                            <div class="fake-sous-menu--li p-texte  triche-enable">Désactiver</div>
+                        </label>
+                    </li>
                     <li class="liste-fake-menu--li">?</li>
                 </ul>
             </div>
         </section>
-
 
         <div class="kp_content--block--content kp_element--enable  kp_content--demineur">
 
@@ -610,9 +619,22 @@ export default {
     border-left: solid 3px #FFFFFF;
     border-bottom: solid 3px #808080;
     border-right: solid 3px #808080;
-
 }
 
+.toggletriche,
+.triche-disable{
+    display: none;
+}
+.toggletriche:checked + .fake-menu-top-folder .triche-disable {
+    display: block;
+}
+.toggletriche:checked + .fake-menu-top-folder .triche-enable {
+    display: none;
+}
+
+.toggletriche:checked ~ .kp_content--demineur .cell.mine img {
+    display: block;
+}
 .cell:hover {
 
     border-bottom: solid 3px #c0c0c0;
