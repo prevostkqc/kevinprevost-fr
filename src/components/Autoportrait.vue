@@ -13,58 +13,86 @@
             <!-- Utilisation du composant Navigation avec le bon contexte -->
         <Navigation @close="handleClose"  @resize="handleResize"  @reduct="handleReduct"  :viewName="title" :context="context" :customClass="customClass" />
         </div>
-        <pre class="kp_image_ascii--content kp_element--enable">                                                                   
-                                           .=#@@@@@@#=.                                             
-                                       .@@@@@@@@@@@@@@@@@.                                          
-                                   .@@@@@@@@@@@@@@@@@@@@@@@@.                                       
-                                 #@@@@@@@@%%%############@@@@@:                                     
-                                @@@@@%###******************%@@@.                                    
-                               @@@#****++++++***+**+++*+*****###                                    
-                              @@****++++++++++++++++++++++++***##                                   
-                            .@#**+++++++++++++++++++++++==++++*+*                                   
-                            =#++++++++======+++++++===========++++                                  
-                            **++++++++++===+++++===========---=+*=.                                 
-                            **+++++++++++++++=====-========-----==-                                 
-                            +**+++++=============*####**+++=-----+=                                 
-                            =**++++============++*###*++++==--:::=+=                                
-                            ***+++++**+++====-===+*##**+==#=--:::-== =:=                            
-                            ##*++#%%%%%#*++=----=+##*@@@=**=----::-*-::+:                           
-                            -#*#%#*###%##*++=---++**=##%-=------::::---:::                          
-                            +%%**#**#@####*+==--==+***+==-------:::.-=-:-.                          
-                             *#*%#*%#@@#***++=-:---=+====------:::...-==:.                          
-                             ****#****#****++=-:::::---------::::...:-=---                          
-                             +++++++++**++**+=---::::--------::::...:::::.                          
-                             *+++++++++++++*++=---:::------::::::..:-::::                           
-                             +*++++++++++++++==--:::-=----:::::::..:-:++                            
-                              *+========+++++==---@=:--=--::::::::.----                             
-                              ++========+++##*+=:-:--------::::::::--:.                             
-                              .*+======++++*%##*****#*##+=--::::::-:--                              
-                               +++=====+#%@@@%%@%%##******++=-:::--::=                              
-                                +*+++++#%%%%**++=+=====+*##*=-:::----=                              
-                                =#*+++*##%#%%##*++=---::-=++=------:--                              
-                                 =#**+*#%*+*+*++==--::-:---=*+-=--+=--                              
-                                  %%***##**********=---:-++++*+**=++=:                              
-                                  +@%##%@%#+++++++=-----=+######**+==..                             
-                                   +@@@@@@##*+++==+----=+=+####%#*++:...                            
-                                    @@@@@@@%###*+=+++==+++*#****+++:.....-                          
-                                   **@@@@@@@%%##*+*#*++****###*+++:::.....##@@%.                    
-                                  @@@@@@@@@@@@@#%%%%##**##**%%*+-::.......##%%%#*####.              
-                              .@@@@@@@@@*@@@@@%@@%@#%%#%#**##+::::::.....:%#%%%###%%%%%%##+##%*.    
-                       .=@@@@@@@@@@@@@@@*+++%@@%@@%@@@%%#+-:::::::::.....#%%%%%####%%%%%%#*#%%%#*###
-                =%@@@@@@@@@@@@@@@@@@@@@@**+++====++++===--:::::::::....:-%%@@%%%##%%%%%%#*##%%%%%###
-            @@@@@@@@@@@@@@@@@@@@@@@@@@@@@++++====------::::::::::.....::#%%@@########%@%####%%%%%%%#
-          @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*+++===----:-:::::::::::..:..:*%%@@#########%@%######%%%%%%
-       =@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*==++==---::::::::::::....:::=%%@@%###%%####%@#*######%%%%%
-    *%%@%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=-=====---:-:::::::::::::::-*%%@@###%%#####%@########%#%%%
- @%%%%@@@@@%%@@@@@@@@@@@@@@@@@@@@@%%@@@@@+-----------:::::::::::::::+%@@@@###@@####%%@##########%%%%
-@@@%%%%%@%@@%%@@@@@%%@@@@@@%@@@@@@@%%@@@@@@=-------:::::::::::::::::+%@@@@%###@@####%%@**########%##%
-%@@%%%%@@%@@%%@@@@%%@@@@@@%%@@@@@@@%#%@@%@@@+----:-:::::::::::::::-*%%@@@@###%@%####%%@*############%
-%%@@%%%@@%@@%%%%%%#@@%@@@%#%%%%@@@@%##@@%%%@@%----:::::::-:::::::-@%@@@@@@##%%@%%###%@%*#######*####%
-%%%@%%%%@%@@@%%%%#@@%%@@@#%%%%%%@@@###%@@%#@@@@+-:--:::::-:::::-*%@@@@@@@%*%%%@%%%###@#**####***#**#%
-%%%%%%%%@@%@%%%##@@%%@@@##%%%##%@@@####@@@%%%%@@@*--:-::---:--+%@@@@@@@@@#*%#%%%%###%%#*####****#***%
-%%@%%%%%@@#@%%%#@@#%%%%##%%%#%%#%@@##%#%@@@%#%%%@@%#:---:---*%%%%@@@%@@@@*#%%#%%%%##%%#*####****#***%
-#%%@%%%%@@@@%##@@#%%%%%#####%###%@@#####%@@@%%%@%%%%%%=--+@@@@@@@@@#%@@@#*#%##%%%%##%%**#####**#****%
-%#%%@@%#%@@@##%@%%%%%%##%%######%@%###%#%%@@@@%%%%#%%%%%%%%@@@@@@@#%@@@%###%##%%%%%%%%**#####**#****%</pre>
+        <div class="container-texte">
+            <div>
+            <p class="kp_text  kp_text--text">
+              Avec ce site, je vous propose de découvrir mon univers, mes passions et mes différentes approches face aux compléxités de ce que j'avais à reproduire en donnant une place importante aux détails.
+              <br/><br/>
+              J'ai eu l'idée de coder visuellement ce que nous avions sur l'OS de Windows XP afin de vous présenter mes compétences au travers de l'interface qui m'a vu grandir.
+              <br/><br/>
+              Depuis mes débuts, j’ai toujours été animé par l’idée de créer des expériences numériques qui marient esthétique, performance et innovation.
+              <br/><br/>
+              Ce site est une manière de partager avec vous non seulement mon parcours professionnel, mais aussi une part de ma créativité et de mes inspirations.
+              <br/><br/>
+              J’ai conçu ce dernier comme un espace interactif, un terrain de jeu où mes compétences prennent vie.
+              <br/><br/>
+              Vous y découvrirez mes projets passés, mes passions, et ma vision du web moderne. Chaque détail ici est pensé pour offrir une navigation intuitive et agréable, tout en mettant en valeur mon expertise technique et artistique.
+              <br/><br/>
+              À travers les différentes expériences qu'il propose, je vous invite à explorer mon approche du développement web, qui allie rigueur technique et sensibilité graphique. Qu’il s’agisse de concevoir des interfaces dynamiques, de collaborer sur des projets ambitieux ou de donner vie à des concepts créatifs, je m’efforce toujours de repousser les limites pour produire un résultat unique et mémorable.
+              <br/><br/>
+              Que vous soyez curieux de découvrir mon travail, intéressé par une collaboration ou simplement de passage, je vous invite à explorer les fonctionnalités de ce site. Chaque clic vous en dira un peu plus sur ma personnalité, mes compétences et mes ambitions.
+              <br/><br/>
+              Si vous avez des questions ou une idée à partager, contactez-moi. Je suis toujours ouvert à de nouveaux défis et à des échanges enrichissants.
+              <br/><br/>
+              Ensemble, construisons le web de demain.
+            </p>
+          </div>
+         
+          <pre class="kp_element--enable  kp_texte-image">                                                                   
+                                              .=#@@@@@@#=.                                             
+                                          .@@@@@@@@@@@@@@@@@.                                          
+                                      .@@@@@@@@@@@@@@@@@@@@@@@@.                                       
+                                    #@@@@@@@@%%%############@@@@@:                                     
+                                    @@@@@%###******************%@@@.                                    
+                                  @@@#****++++++***+**+++*+*****###                                    
+                                  @@****++++++++++++++++++++++++***##                                   
+                                .@#**+++++++++++++++++++++++==++++*+*                                   
+                                =#++++++++======+++++++===========++++                                  
+                                **++++++++++===+++++===========---=+*=.                                 
+                                **+++++++++++++++=====-========-----==-                                 
+                                +**+++++=============*####**+++=-----+=                                 
+                                =**++++============++*###*++++==--:::=+=                                
+                                ***+++++**+++====-===+*##**+==#=--:::-== =:=                            
+                                ##*++#%%%%%#*++=----=+##*@@@=**=----::-*-::+:                           
+                                -#*#%#*###%##*++=---++**=##%-=------::::---:::                          
+                                +%%**#**#@####*+==--==+***+==-------:::.-=-:-.                          
+                                *#*%#*%#@@#***++=-:---=+====------:::...-==:.                          
+                                ****#****#****++=-:::::---------::::...:-=---                          
+                                +++++++++**++**+=---::::--------::::...:::::.                          
+                                *+++++++++++++*++=---:::------::::::..:-::::                           
+                                +*++++++++++++++==--:::-=----:::::::..:-:++                            
+                                  *+========+++++==---@=:--=--::::::::.----                             
+                                  ++========+++##*+=:-:--------::::::::--:.                             
+                                  .*+======++++*%##*****#*##+=--::::::-:--                              
+                                  +++=====+#%@@@%%@%%##******++=-:::--::=                              
+                                    +*+++++#%%%%**++=+=====+*##*=-:::----=                              
+                                    =#*+++*##%#%%##*++=---::-=++=------:--                              
+                                    =#**+*#%*+*+*++==--::-:---=*+-=--+=--                              
+                                      %%***##**********=---:-++++*+**=++=:                              
+                                      +@%##%@%#+++++++=-----=+######**+==..                             
+                                      +@@@@@@##*+++==+----=+=+####%#*++:...                            
+                                        @@@@@@@%###*+=+++==+++*#****+++:.....-                          
+                                      **@@@@@@@%%##*+*#*++****###*+++:::.....##@@%.                    
+                                      @@@@@@@@@@@@@#%%%%##**##**%%*+-::.......##%%%#*####.              
+                                  .@@@@@@@@@*@@@@@%@@%@#%%#%#**##+::::::.....:%#%%%###%%%%%%##+##%*.    
+                          .=@@@@@@@@@@@@@@@*+++%@@%@@%@@@%%#+-:::::::::.....#%%%%%####%%%%%%#*#%%%#*###
+                    =%@@@@@@@@@@@@@@@@@@@@@@**+++====++++===--:::::::::....:-%%@@%%%##%%%%%%#*##%%%%%###
+                @@@@@@@@@@@@@@@@@@@@@@@@@@@@@++++====------::::::::::.....::#%%@@########%@%####%%%%%%%#
+              @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*+++===----:-:::::::::::..:..:*%%@@#########%@%######%%%%%%
+          =@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*==++==---::::::::::::....:::=%%@@%###%%####%@#*######%%%%%
+        *%%@%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=-=====---:-:::::::::::::::-*%%@@###%%#####%@########%#%%%
+    @%%%%@@@@@%%@@@@@@@@@@@@@@@@@@@@@%%@@@@@+-----------:::::::::::::::+%@@@@###@@####%%@##########%%%%
+    @@@%%%%%@%@@%%@@@@@%%@@@@@@%@@@@@@@%%@@@@@@=-------:::::::::::::::::+%@@@@%###@@####%%@**########%##%
+    %@@%%%%@@%@@%%@@@@%%@@@@@@%%@@@@@@@%#%@@%@@@+----:-:::::::::::::::-*%%@@@@###%@%####%%@*############%
+    %%@@%%%@@%@@%%%%%%#@@%@@@%#%%%%@@@@%##@@%%%@@%----:::::::-:::::::-@%@@@@@@##%%@%%###%@%*#######*####%
+    %%%@%%%%@%@@@%%%%#@@%%@@@#%%%%%%@@@###%@@%#@@@@+-:--:::::-:::::-*%@@@@@@@%*%%%@%%%###@#**####***#**#%
+    %%%%%%%%@@%@%%%##@@%%@@@##%%%##%@@@####@@@%%%%@@@*--:-::---:--+%@@@@@@@@@#*%#%%%%###%%#*####****#***%
+    %%@%%%%%@@#@%%%#@@#%%%%##%%%#%%#%@@##%#%@@@%#%%%@@%#:---:---*%%%%@@@%@@@@*#%%#%%%%##%%#*####****#***%
+    #%%@%%%%@@@@%##@@#%%%%%#####%###%@@#####%@@@%%%@%%%%%%=--+@@@@@@@@@#%@@@#*#%##%%%%##%%**#####**#****%
+    %#%%@@%#%@@@##%@%%%%%%##%%######%@%###%#%%@@@@%%%%#%%%%%%%%@@@@@@@#%@@@%###%##%%%%%%%%**#####**#****%</pre>
+
+        </div>
+        
            
            <div class="resize-handle"></div>
        </section>
@@ -128,10 +156,32 @@ export default {
     font-family: monospace;
     background: white;
     color: black;
+    max-height: 100vh;
+    /* overflow-Y: scroll; */
     &:hover .kp_image_ascii--content {
       filter: drop-shadow(3px 3px 2px black);
     }
   }
+.kp_element--title{
+  position: sticky;
+  top: 0;
+}
+  
+
+.kp_content--block {
+    position: absolute;
+    font-size: 14px;
+    letter-spacing: 0px;
+    color: black;
+    width: 385px;
+    height: fit-content;
+    background: #cdcabb;
+    position: absolute;
+    max-height: 100vh;
+    max-width: 100vw;
+    height: 550px;
+}
+
   .kp_window--show{
     display: block !important;
     overflow: hidden;
@@ -139,10 +189,9 @@ export default {
   .kp_image_ascii--content{
     overflow: scroll;
     width: 100%;
-    height: calc(100% - 11px);
     transition: 0.3s;
     position: relative;
-    height: calc(100% - 36px) !important;
+    height: calc(100% - 36px);
   }
   .kp_image_ascii:hover .kp_image_ascii--content {
     filter: drop-shadow(3px 3px 2px black);
@@ -152,7 +201,6 @@ export default {
     display: block;
   }
   .kp_image_ascii--content{
-    overflow: scroll;
     overflow: scroll;
     width: 100%;
     height: calc(100% - 11px);
@@ -165,14 +213,31 @@ export default {
     font-family: monospace;
     background: white;
     color: black;
-    width: 800px;
-    height: 800px;
     background: white;
     position: absolute;
   }
+  .kp_text--text{
+    font-size: 14px;
+    font-family: monospace;
+    color: black;
+    margin: 0;
+    padding: 10px;
+  }
+  .kp_texte-image{
+    filter: drop-shadow(3px 3px 2px black);
+  }
 
+  .kp_texte-image{
+    filter: drop-shadow(3px 3px 2px black);
+    font-family: monospace;
+    color: black;
+  }
+  .container-texte{
+    overflow-y: scroll;
+    height: calc(100% - 0px);
+  }
   
-@media screen and (max-width: 900px){
+@media screen and (max-width: 960px){
   .kp_image_ascii--content{
     overflow: scroll;
     width: 100%;
@@ -183,6 +248,15 @@ export default {
     font-size: 9px;
     display: flex;
     align-items: flex-end;
+    padding-top: 30px;
+  }
+  .kp_text--text{
+    padding-top: 50px;
+  }
+  .kp_element--title{
+    position: fixed;
+    top: 0;
+    width: calc(100vw - 17px);
   }
 }
 </style>

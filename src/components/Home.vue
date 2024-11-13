@@ -670,16 +670,28 @@ export default {
   left: 130px;  
 }
 .container--monparcours {
-  top: 280px;
-  left: 280px;  
+  top: 120px;
+  left: 180px;  
 }
 .container--autoportrait {
-  top: 220px;
-  left: 500px;  
+  top: 40px;
+  left: 140px;  
 }
 .container--paint{
   top: 80px;
   left: 180px;  
+}
+.container--mail{
+  top: 20px;
+  left: 120px;  
+}
+.container--media{
+  top: 180px;
+  left: 180px;  
+}
+.container--demineur{
+  top: 60px;
+  left: 120px;  
 }
 
 </style>

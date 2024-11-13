@@ -49,9 +49,10 @@
                     <p class="game-info-p">{{ formatNumber(flagsLeft) }}</p>
                 </div>
                 <div @click="initializeBoard" class="new-game-button"
-                    :class="['new-game-button', { 'face-game-over': isGameOver }]">
+                    :class="['new-game-button', { 'face-game-over': isGameOver }, { 'face-game-win': isWin }]">
                     <img :src="smile" :class="['dem-smile']" alt="smile" />
                     <img :src="sad" :class="['dem-sad']" alt="smile" />
+                    <img :src="win" :class="['dem-win']" alt="smile" />
                 </div>
                 <div class="game-info  game-info-time">
                     <p class="game-info-p">{{ formatNumber(timer) }}</p>
@@ -79,6 +80,9 @@
                         <img v-if="cell.mine && !cell.exploded" :src="mine" class="dem-mine" alt="mine" />
                     </div>
                 </div>
+                <div :class="['explosion', { 'face-game-win': isWin }]">
+                    <img :src="explosion" alt="explosion" />
+                </div>
                 <div v-if="gameMessage" class="game-message">{{ gameMessage }}</div>
             </section>
 
@@ -98,6 +102,8 @@ import mine from '@/assets/images/dem-bomb.png';
 import minefake from '@/assets/images/dem-bomb-fake.png';
 import smile from '@/assets/images/dem-smile.png';
 import sad from '@/assets/images/dem-sad.png';
+import win from '@/assets/images/dem-win.png';
+import explosion from '@/assets/images/explosion.gif';
 
 export default {
     name: 'Media',
@@ -139,10 +145,13 @@ export default {
             gameMessage: '',
             intervalId: null,
             isGameOver: false,
+            isWin: false,
             hasGameStarted: false,
             selectedDifficulty: 'easy',
             smile,
             sad,
+            win,
+            explosion,  
 
             colors: {
                 0: '#00000000',
@@ -262,10 +271,10 @@ export default {
             if (allMinesFlagged) {
                 this.gameMessage = 'Bravo, vous avez gagné !';
                 this.isGameOver = true;
+                this.isWin = true;
             }
         },
         toggleFlag(row, col) {
-            console.log(this.isGameOver);
             if (this.isGameOver) return;
 
             const cell = this.board[row][col];
@@ -333,6 +342,7 @@ export default {
 
             this.timer = 0;
             this.isGameOver = false;
+            this.isWin = false;
             this.hasGameStarted = false;
             this.flagsLeft = this.mines;
             this.gameMessage = '';
@@ -651,6 +661,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;    
 }
 
 .game-container.game-over {
@@ -661,6 +672,9 @@ export default {
 .dem-sad {
     display: none;
 }
+.dem-win{
+    display: none;
+}
 
 .face-game-over .dem-smile {
     display: none;
@@ -669,7 +683,12 @@ export default {
 .face-game-over .dem-sad {
     display: block;
 }
-
+.face-game-win .dem-sad{
+    display: none;
+}
+.face-game-win .dem-win{
+    display: block;
+}
 .resize-handle {
     display: none;
     pointer-events: none;
@@ -704,7 +723,6 @@ export default {
     flex-wrap: wrap;
     align-content: flex-start;
 }
-
 .game-info-p{
     font-size: 20px;
     font-weight: 600;
@@ -716,8 +734,6 @@ export default {
     top: 1px;
     left: 1px;
 }
-
-
 .game-info-time {
     width: fit-content;
     height: 26px;
@@ -729,5 +745,19 @@ export default {
     justify-content: center;
     align-items: center;
     background-color: #000000;
+}
+.explosion{
+    display: none;
+    pointer-events: none;
+}
+
+.explosion.face-game-win{
+    display: block;
+    position: absolute;
+    top: 0;
+    left: calc(-50% + 20px);
+    width: 100%;
+    height: 100%;
+    filter: sepia(1) drop-shadow(2px 4px 6px black);
 }
 </style>

@@ -11,21 +11,6 @@
       <div class="kp_menu__barre-etat--container">
         <div class="kp_menu__barre-etat--content-left">
   
-          <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--projet" @click="emitAction('folder')">
-            <div class="kp_menu__barre-etat--un-ico-container-img">
-              <img class="kp_menu__barre-etat--img" :src="folder" alt="Mes projets">
-            </div>
-            <div>
-              <p class="kp_menu__barre-etat--un-ico-container--text">
-                Mes réalisations
-              </p>
-              <p class="kp_menu__barre-etat--un-ico-container--desc">
-                Consulter mes projets
-              </p>
-            </div>
-          </article>
-          
-  
           <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--contact" @click="emitAction('mail')">
             <div class="kp_menu__barre-etat--un-ico-container-img">
                 <img class="kp_menu__barre-etat--img" :src="mail" alt="Me contacter">
@@ -36,6 +21,21 @@
               </p>
               <p class="kp_menu__barre-etat--un-ico-container--desc">
                 Envoyez-moi un message
+              </p>
+            </div>
+          </article>
+
+
+          <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--projet" @click="emitAction('folder')">
+            <div class="kp_menu__barre-etat--un-ico-container-img">
+              <img class="kp_menu__barre-etat--img" :src="folder" alt="Mes projets">
+            </div>
+            <div>
+              <p class="kp_menu__barre-etat--un-ico-container--text">
+                Mes réalisations
+              </p>
+              <p class="kp_menu__barre-etat--un-ico-container--desc">
+                Consulter mes projets
               </p>
             </div>
           </article>
@@ -55,9 +55,8 @@
             </div>
           </article>
 
-          
-          
-  
+          <div class="sep-menu"></div>
+
           <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--quisuisje" @click="emitAction('passions')">
             <div class="kp_menu__barre-etat--un-ico-container-img">
               <img class="kp_menu__barre-etat--img" :src="pokemon" alt="Ma passion">
@@ -72,25 +71,45 @@
             </div>
           </article>
 
-          
-  
-          <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--quisuisje" @click="emitAction('paint')">
-            <div class="kp_menu__barre-etat--un-ico-container-img">
-              <img class="kp_menu__barre-etat--img" :src="paint" alt="paint">
-            </div>
-            <div>
-              <p class="kp_menu__barre-etat--un-ico-container--text">
-                Paint
-              </p>
-              <p class="kp_menu__barre-etat--un-ico-container--desc">
-                Une âme d'artiste ?
-              </p>
-            </div>
-          </article>
   
         </div>
         <div class="kp_menu__barre-etat--content-right">
           <!-- Contenu de la partie droite -->
+
+          
+          <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--quisuisje" @click="emitAction('media')">
+              <div class="kp_menu__barre-etat--un-ico-container-img">
+                <img class="kp_menu__barre-etat--img" :src="media" alt="media">
+              </div>
+              <div>
+                <p class="kp_menu__barre-etat--un-ico-container--text  text--left">
+                  Lecteur média
+                </p>
+              </div>
+            </article>
+          
+          <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--quisuisje" @click="emitAction('paint')">
+              <div class="kp_menu__barre-etat--un-ico-container-img">
+                <img class="kp_menu__barre-etat--img" :src="paint" alt="paint">
+              </div>
+              <div>
+                <p class="kp_menu__barre-etat--un-ico-container--text  text--left">
+                  Paint
+                </p>
+              </div>
+            </article>
+          
+          <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--quisuisje" @click="emitAction('demineur')">
+            <div class="kp_menu__barre-etat--un-ico-container-img">
+              <img class="kp_menu__barre-etat--img" :src="demineur" alt="Démineur">
+            </div>
+            <div>
+              <p class="kp_menu__barre-etat--un-ico-container--text  text--left">
+                Démineur
+              </p>
+            </div>
+          </article>
+
         </div>
       </div>
       
@@ -119,6 +138,8 @@ import mail from '@/assets/images/icon-mail.png';
 import cv from '@/assets/images/cv.png';
 import pokemon from '@/assets/images/icon-heart.png';
 import paint from '@/assets/images/icon-paint.png';
+import demineur from '@/assets/images/icon-demineur.png';
+import media from '@/assets/images/icon-media.png';
 
 import exitIcon from '@/assets/images/exit-icon.png';
 import lockIcon from '@/assets/images/lock-icon.png';
@@ -139,14 +160,15 @@ export default {
     return {
         maphoto,
         folder,
-        mail,
-        cv,
-        mail,
         localIsVisible: true, 
         exitIcon,
         lockIcon,
+        demineur,
         pokemon,
+        media,
         paint,
+        mail,
+        cv,
       };
   },
   methods: {
@@ -449,6 +471,17 @@ background-color: white;
     bottom: 0;
     right: 0;
     left: 0;
+}
+
+.text--left{
+  color : #0a246a;
+}
+.sep-menu{
+  width: calc(90% - 20px);
+  height: 1px;
+  background: rgb(255, 255, 255);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(211, 211, 200, 1) 15%, rgba(211, 211, 200, 1) 50%, rgba(211, 211, 200, 1) 85%, rgba(255, 255, 255, 1) 100%);
+  margin: auto;
 }
 
 @media screen and (max-width: 960px){
