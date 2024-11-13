@@ -62,6 +62,7 @@ import heartIcon        from '@/assets/images/icon-heart.png';
 import paintIcon        from '@/assets/images/icon-paint.png';
 import mailIcon         from '@/assets/images/icon-mail.png';
 import mediaIcon        from '@/assets/images/icon-media.png';
+import demineurIcon     from '@/assets/images/icon-demineur.png';
 
 export default {
   name: 'Barrebottom',
@@ -143,6 +144,13 @@ export default {
           class: 'kp_barre-une-app--media',
           icon: mediaIcon,
           title: 'Lecteur média',
+          isText: false
+        },
+        {
+          id: 'demineur',
+          class: 'kp_barre-une-app--demineur',
+          icon: demineurIcon,
+          title: 'Démineur',
           isText: false
         }
       ],

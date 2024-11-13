@@ -33,6 +33,7 @@ import passionIcon from '@/assets/images/icon-heart.png';
 import paintIcon from '@/assets/images/icon-paint.png';
 import terminalIcon from '@/assets/images/icon-terminalkp.png';
 import mediaIcon from '@/assets/images/icon-media.png';
+import demineurIcon from '@/assets/images/icon-demineur.png';
 
 export default {
   name: 'Desktop',
@@ -118,6 +119,14 @@ export default {
           isTextIcon: false,
           text: 'Lecteur Média',
           altText: 'Média',
+        },
+        {
+          id: 'demineur',
+          class: 'kp_folder--demineur',
+          icon: demineurIcon,
+          isTextIcon: false,
+          text: 'Démineur',
+          altText: 'Démineur',
         },
       ],
       localIsSelecting: this.isSelecting, // Copie locale de isSelecting

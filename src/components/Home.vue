@@ -99,7 +99,15 @@
         :title="'Mes media'" />
     </div>
 
-    
+    <div class="container--demineur"
+        v-bring-to-front-on-show
+        @click="bringToFront($event)"
+        v-show="openWindows.includes('demineur')"
+        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.demineur]">
+      <Demineur @update-class="updateWindowClass('demineur', $event)" @close="handleCloseWindow('demineur')"
+        :context="'demineur'"
+        :title="'Démineur'" />
+    </div>
 
     <div class="container--mail"
         v-bring-to-front-on-show
@@ -147,6 +155,7 @@ import Menuderoulant  from '@/components/Menuderoulant.vue';
 import Mespassions    from '@/components/Mespassions.vue';
 import Mail           from '@/components/mail.vue';
 import Media          from '@/components/Lecteurmedia.vue';
+import Demineur       from '@/components/Demineur.vue';
 
 export default {
   name: 'Home',
@@ -166,6 +175,7 @@ export default {
     Mespassions,
     Mail,
     Media,
+    Demineur,
   },
   data() {
     return {
@@ -184,6 +194,7 @@ export default {
         menuderoulant:'kp_item_hide',
         mail:         'kp_item_hide',
         media:        'kp_item_hide',
+        demineur:     'kp_item_hide',
       },
       windowMinimized: {
         terminal:     false,
@@ -198,6 +209,7 @@ export default {
         starting:     false,
         mail:         false,
         media:        false,
+        demineur:     false,
       },
       zIndexCounter: 10, 
       isDragging: false,

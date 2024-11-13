@@ -65,8 +65,9 @@ export default {
 
 <style scoped>
 
-.kp_icon--resize-media{
+.kp_icon--resize-media,
+.kp_icon--resize-demineur{
     pointer-events: none;
-    display: none;
+    opacity: 0.5;
 }
 </style>
