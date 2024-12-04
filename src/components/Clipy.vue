@@ -1,6 +1,8 @@
 <template>
     <!-- Clipy -->
+    <input type="checkbox" id="clippyactivated">
     <section class="kp_clipy__zone">
+      <label for="clippyactivated" class="clippyclick"></label>
       <article :class="['kp_clipy', customClass]" :id="`kp_${context}`">
         <img :class="['kp_clippy--img', 'kp_clipy--feuille']" :src="clippyfeuille" alt="Clipy">
         <div class="kp_clippy--container">
@@ -17,6 +19,21 @@
       </article>
       <div :class="['kp_clipy--bulle', `kp_bulle--${context}`]">
         {{ message }}
+        <br>
+        <div class="text-content">
+          <p class="kp_p  text_bulle"   @click="emitAction('mail')">
+             - Me contacter >
+          </p>
+          <p class="kp_p  text_bulle"   @click="emitAction('messervices')">
+             - Mes services >
+          </p>
+          <a class="kp_p  text_bulle"  target="_blank"  :href="cv"  @click="emitAction('moncv')">
+             - Mon CV >
+          </a>
+        </div>
+        <label class="kp_icon_zone  kp_icon_zone--close" for="clippyactivated">
+          <img :src="close" class="kp_icon_zone--img" alt="close">
+        </label>
       </div>
   </section>
     <!-- Clipy -->
@@ -32,8 +49,13 @@
   import clippysourcil1   from '@/assets/images/clippy/sourcil1.svg';
   import clippysourcil2   from '@/assets/images/clippy/sourcil2.svg';
 
+  import close           from '@/assets/images/close_icn.svg';
+
+  import cv              from '/cv_kevin_prevost.pdf';
+
 
   export default {
+    emits: ['updateClass', 'close', 'actionSelected'],
     name: 'Clipy',
     props: {
       context: {
@@ -59,7 +81,14 @@
         clippyyeux,
         clippysourcil1,
         clippysourcil2,
+        close,
+        cv
       };
+    },
+    methods: {
+        emitAction(actionType) {
+        this.$emit('actionSelected', actionType);
+      }
     }
   };
   </script>
@@ -248,6 +277,42 @@
     pointer-events: none;
   }
 
+  .text_bulle{
+    font-size: 16px;
+    color: #000000;
+    font-weight: 400;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .text_bulle:hover{
+    text-decoration: underline;
+  }
+  .text-content{
+    margin: 10px 0 0 10px;
+  }
+  .kp_icon_zone--close{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+  }
+
+  .clippyclick{
+    position: fixed;
+    bottom: 46px;
+    right: 0;
+    width: 100px;
+    height: 90px;
+    cursor: pointer;
+  }
+  #clippyactivated{
+    display: none;
+  }
+
+  #clippyactivated:checked ~ .kp_clipy__zone  .kp_clipy--bulle {
+    display: none;
+  }
+
   @keyframes clippymove{
     0%{ 
       transform : scaleY(1) translateY(0);
@@ -275,6 +340,9 @@
     }
   }
 
+  .kp_clipy--bulle {
+    padding-right: 50px;
+  }
   
   @media screen and (max-width: 960px) {
     .kp_clipy {

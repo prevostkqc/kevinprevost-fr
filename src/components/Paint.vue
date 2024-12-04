@@ -813,6 +813,10 @@ export default {
     }
   },
   beforeDestroy() {
+    this.$refs.canvas.removeEventListener('touchstart', this.handleTouchStart, { passive: true });
+    this.$refs.canvas.removeEventListener('touchmove', this.handleTouchMove, { passive: true });
+    this.$refs.canvas.removeEventListener('touchend', this.handleTouchEnd, { passive: true });
+
     window.removeEventListener('mouseleave', this.stopDrawing);
   },
   mounted() {
@@ -822,7 +826,6 @@ export default {
     this.currentTool = 'pen';
     this.lineWidth = 1;
 
-    // Ajuste la largeur et la hauteur pour mobile en prenant 90% de l'écran
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
     this.width = screenWidth < 900 ? screenWidth * 0.9 : 900;
@@ -834,12 +837,18 @@ export default {
     this.canvasContext.fillStyle = "#FFFFFF";
     this.canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 
+    canvas.addEventListener('touchstart', this.handleTouchStart, { passive: true });
+    canvas.addEventListener('touchmove', this.handleTouchMove, { passive: true });
+    canvas.addEventListener('touchend', this.handleTouchEnd, { passive: true });
+
     window.addEventListener('mouseleave', (event) => {
       if (this.activeDrawing) {
         this.stopDrawing(event);
       }
     });
   },
+
+
 
   computed: {
     cursorStyle() {

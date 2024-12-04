@@ -29,7 +29,7 @@
                   <div class="kp_titre-profil-barre">
                     <h3 class="session-titre">Kévin Prévost</h3>
                     <h4 class="session-sstitre">Développeur Web</h4>
-                    <div class="btn-windows-xp  btn-windows-xp-ok" ><span class="btn-windows-xp--texte">Se&nbsp;connecter</span></div>
+                    <div class="btn-windows-xp  btn-windows-xp-ok" ><span class="btn-windows-xp--texte">Entrer dans mon univers</span></div>
                   </div>
                 </div>
                 <div class="message-alerte">

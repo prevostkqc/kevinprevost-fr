@@ -6,7 +6,7 @@
 
     <div class="container--clipy">
       <div class="clipy">
-        <Clipy @update-class="updateWindowClass('clipy', $event)" @close="handleCloseWindow('clipy')" />
+        <Clipy @update-class="updateWindowClass('clipy', $event)" @close="handleCloseWindow('clipy')"  @actionSelected="handleAction" />
       </div>
     </div>
     
@@ -16,6 +16,17 @@
         :context="'terminal'"
         :title="'terminal'" />
       </div>
+    </div>
+
+  
+    <div class="container--messervices"
+        v-bring-to-front-on-show
+        @click="bringToFront($event)"
+        v-show="openWindows.includes('messervices')"
+        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.messervices]">
+      <Messervices @update-class="updateWindowClass('messervices', $event)" @close="handleCloseWindow('messervices')"
+        :context="'messervices'"
+        :title="'messervices'" />
     </div>
 
     <div class="container--folder"
@@ -142,6 +153,7 @@
 <script>
 import Desktop        from '@/components/Desktop.vue';
 import Terminal       from '@/components/Terminal.vue';
+import Messervices     from '@/components/Messervices.vue';
 import Folderprojects from '@/components/Folderprojects.vue';
 import Autoportrait   from '@/components/Autoportrait.vue';
 import Paint          from '@/components/Paint.vue';
@@ -162,6 +174,7 @@ export default {
   components: {
     Desktop,
     Terminal,
+    Messervices,
     Folderprojects,
     Autoportrait,
     Paint,
@@ -184,6 +197,7 @@ export default {
         terminal:     'kp_item_show',
         folder:       'kp_item_hide',
         autoportrait: 'kp_item_hide',
+        messervices:   'kp_item_hide',
         paint:        'kp_item_hide',
         personnaliser:'kp_item_hide',
         monparcours:  'kp_item_hide',
@@ -201,6 +215,7 @@ export default {
         folder:       false,
         autoportrait: false,
         paint:        false,
+        meservices:   false,
         personnaliser:false,
         monparcours:  false,
         pokemon:      false,

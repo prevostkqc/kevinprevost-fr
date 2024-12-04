@@ -41,8 +41,8 @@
                     <li class="liste-fake-menu--li  liste-fake-menu--li-nouveau">
                         Triche
                         <label class="fake-sous-menu" for="toggletriche">
-                            <div class="fake-sous-menu--li p-texte  triche-disable">Activer</div>
-                            <div class="fake-sous-menu--li p-texte  triche-enable">Désactiver</div>
+                            <div class="fake-sous-menu--li p-texte  triche-disable">Désactiver</div>
+                            <div class="fake-sous-menu--li p-texte  triche-enable">Activer</div>
                         </label>
                     </li>
                     <li class="liste-fake-menu--li">?</li>
@@ -71,29 +71,38 @@
 
             <section :class="['game-container', { 'game-over': isGameOver }]">
                 <div v-for="(row, rowIndex) in board" :key="rowIndex" class="row">
-                    <div v-for="(cell, colIndex) in row" :key="colIndex" class="cell" :class="[
-                        { revealed: cell.revealed },
-                        { mine: cell.mine },
-                        { exploded: cell.exploded },
-                        { flagged: cell.flagged },
-                        { disabled: isGameOver }
-                    ]" @click="handleCellClick(rowIndex, colIndex)"
-                        @contextmenu.prevent="toggleFlag(rowIndex, colIndex)">
+                    <div
+                        v-for="(cell, colIndex) in row"
+                        :key="colIndex"
+                        class="cell"
+                        :class="[
+                            { revealed: cell.revealed },
+                            { mine: cell.mine },
+                            { exploded: cell.exploded },
+                            { flagged: cell.state === 'flag' },
+                            { question: cell.state === 'question' },
+                            { disabled: isGameOver }
+                        ]"
+                        @click="handleCellClick(rowIndex, colIndex)"
+                        @contextmenu.prevent="handleRightClick(rowIndex, colIndex)"
+                    >
                         <span v-if="cell.revealed && !cell.mine"
                             :class="['text', cell.adjacentMines ? `text-${cell.adjacentMines}` : 'text-default']"
                             :style="{ color: colors[cell.adjacentMines] || 'black' }">
                             {{ cell.adjacentMines }}
                         </span>
-                        <img v-if="cell.flagged" :src="flag" class="dem-flag" alt="flag" />
+                        <img v-if="cell.state === 'flag'" :src="flag" class="dem-flag" alt="flag" />
+                        <span v-if="cell.state === 'question'" class="question-text">?</span>
                         <img v-if="cell.mine && cell.exploded" :src="minefake" class="dem-mine-fake" alt="fake mine" />
                         <img v-if="cell.mine && !cell.exploded" :src="mine" class="dem-mine" alt="mine" />
                     </div>
                 </div>
-                <div :class="['explosion', { 'face-game-win': isWin }]">
-                    <img :src="explosion" alt="explosion" />
-                </div>
+
                 <div v-if="gameMessage" class="game-message">{{ gameMessage }}</div>
             </section>
+            <div :class="['explosion', { 'face-game-win': isWin }]">
+                <img :src="explosion" alt="explosion" />
+            </div>
 
         </div>
         <div class="resize-handle"></div>
@@ -193,7 +202,6 @@ export default {
         },
         changeDifficulty(difficulty) {
             this.selectedDifficulty = difficulty;
-            // Logique de changement de difficulté ici...
             if (difficulty === 'easy') {
                 this.rows = 8;
                 this.cols = 8;
@@ -226,16 +234,14 @@ export default {
         },
 
         initializeBoard() {
-
             if (this.intervalId) {
                 clearInterval(this.intervalId);
                 this.intervalId = null;
             }
-            this.timer = 0;
-            this.intervalId = setInterval(() => {
-                this.timer++;
-            }, 1000);
 
+            this.timer = 0;
+            this.isGameOver = false;
+            this.isWin = false;
             this.hasGameStarted = false;
             this.flagsLeft = this.mines;
             this.gameMessage = '';
@@ -244,22 +250,24 @@ export default {
                 Array.from({ length: this.cols }, () => ({
                     revealed: false,
                     mine: false,
-                    flagged: false,
                     exploded: false,
                     adjacentMines: 0,
+                    state: 'empty',
                 }))
             );
 
+            // Placement des mines
             let placedMines = 0;
             while (placedMines < this.mines) {
                 const row = Math.floor(Math.random() * this.rows);
                 const col = Math.floor(Math.random() * this.cols);
-                if (!this.board[row][col].mine) {
-                    this.board[row][col].mine = true;
+                const cell = this.board[row][col];
+
+                if (!cell.mine) {
+                    cell.mine = true;
                     placedMines++;
                 }
             }
-
             this.board.forEach((row, rowIndex) => {
                 row.forEach((cell, colIndex) => {
                     if (!cell.mine) {
@@ -267,44 +275,65 @@ export default {
                     }
                 });
             });
-
         },
 
         checkVictory() {
-            const allMinesFlagged = this.board.every(row =>
-                row.every(cell =>
-                    (cell.mine && cell.flagged) || (!cell.mine && cell.revealed)
-                )
+            const allNonMinesRevealed = this.board.every(row =>
+                row.every(cell => cell.mine || cell.revealed)
             );
 
-            if (allMinesFlagged) {
-                this.gameMessage = 'Bravo, vous avez gagné !';
-                this.isGameOver = true;
+            const allMinesCorrectlyFlagged = this.board.every(row =>
+                row.every(cell => (!cell.mine && cell.state !== 'flag') || (cell.mine && cell.state === 'flag'))
+            );
+
+            if (allNonMinesRevealed || allMinesCorrectlyFlagged) {
                 this.isWin = true;
+                this.isGameOver = true;
+                this.gameMessage = 'Bravo, vous avez gagné !';
+                clearInterval(this.intervalId);
             }
         },
-        toggleFlag(row, col) {
-            if (this.isGameOver) return;
+
+        handleRightClick(row, col) {
+            if (this.isGameOver || this.board[row][col].revealed) return;
 
             const cell = this.board[row][col];
-
-            if (!cell.revealed) {
-                if (cell.flagged) {
-                    cell.flagged = false;
-                    this.flagsLeft++;
-                } else if (this.flagsLeft > 0) {
-                    cell.flagged = true;
+            
+            if (cell.state === 'empty') {
+                if (this.flagsLeft > 0) {
+                    cell.state = 'flag';
                     this.flagsLeft--;
-
-                    if (cell.mine) {
-                    }
                 }
+            } else if (cell.state === 'flag') {
+                cell.state = 'question';
+                this.flagsLeft++;
+            } else if (cell.state === 'question') {
+                cell.state = 'empty';
             }
+            this.checkVictory();
+        },
+        toggleFlag(row, col) {
+            const cell = this.board[row][col];
+
+            if (this.isGameOver || cell.revealed) return;
+
+            if (cell.state === 'empty') {
+                if (this.flagsLeft > 0) {
+                    cell.state = 'flag';
+                    this.flagsLeft--;
+                }
+            } else if (cell.state === 'flag') {
+                cell.state = 'question';
+                this.flagsLeft++;
+            } else if (cell.state === 'question') {
+                cell.state = 'empty';
+            }
+
             this.checkVictory();
         },
         handleCellClick(row, col) {
             const cell = this.board[row][col];
-            if (cell.revealed || cell.flagged) return;
+            if (cell.revealed || cell.state === 'flag' || cell.state === 'question' || this.isGameOver) return;
 
             if (!this.hasGameStarted) {
                 this.hasGameStarted = true;
@@ -315,12 +344,16 @@ export default {
             }
 
             cell.revealed = true;
+
             if (cell.mine) {
                 cell.exploded = true;
                 this.revealAllMines();
                 this.gameMessage = 'Game Over';
                 this.isGameOver = true;
-            } else if (cell.adjacentMines === 0) {
+                return;
+            }
+
+            if (cell.adjacentMines === 0) {
                 this.revealAdjacentCells(row, col);
             }
             this.checkVictory();
@@ -363,6 +396,7 @@ export default {
                     flagged: false,
                     exploded: false,
                     adjacentMines: 0,
+                    state: 'empty',
                 }))
             );
 
@@ -420,7 +454,7 @@ export default {
                 if (x >= 0 && x < this.rows && y >= 0 && y < this.cols) {
                     const cell = this.board[x][y];
                     if (!cell.revealed && !cell.mine) {
-                        cell.revealed = true;
+                        cell.revealed = true;arguments
                         if (cell.adjacentMines === 0) {
                             this.revealAdjacentCells(x, y);
                         }
@@ -428,22 +462,20 @@ export default {
                 }
             });
         },
+        
         toggleFlag(row, col) {
-            if (this.isGameOver) return;
-
             const cell = this.board[row][col];
 
-            if (!cell.revealed) {
-                if (cell.flagged) {
-                    cell.flagged = false;
-                    this.flagsLeft++;
-                } else if (this.flagsLeft > 0) {
-                    cell.flagged = true;
-                    this.flagsLeft--;
+            if (this.isGameOver || cell.revealed) return;
 
-                    if (cell.mine) {
-                    }
-                }
+            if (cell.state === 'empty') {
+                cell.state = 'flag';
+                this.flagsLeft--;
+            } else if (cell.state === 'flag') {
+                cell.state = 'question';
+                this.flagsLeft++;
+            } else if (cell.state === 'question') {
+                cell.state = 'empty';
             }
 
             this.checkVictory();
@@ -586,6 +618,15 @@ export default {
 .game-message {
     display: none;
 }
+.cell.question {
+    height: 15px;
+    overflow: hidden; 
+}
+.cell.question span {
+    font-weight: bold;
+    color: #000000;
+}
+
 
 .cell {
     width: 15px;
@@ -720,8 +761,11 @@ export default {
     padding: 10px;
 }
 
-.li-difficulte:hover {
+.li-difficulte:hover,
+.triche-disable:hover,
+.triche-enable:hover {
     color: white;
+    cursor: pointer;
 }
 
 .game-info-container {
@@ -773,13 +817,18 @@ export default {
     pointer-events: none;
 }
 
+
 .explosion.face-game-win{
     display: block;
     position: absolute;
-    top: 0;
-    left: calc(-50% + 20px);
+    top: 70px;
+    left: calc(0px - 15px);
     width: 100%;
     height: 100%;
     filter: sepia(1) drop-shadow(2px 4px 6px black);
+}
+
+.explosion.face-game-win{
+    width: 0;
 }
 </style>

@@ -34,6 +34,7 @@ import paintIcon from '@/assets/images/icon-paint.png';
 import terminalIcon from '@/assets/images/icon-terminalkp.png';
 import mediaIcon from '@/assets/images/icon-media.png';
 import demineurIcon from '@/assets/images/icon-demineur.png';
+import servicesIcon from '@/assets/images/icon-services.png';
 
 export default {
   name: 'Desktop',
@@ -63,6 +64,14 @@ export default {
           isTextIcon: false,
           text: 'Qui suis-je ?',
           altText: 'Terminal',
+        },
+        {
+          id: 'messervices',
+          class: 'kp_folder--messervices',
+          icon: servicesIcon,
+          isTextIcon: false,
+          text: 'Mes services',
+          altText: 'Messervices',
         },
         {
           id: 'folder',
