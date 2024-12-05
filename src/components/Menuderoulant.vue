@@ -1,137 +1,164 @@
 <template>
 
-    <section class="kp_menu__barre-etat" ref="menu">
-        
-      <div class="kp_menu__barre-etat--titre">
-        <div class="kp_menu__barre-etat--photo-container">
-          <img class="kp_menu__barre-etat--photo" :src="maphoto" alt="Kévin Prévost">
-        </div>
-        <p class="kp_titre-profil-barre">Kévin Prévost - Développeur front-end</p>
+  <section class="kp_menu__barre-etat" ref="menu">
+
+    <div class="kp_menu__barre-etat--titre">
+      <div class="kp_menu__barre-etat--photo-container">
+        <img class="kp_menu__barre-etat--photo" :src="maphoto" alt="Kévin Prévost">
       </div>
-      <div class="kp_menu__barre-etat--container">
-        <div class="kp_menu__barre-etat--content-left">
-  
-          <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--contact" @click="emitAction('mail')">
-            <div class="kp_menu__barre-etat--un-ico-container-img">
-                <img class="kp_menu__barre-etat--img" :src="mail" alt="Me contacter">
-              </div>
-            <div>
-              <p class="kp_menu__barre-etat--un-ico-container--text">
-                Me contacter
-              </p>
-              <p class="kp_menu__barre-etat--un-ico-container--desc">
-                Envoyez-moi un message
-              </p>
-            </div>
-          </article>
+      <p class="kp_titre-profil-barre">Kévin Prévost - Développeur front-end</p>
+    </div>
+    <div class="kp_menu__barre-etat--container">
+      <div class="kp_menu__barre-etat--content-left">
 
-
-          <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--projet" @click="emitAction('folder')">
-            <div class="kp_menu__barre-etat--un-ico-container-img">
-              <img class="kp_menu__barre-etat--img" :src="folder" alt="Mes projets">
-            </div>
-            <div>
-              <p class="kp_menu__barre-etat--un-ico-container--text">
-                Mes réalisations
-              </p>
-              <p class="kp_menu__barre-etat--un-ico-container--desc">
-                Consulter mes projets
-              </p>
-            </div>
-          </article>
-          
-  
-          <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--quisuisje" @click="emitAction('monparcours')">
-            <div class="kp_menu__barre-etat--un-ico-container-img">
-              <img class="kp_menu__barre-etat--img" :src="cv" alt="Mon parcours">
-            </div>
-            <div>
-              <p class="kp_menu__barre-etat--un-ico-container--text">
-                Mon parcours
-              </p>
-              <p class="kp_menu__barre-etat--un-ico-container--desc">
-                Consulter mon parcours
-              </p>
-            </div>
-          </article>
-
-          <div class="sep-menu"></div>
-
-          <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--quisuisje" @click="emitAction('passions')">
-            <div class="kp_menu__barre-etat--un-ico-container-img">
-              <img class="kp_menu__barre-etat--img" :src="pokemon" alt="Ma passion">
-            </div>
-            <div>
-              <p class="kp_menu__barre-etat--un-ico-container--text">
-                Mes passions
-              </p>
-              <p class="kp_menu__barre-etat--un-ico-container--desc">
-                Découvrez mes passions
-              </p>
-            </div>
-          </article>
-
-  
-        </div>
-        <div class="kp_menu__barre-etat--content-right">
-          <!-- Contenu de la partie droite -->
-
-          
-          <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--quisuisje" @click="emitAction('media')">
-              <div class="kp_menu__barre-etat--un-ico-container-img">
-                <img class="kp_menu__barre-etat--img" :src="media" alt="media">
-              </div>
-              <div>
-                <p class="kp_menu__barre-etat--un-ico-container--text  text--left">
-                  Lecteur média
-                </p>
-              </div>
-            </article>
-          
-          <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--quisuisje" @click="emitAction('paint')">
-              <div class="kp_menu__barre-etat--un-ico-container-img">
-                <img class="kp_menu__barre-etat--img" :src="paint" alt="paint">
-              </div>
-              <div>
-                <p class="kp_menu__barre-etat--un-ico-container--text  text--left">
-                  Paint
-                </p>
-              </div>
-            </article>
-          
-          <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--quisuisje" @click="emitAction('demineur')">
-            <div class="kp_menu__barre-etat--un-ico-container-img">
-              <img class="kp_menu__barre-etat--img" :src="demineur" alt="Démineur">
-            </div>
-            <div>
-              <p class="kp_menu__barre-etat--un-ico-container--text  text--left">
-                Démineur
-              </p>
-            </div>
-          </article>
-
-        </div>
-      </div>
-      
-      <div class="kp_menu__barre-etat--bottom">
-        <div class="item-action">
-            <div class="link-profil"  @click="fermersession" ></div>
-            <img class="kp_menu__barre-etat--img-icon" :src="lockIcon" alt="Verrouiller">
-            <p class="kp_menu--sortir">Fermer la session</p>
+        <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--contact" @click="emitAction('mail')">
+          <div class="kp_menu__barre-etat--un-ico-container-img">
+            <img class="kp_menu__barre-etat--img" :src="mail" alt="Me contacter">
           </div>
-      
-      
-          <div class="item-action">
-            <div class="link-profil" @click="fermersession"></div>
-            <img class="kp_menu__barre-etat--img-icon" :src="exitIcon" alt="Fermer">
-            <p class="kp_menu--sortir">Arrêter la navigation</p>
+          <div>
+            <p class="kp_menu__barre-etat--un-ico-container--text">
+              Me contacter
+            </p>
+            <p class="kp_menu__barre-etat--un-ico-container--desc">
+              Envoyez-moi un message
+            </p>
           </div>
+        </article>
+
+        <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--projet" @click="emitAction('messervices')">
+          <div class="kp_menu__barre-etat--un-ico-container-img">
+            <img class="kp_menu__barre-etat--img" :src="services" alt="Mes services">
+          </div>
+          <div>
+            <p class="kp_menu__barre-etat--un-ico-container--text">
+              Mes services
+            </p>
+            <p class="kp_menu__barre-etat--un-ico-container--desc">
+              Que puis-je vous offrir
+            </p>
+          </div>
+        </article>
+
+        <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--projet" @click="emitAction('folder')">
+          <div class="kp_menu__barre-etat--un-ico-container-img">
+            <img class="kp_menu__barre-etat--img" :src="folder" alt="Mes projets">
+          </div>
+          <div>
+            <p class="kp_menu__barre-etat--un-ico-container--text">
+              Mes réalisations
+            </p>
+            <p class="kp_menu__barre-etat--un-ico-container--desc">
+              Découvrez mes projets
+            </p>
+          </div>
+        </article>
+
+        <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--exemples" @click="emitAction('exemples')">
+          <div class="kp_menu__barre-etat--un-ico-container-img">
+            <img class="kp_menu__barre-etat--img" :src="exemples" alt="Mes exemples">
+          </div>
+          <div>
+            <p class="kp_menu__barre-etat--un-ico-container--text">
+              Mes exemples
+            </p>
+            <p class="kp_menu__barre-etat--un-ico-container--desc">
+              Ce que je peux vous proposer
+            </p>
+          </div>
+        </article>
+
+
+        <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--quisuisje" @click="emitAction('monparcours')">
+          <div class="kp_menu__barre-etat--un-ico-container-img">
+            <img class="kp_menu__barre-etat--img" :src="cv" alt="Mon parcours">
+          </div>
+          <div>
+            <p class="kp_menu__barre-etat--un-ico-container--text">
+              Mon parcours
+            </p>
+            <p class="kp_menu__barre-etat--un-ico-container--desc">
+              Consulter mon parcours
+            </p>
+          </div>
+        </article>
+
+        <div class="sep-menu"></div>
+
+        <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--quisuisje" @click="emitAction('passions')">
+          <div class="kp_menu__barre-etat--un-ico-container-img">
+            <img class="kp_menu__barre-etat--img" :src="pokemon" alt="Ma passion">
+          </div>
+          <div>
+            <p class="kp_menu__barre-etat--un-ico-container--text">
+              Mes passions
+            </p>
+            <p class="kp_menu__barre-etat--un-ico-container--desc">
+              Découvrez mes passions
+            </p>
+          </div>
+        </article>
+
+
       </div>
-    </section>
-    
-  </template>
-  
-  <script>
+      <div class="kp_menu__barre-etat--content-right">
+        <!-- Contenu de la partie droite -->
+
+
+        <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--quisuisje" @click="emitAction('media')">
+          <div class="kp_menu__barre-etat--un-ico-container-img">
+            <img class="kp_menu__barre-etat--img" :src="media" alt="media">
+          </div>
+          <div>
+            <p class="kp_menu__barre-etat--un-ico-container--text  text--left">
+              Lecteur média
+            </p>
+          </div>
+        </article>
+
+        <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--quisuisje" @click="emitAction('paint')">
+          <div class="kp_menu__barre-etat--un-ico-container-img">
+            <img class="kp_menu__barre-etat--img" :src="paint" alt="paint">
+          </div>
+          <div>
+            <p class="kp_menu__barre-etat--un-ico-container--text  text--left">
+              Paint
+            </p>
+          </div>
+        </article>
+
+        <article class="kp_menu__barre-etat--ico kp_menu__barre-etat--quisuisje" @click="emitAction('demineur')">
+          <div class="kp_menu__barre-etat--un-ico-container-img">
+            <img class="kp_menu__barre-etat--img" :src="demineur" alt="Démineur">
+          </div>
+          <div>
+            <p class="kp_menu__barre-etat--un-ico-container--text  text--left">
+              Démineur
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+    <div class="kp_menu__barre-etat--bottom">
+      <div class="item-action">
+        <div class="link-profil" @click="fermersession"></div>
+        <img class="kp_menu__barre-etat--img-icon" :src="lockIcon" alt="Verrouiller">
+        <p class="kp_menu--sortir">Fermer la session</p>
+      </div>
+
+
+      <div class="item-action">
+        <div class="link-profil" @click="fermersession"></div>
+        <img class="kp_menu__barre-etat--img-icon" :src="exitIcon" alt="Fermer">
+        <p class="kp_menu--sortir">Arrêter la navigation</p>
+      </div>
+    </div>
+  </section>
+
+</template>
+
+<script>
 import maphoto from '@/assets/images/kevinprevost.jpg';
 import folder from '@/assets/images/icon-archive.png';
 import mail from '@/assets/images/icon-mail.png';
@@ -140,6 +167,8 @@ import pokemon from '@/assets/images/icon-heart.png';
 import paint from '@/assets/images/icon-paint.png';
 import demineur from '@/assets/images/icon-demineur.png';
 import media from '@/assets/images/icon-media.png';
+import services from '@/assets/images/icon-services.png';
+import exemples from '@/assets/images/icon-exemples.png';
 
 import exitIcon from '@/assets/images/exit-icon.png';
 import lockIcon from '@/assets/images/lock-icon.png';
@@ -152,27 +181,29 @@ export default {
       default: false,
     },
     maillink: {
-        type: String,
-        default: 'mailto:kevin@example.com'
+      type: String,
+      default: 'mailto:kevin@example.com'
     }
   },
   data() {
     return {
-        maphoto,
-        folder,
-        localIsVisible: true, 
-        exitIcon,
-        lockIcon,
-        demineur,
-        pokemon,
-        media,
-        paint,
-        mail,
-        cv,
-      };
+      maphoto,
+      folder,
+      localIsVisible: true,
+      exitIcon,
+      lockIcon,
+      demineur,
+      pokemon,
+      media,
+      services,
+      exemples,
+      paint,
+      mail,
+      cv,
+    };
   },
   methods: {
-    fermersession(){
+    fermersession() {
       this.$emit('fermersession');
     },
     toggleClass(menuIsVisible) {
@@ -185,7 +216,7 @@ export default {
       if (menu) {
         if (!this.localIsVisible) {
           menu.classList.add('kp_menu__barre-etat--show');
-          document.removeEventListener('click', this.handleClickOutside); 
+          document.removeEventListener('click', this.handleClickOutside);
         } else {
           menu.classList.remove('kp_menu__barre-etat--show');
         }
@@ -208,30 +239,32 @@ export default {
 </script>
 
 
-  
-  <style scoped>
-.kp_menu__barre-etat{
-    position: absolute;
-    bottom: -10px;
-    left: 0;
-    background: white;
-    width: 100%;
-    max-width: 600px;
-    transform: translateY(100%);
-    transition: 0.1s;
-    pointer-events: initial;
-    filter: drop-shadow(1px 3px 4px black);
-    border: solid 3px #255ec6;
-    border-radius: 10px 10px 0 0;
+
+<style scoped>
+.kp_menu__barre-etat {
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  background: white;
+  width: 100%;
+  max-width: 600px;
+  transform: translateY(100%);
+  transition: 0.1s;
+  pointer-events: initial;
+  filter: drop-shadow(1px 3px 4px black);
+  border: solid 3px #255ec6;
+  border-radius: 10px 10px 0 0;
 }
+
 .kp_menu__barre-etat--show {
   transform: translateY(0%);
   bottom: 42px;
 }
-.kp_menu__barre-etat--titre{
 
-  background: rgb(139,185,237);
-  background: linear-gradient(180deg, rgba(139,185,237,1) 0%, rgba(23,103,207,1) 3%, rgba(37,119,220,1) 16%, rgba(37,119,220,1) 64%, rgba(91,159,242,1) 100%);
+.kp_menu__barre-etat--titre {
+
+  background: rgb(139, 185, 237);
+  background: linear-gradient(180deg, rgba(139, 185, 237, 1) 0%, rgba(23, 103, 207, 1) 3%, rgba(37, 119, 220, 1) 16%, rgba(37, 119, 220, 1) 64%, rgba(91, 159, 242, 1) 100%);
   padding: 5px;
   border: solid 1px #4e7cd3;
   display: flex;
@@ -246,21 +279,26 @@ export default {
   top: -6px;
   outline: solid 1px #255ec6;
   border-radius: 10px 10px 0 0;
-  &:hover{
+
+  &:hover {
     cursor: pointer;
   }
-  &:hover .kp_titre-profil-barre{
+
+  &:hover .kp_titre-profil-barre {
     text-decoration: underline;
   }
-  &:hover .kp_menu__barre-etat--photo-container{
+
+  &:hover .kp_menu__barre-etat--photo-container {
     filter: drop-shadow(4px 3px 0px rgba(0, 0, 0, 0.3333333333));
   }
-  &:hover .kp_menu__barre-etat--photo{
+
+  &:hover .kp_menu__barre-etat--photo {
     opacity: 0.9;
   }
 }
-.kp_menu__barre-etat--titre:after{
-content: "";
+
+.kp_menu__barre-etat--titre:after {
+  content: "";
   position: absolute;
   width: 100%;
   height: 3px;
@@ -269,20 +307,23 @@ content: "";
   bottom: -5px;
   border: solid 1px white;
   border-top: solid 1px #002c77;
-  background: rgb(255,255,255);
-  background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(242,143,41,1) 33%, rgba(241,138,32,1) 50%, rgba(240,142,41,1) 66%, rgba(211,229,250,1) 100%);
+  background: rgb(255, 255, 255);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(242, 143, 41, 1) 33%, rgba(241, 138, 32, 1) 50%, rgba(240, 142, 41, 1) 66%, rgba(211, 229, 250, 1) 100%);
 }
-.kp_notification__demarrer{
+
+.kp_notification__demarrer {
   width: 172px;
   height: 44px;
   position: fixed;
   bottom: 0;
   left: 0;
 }
-.kp_menu__barre-etat--photo{
-width: 60px;
+
+.kp_menu__barre-etat--photo {
+  width: 60px;
 }
-.kp_menu__barre-etat--container{
+
+.kp_menu__barre-etat--container {
   position: relative;
   top: -5px;
   display: flex;
@@ -290,54 +331,64 @@ width: 60px;
   justify-content: space-between;
   min-height: 400px;
 }
+
 #kp_lang__user,
-#kp_battery__user{
-padding-right: 20px;
+#kp_battery__user {
+  padding-right: 20px;
 }
-.kp_battery--img{
+
+.kp_battery--img {
   width: 20px;
   filter: drop-shadow(2px 2px 1px #0000EE55);
 }
 
 /* icons */
-.kp_menu__barre-etat--img{
+.kp_menu__barre-etat--img {
   width: 40px;
 }
-.kp_menu__barre-etat--un-ico-container--text{
+
+.kp_menu__barre-etat--un-ico-container--text {
   color: #34393a;
   font-weight: 700;
 }
-.kp_menu__barre-etat--un-ico-container--desc{
+
+.kp_menu__barre-etat--un-ico-container--desc {
   color: #aba3a9;
   font-weight: 400;
   padding-top: 5px;
 }
-.kp_menu__barre-etat--ico{
+
+.kp_menu__barre-etat--ico {
   display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 10px;
-    padding: 10px;
-    cursor: pointer;
-    &:hover{
-      filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3333333333));
-      background-color: #316ac5;
-    }
-    &:hover .kp_menu__barre-etat--un-ico-container--desc{
-      color: #34393a;
-    }
-    &:hover p{
-        color:white !important;
-    }
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 10px;
+  cursor: pointer;
+
+  &:hover {
+    filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3333333333));
+    background-color: #316ac5;
+  }
+
+  &:hover .kp_menu__barre-etat--un-ico-container--desc {
+    color: #34393a;
+  }
+
+  &:hover p {
+    color: white !important;
+  }
 }
-.kp_menu__barre-etat--content-right{
+
+.kp_menu__barre-etat--content-right {
   background: #d0dff6;
-    width: 50%;
-    border-left: solid 1px #a0c4f0;
-    position: relative;
-    top: 3px;
+  width: 50%;
+  border-left: solid 1px #a0c4f0;
+  position: relative;
+  top: 3px;
 }
-.kp_menu__barre-etat--photo-container{
+
+.kp_menu__barre-etat--photo-container {
   border: solid 3px white;
   border-radius: 7px;
   filter: drop-shadow(2px 2px 3px #00000055);
@@ -346,7 +397,7 @@ padding-right: 20px;
   background: white;
 }
 
-.kp_element_container--part-content{
+.kp_element_container--part-content {
   min-height: 300px;
   min-width: 400px;
   background: #0053e3;
@@ -355,9 +406,10 @@ padding-right: 20px;
   box-shadow: inset 0 0 13px rgb(45, 145, 255);
   position: relative;
 }
-.kp_element_container--content{
+
+.kp_element_container--content {
   background: white;
-  width:calc(100% - 4px);
+  width: calc(100% - 4px);
   height: 100%;
   min-height: 296px;
   min-width: 396px;
@@ -366,117 +418,129 @@ padding-right: 20px;
   position: absolute;
   left: 2px;
 }
-.kp_element--action--close{
-  display:none;
+
+.kp_element--action--close {
+  display: none;
 }
-.kp_profil--show{
+
+.kp_profil--show {
   display: block;
   position: absolute;
   top: 50px;
   left: 300px;
 }
-.kp_notification__demarrer{
 
-}
+.kp_notification__demarrer {}
 
-.kp_element--title-p{
+.kp_element--title-p {
   display: flex;
 }
 
-.kp_element__main-content{
+.kp_element__main-content {
   position: relative;
   z-index: 1;
   display: flex;
   justify-content: space-between;
 }
-.kp_title--ssmenu-profil{
+
+.kp_title--ssmenu-profil {
   color: black;
 }
-.kp_element__main-content{
-background-color: white;
+
+.kp_element__main-content {
+  background-color: white;
 }
 
-.kp_element__profil--container{
+.kp_element__profil--container {
   min-height: 250px;
   height: calc(100% - 39px);
 }
-.kp_profil--show{
+
+.kp_profil--show {
   min-height: 289px;
 }
-.kp_element__main-content{
+
+.kp_element__main-content {
   position: relative;
   z-index: 1;
   display: flex;
   justify-content: space-between;
-  height:100%;
+  height: 100%;
   background: white;
 }
-.kp_element_zone__profil--left{
+
+.kp_element_zone__profil--left {
   width: calc(200px - 20px);
   background: #7b9fea;
   padding: 10px;
 }
 
 
-.kp_menu__barre-etat--bottom{
-    background: rgb(139, 185, 237);
-    background: linear-gradient(180deg, rgba(139, 185, 237, 1) 0%, rgba(23, 103, 207, 1) 3%, rgba(37, 119, 220, 1) 16%, rgba(37, 119, 220, 1) 64%, rgba(91, 159, 242, 1) 100%);
-    padding: 5px;
-    border: solid 1px #4e7cd3;
-    box-shadow: inset 0 0 13px rgb(45, 145, 255);
-    padding: 20px 20px 20px 0px;
-    font-size: 20px;
-    width: calc(100% - 22px);
-    gap: 20px;
-    position: relative;
-    outline: solid 1px #255ec6;
-    cursor: pointer;
-    display: flex;
-    justify-content: right;
-    flex-wrap: wrap;
-    gap: 40px;
+.kp_menu__barre-etat--bottom {
+  background: rgb(139, 185, 237);
+  background: linear-gradient(180deg, rgba(139, 185, 237, 1) 0%, rgba(23, 103, 207, 1) 3%, rgba(37, 119, 220, 1) 16%, rgba(37, 119, 220, 1) 64%, rgba(91, 159, 242, 1) 100%);
+  padding: 5px;
+  border: solid 1px #4e7cd3;
+  box-shadow: inset 0 0 13px rgb(45, 145, 255);
+  padding: 20px 20px 20px 0px;
+  font-size: 20px;
+  width: calc(100% - 22px);
+  gap: 20px;
+  position: relative;
+  outline: solid 1px #255ec6;
+  cursor: pointer;
+  display: flex;
+  justify-content: right;
+  flex-wrap: wrap;
+  gap: 40px;
 }
 
 
-.item-action{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    padding : 0px 10px 0px 0px;
-    position: relative;
-}
-.item-action:hover{
-    text-decoration: underline;
-    background: #255ec6;
-    
-}
-.kp_menu--sortir{
-    font-size:16px;
-}
-.kp_menu__barre-etat--img-icon{
-    width: 30px;
-}
-.item-action:hover .kp_menu__barre-etat--img-icon{
-    filter: brightness(1.32) ;
-}
-.kp_menu__barre-etat--content-left{
-    padding:10px;
-    width: 50%;
+.item-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 0px 10px 0px 0px;
+  position: relative;
 }
 
-.link-profil{
+.item-action:hover {
+  text-decoration: underline;
+  background: #255ec6;
+
+}
+
+.kp_menu--sortir {
+  font-size: 16px;
+}
+
+.kp_menu__barre-etat--img-icon {
+  width: 30px;
+}
+
+.item-action:hover .kp_menu__barre-etat--img-icon {
+  filter: brightness(1.32);
+}
+
+.kp_menu__barre-etat--content-left {
+  padding: 10px;
+  width: 50%;
+}
+
+.link-profil {
   position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }
 
-.text--left{
-  color : #0a246a;
+.text--left {
+  color: #0a246a;
 }
-.sep-menu{
+
+.sep-menu {
   width: calc(90% - 20px);
   height: 1px;
   background: rgb(255, 255, 255);
@@ -484,18 +548,20 @@ background-color: white;
   margin: auto;
 }
 
-@media screen and (max-width: 960px){
-  .kp_menu__barre-etat--bottom{
+.kp_menu__barre-etat--exemples{
+  display:none;
+}
+@media screen and (max-width: 960px) {
+  .kp_menu__barre-etat--bottom {
     display: flex;
     justify-content: flex-start;
     padding-left: 20px;
   }
 }
-@media screen and (max-width: 400px){
-  .kp_menu__barre-etat--content-right{
+
+@media screen and (max-width: 400px) {
+  .kp_menu__barre-etat--content-right {
     display: none;
   }
 }
-
-  </style>
-  
+</style>

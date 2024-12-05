@@ -63,6 +63,8 @@ import paintIcon        from '@/assets/images/icon-paint.png';
 import mailIcon         from '@/assets/images/icon-mail.png';
 import mediaIcon        from '@/assets/images/icon-media.png';
 import demineurIcon     from '@/assets/images/icon-demineur.png';
+import servicesIcon     from '@/assets/images/icon-services.png';
+import exemplesIcon     from '@/assets/images/icon-exemples.png';
 
 export default {
   name: 'Barrebottom',
@@ -101,7 +103,7 @@ export default {
           id: 'autoportrait',
           class: 'kp_barre-une-app--text',
           icon: textIcon,
-          title: 'Autoportrait',
+          title: 'Notes',
           isText: false
         },
         {
@@ -152,7 +154,21 @@ export default {
           icon: demineurIcon,
           title: 'Démineur',
           isText: false
-        }
+        },
+        {
+          id: 'messervices',
+          class: 'kp_barre-une-app--messervices',
+          icon: servicesIcon,
+          title: 'Mes services',
+          isText: false
+        },
+        {
+          id: 'exemples',
+          class: 'kp_barre-une-app--exemples',
+          icon: exemplesIcon,
+          title: 'Mes exemples',
+          isText: false
+        },
       ],
       percentbattery: 0,
       langue: 'FR - fr',

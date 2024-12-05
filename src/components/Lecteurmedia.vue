@@ -269,8 +269,8 @@ export default {
             isMuted: false,
             currentTrackIndex: 0,
             playlist: [
-                { title: '99 Red Balloons', artist: 'Nena', path: track1 },
                 { title: 'Foule Sentimentale', artist: 'Alain Souchon', path: track2 },
+                { title: '99 Red Balloons', artist: 'Nena', path: track1 },
             ],
         };
     },

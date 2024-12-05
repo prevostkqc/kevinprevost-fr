@@ -2,172 +2,145 @@
   <Starting v-show="showStarting" @close="handleCloseStarting" />
   <main class="kp_main" v-show="!showStarting">
     <!-- Appel à Desktop avec écoute de l'événement openWindow -->
-    <Desktop @openWindow="toggleWindow" ref="desktop"  @callBringToFront="callBringToFront"  />
+    <Desktop @openWindow="toggleWindow" ref="desktop" @callBringToFront="callBringToFront" />
 
     <div class="container--clipy">
       <div class="clipy">
-        <Clipy @update-class="updateWindowClass('clipy', $event)" @close="handleCloseWindow('clipy')"  @actionSelected="handleAction" />
+        <Clipy @update-class="updateWindowClass('clipy', $event)" @close="handleCloseWindow('clipy')"
+          @actionSelected="handleAction" />
       </div>
     </div>
-    
+
     <div class="container--terminal">
-      <div @click="bringToFront($event)" v-show="openWindows.includes('terminal')" :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.terminal]">
-        <Terminal @update-class="updateWindowClass('terminal', $event)" @close="handleCloseWindow('terminal')" 
-        :context="'terminal'"
-        :title="'terminal'" />
+      <div @click="bringToFront($event)" v-show="openWindows.includes('terminal')"
+        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.terminal]">
+        <Terminal @update-class="updateWindowClass('terminal', $event)" @close="handleCloseWindow('terminal')"
+          :context="'terminal'" :title="'terminal'" />
       </div>
     </div>
 
-  
-    <div class="container--messervices"
-        v-bring-to-front-on-show
-        @click="bringToFront($event)"
-        v-show="openWindows.includes('messervices')"
-        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.messervices]">
+
+    <div class="container--messervices" v-bring-to-front-on-show @click="bringToFront($event)"
+      v-show="openWindows.includes('messervices')"
+      :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.messervices]">
       <Messervices @update-class="updateWindowClass('messervices', $event)" @close="handleCloseWindow('messervices')"
-        :context="'messervices'"
-        :title="'messervices'" />
+        :context="'messervices'" :title="'messervices'" />
     </div>
 
-    <div class="container--folder"
-        v-bring-to-front-on-show
-        @click="bringToFront($event)"
-        v-show="openWindows.includes('folder')"
-        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.folder]">
-      <Folderprojects @update-class="updateWindowClass('folder', $event)" @close="handleCloseWindow('folder')" 
-        :context="'folder'"
-        :title="'folder'" />
+    <div class="container--folder" v-bring-to-front-on-show @click="bringToFront($event)"
+      v-show="openWindows.includes('folder')"
+      :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.folder]">
+      <Folderprojects @update-class="updateWindowClass('folder', $event)" @close="handleCloseWindow('folder')"
+        :context="'folder'" :title="'folder'" />
     </div>
 
-    <div class="container--autoportrait"
-        v-bring-to-front-on-show
-        @click="bringToFront($event)"
-        v-show="openWindows.includes('autoportrait')"
-        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.autoportrait]">
+    <div class="container--autoportrait" v-bring-to-front-on-show @click="bringToFront($event)"
+      v-show="openWindows.includes('autoportrait')"
+      :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.autoportrait]">
       <Autoportrait @update-class="updateWindowClass('autoportrait', $event)" @close="handleCloseWindow('autoportrait')"
-        :context="'autoportrait'"
-        :title="'autoportrait'" />
+        :context="'autoportrait'" :title="'autoportrait'" />
     </div>
-    
 
-    <div class="container--paint"
-        v-bring-to-front-on-show
-        @click="bringToFront($event)"
-        v-show="openWindows.includes('paint')"
-        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.paint]">
-      <Paint @update-class="updateWindowClass('paint', $event)" @close="handleCloseWindow('paint')"
-        :context="'paint'"
+
+    <div class="container--paint" v-bring-to-front-on-show @click="bringToFront($event)"
+      v-show="openWindows.includes('paint')"
+      :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.paint]">
+      <Paint @update-class="updateWindowClass('paint', $event)" @close="handleCloseWindow('paint')" :context="'paint'"
         :title="'paint'" />
     </div>
 
-    <div class="container--personnaliser"
-        v-bring-to-front-on-show
-        @click="bringToFront($event)"
-        v-show="openWindows.includes('personnaliser')"
-        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.personnaliser]">
-      <Personnaliser @update-class="updateWindowClass('personnaliser', $event)" @close="handleCloseWindow('personnaliser')"
-        :context="'personnaliser'"
-        :title="'personnaliser'" />
+    <div class="container--exemples" v-bring-to-front-on-show @click="bringToFront($event)"
+      v-show="openWindows.includes('exemples')"
+      :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.exemples]">
+      <Exemples @update-class="updateWindowClass('exemples', $event)" @close="handleCloseWindow('exemples')"
+        :context="'exemples'" :title="'exemples'" />
     </div>
 
-    <div class="container--monparcours"
-        v-bring-to-front-on-show
-        @click="bringToFront($event)"
-        v-show="openWindows.includes('monparcours')"
-        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.monparcours]">
+    <div class="container--personnaliser" v-bring-to-front-on-show @click="bringToFront($event)"
+      v-show="openWindows.includes('personnaliser')"
+      :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.personnaliser]">
+      <Personnaliser @update-class="updateWindowClass('personnaliser', $event)"
+        @close="handleCloseWindow('personnaliser')" :context="'personnaliser'" :title="'personnaliser'" />
+    </div>
+
+    <div class="container--monparcours" v-bring-to-front-on-show @click="bringToFront($event)"
+      v-show="openWindows.includes('monparcours')"
+      :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.monparcours]">
       <Monparcours @update-class="updateWindowClass('monparcours', $event)" @close="handleCloseWindow('monparcours')"
-        :context="'monparcours'"
-        :title="'monparcours'" />
+        :context="'monparcours'" :title="'monparcours'" />
     </div>
 
-    <div class="container--pokemon"
-        v-bring-to-front-on-show
-        @click="bringToFront($event)"
-        v-show="openWindows.includes('pokemon')"
-        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.pokemon]">
+    <div class="container--pokemon" v-bring-to-front-on-show @click="bringToFront($event)"
+      v-show="openWindows.includes('pokemon')"
+      :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.pokemon]">
       <Cardpokemon @update-class="updateWindowClass('pokemon', $event)" @close="handleCloseWindow('pokemon')"
-        :context="'pokemon'"
-        :title="'Pokémon Card'" />
+        :context="'pokemon'" :title="'Pokémon Card'" />
     </div>
 
-    <div class="container--passions"
-        v-bring-to-front-on-show
-        @click="bringToFront($event)"
-        v-show="openWindows.includes('passions')"
-        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.passions]">
+    <div class="container--passions" v-bring-to-front-on-show @click="bringToFront($event)"
+      v-show="openWindows.includes('passions')"
+      :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.passions]">
       <Mespassions @update-class="updateWindowClass('passions', $event)" @close="handleCloseWindow('passions')"
-        :context="'passions'"
-        :title="'Mes passions'" />
+        :context="'passions'" :title="'Mes passions'" />
     </div>
 
-    <div class="container--media"
-        v-bring-to-front-on-show
-        @click="bringToFront($event)"
-        v-show="openWindows.includes('media')"
-        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.media]">
-      <Media @update-class="updateWindowClass('media', $event)" @close="handleCloseWindow('media')"
-        :context="'media'"
+    <div class="container--media" v-bring-to-front-on-show @click="bringToFront($event)"
+      v-show="openWindows.includes('media')"
+      :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.media]">
+      <Media @update-class="updateWindowClass('media', $event)" @close="handleCloseWindow('media')" :context="'media'"
         :title="'Mes media'" />
     </div>
 
-    <div class="container--demineur"
-        v-bring-to-front-on-show
-        @click="bringToFront($event)"
-        v-show="openWindows.includes('demineur')"
-        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.demineur]">
+    <div class="container--demineur" v-bring-to-front-on-show @click="bringToFront($event)"
+      v-show="openWindows.includes('demineur')"
+      :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.demineur]">
       <Demineur @update-class="updateWindowClass('demineur', $event)" @close="handleCloseWindow('demineur')"
-        :context="'demineur'"
-        :title="'Démineur'" />
+        :context="'demineur'" :title="'Démineur'" />
     </div>
 
-    <div class="container--mail"
-        v-bring-to-front-on-show
-        @click="bringToFront($event)"
-        v-show="openWindows.includes('mail')"
-        :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.mail]">
-      <Mail @update-class="updateWindowClass('mail', $event)" @close="handleCloseWindow('mail')"
-        :context="'mail'"
+    <div class="container--mail" v-bring-to-front-on-show @click="bringToFront($event)"
+      v-show="openWindows.includes('mail')"
+      :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.mail]">
+      <Mail @update-class="updateWindowClass('mail', $event)" @close="handleCloseWindow('mail')" :context="'mail'"
         :title="'mail'" />
     </div>
 
 
     <div class="scanlines-v"></div>
 
-    <div
-      v-if="!menuIsVisible"
-      class="kp_menu__backdrop"
-      @click="toggleMenu()"
-    ></div> 
-    <div 
-      class="container--menuderoulant" 
-      :class="['window', 'kp_item__window_draggable']">
-      <Menuderoulant :isVisible="menuIsVisible" @fermersession="fermersession"  ref="menuDeroulant" @click="handleContainerClick" @actionSelected="handleAction"/>
+    <div v-if="!menuIsVisible" class="kp_menu__backdrop" @click="toggleMenu()"></div>
+    <div class="container--menuderoulant" :class="['window', 'kp_item__window_draggable']">
+      <Menuderoulant :isVisible="menuIsVisible" @fermersession="fermersession" ref="menuDeroulant"
+        @click="handleContainerClick" @actionSelected="handleAction" />
     </div>
 
-    <Barrebottom :openWindows="openWindows" @handleBringToFront="handleBringToFront" :windowClasses="windowClasses" @childClicked="handleContainerClick"  @callBringToFront="callBringToFront"  @openMenuDeroulant="openMenuDeroulant"  @toggleMenu="toggleMenu"  class="barrenotif" />
+    <Barrebottom :openWindows="openWindows" @handleBringToFront="handleBringToFront" :windowClasses="windowClasses"
+      @childClicked="handleContainerClick" @callBringToFront="callBringToFront" @openMenuDeroulant="openMenuDeroulant"
+      @toggleMenu="toggleMenu" class="barrenotif" />
   </main>
 </template>
 
 
 
 <script>
-import Desktop        from '@/components/Desktop.vue';
-import Terminal       from '@/components/Terminal.vue';
-import Messervices     from '@/components/Messervices.vue';
+import Desktop from '@/components/Desktop.vue';
+import Terminal from '@/components/Terminal.vue';
+import Messervices from '@/components/Messervices.vue';
 import Folderprojects from '@/components/Folderprojects.vue';
-import Autoportrait   from '@/components/Autoportrait.vue';
-import Paint          from '@/components/Paint.vue';
-import Personnaliser  from '@/components/Personnaliser.vue';
-import Monparcours    from '@/components/Monparcours.vue';
-import Cardpokemon    from '@/components/Cardpokemon.vue';
-import Clipy          from '@/components/Clipy.vue';
-import Barrebottom    from '@/components/Barrebottom.vue';
-import Starting       from '@/components/Starting.vue';
-import Menuderoulant  from '@/components/Menuderoulant.vue';
-import Mespassions    from '@/components/Mespassions.vue';
-import Mail           from '@/components/mail.vue';
-import Media          from '@/components/Lecteurmedia.vue';
-import Demineur       from '@/components/Demineur.vue';
+import Autoportrait from '@/components/Autoportrait.vue';
+import Paint from '@/components/Paint.vue';
+import Exemples from '@/components/Exemples.vue';
+import Personnaliser from '@/components/Personnaliser.vue';
+import Monparcours from '@/components/Monparcours.vue';
+import Cardpokemon from '@/components/Cardpokemon.vue';
+import Clipy from '@/components/Clipy.vue';
+import Barrebottom from '@/components/Barrebottom.vue';
+import Starting from '@/components/Starting.vue';
+import Menuderoulant from '@/components/Menuderoulant.vue';
+import Mespassions from '@/components/Mespassions.vue';
+import Mail from '@/components/mail.vue';
+import Media from '@/components/Lecteurmedia.vue';
+import Demineur from '@/components/Demineur.vue';
 
 export default {
   name: 'Home',
@@ -178,6 +151,7 @@ export default {
     Folderprojects,
     Autoportrait,
     Paint,
+    Exemples,
     Personnaliser,
     Monparcours,
     Cardpokemon,
@@ -194,39 +168,41 @@ export default {
     return {
       openWindows: ['terminal', 'clipy'],
       windowClasses: {
-        terminal:     'kp_item_show',
-        folder:       'kp_item_hide',
+        terminal: 'kp_item_show',
+        folder: 'kp_item_hide',
         autoportrait: 'kp_item_hide',
-        messervices:   'kp_item_hide',
-        paint:        'kp_item_hide',
-        personnaliser:'kp_item_hide',
-        monparcours:  'kp_item_hide',
-        pokemon:      'kp_item_hide',
-        passions:     'kp_item_hide',
-        clipy:        'kp_item_hide',
-        starting:     'kp_item_hide',
-        menuderoulant:'kp_item_hide',
-        mail:         'kp_item_hide',
-        media:        'kp_item_hide',
-        demineur:     'kp_item_hide',
+        messervices: 'kp_item_hide',
+        paint: 'kp_item_hide',
+        exemples: 'kp_item_hide',
+        personnaliser: 'kp_item_hide',
+        monparcours: 'kp_item_hide',
+        pokemon: 'kp_item_hide',
+        passions: 'kp_item_hide',
+        clipy: 'kp_item_hide',
+        starting: 'kp_item_hide',
+        menuderoulant: 'kp_item_hide',
+        mail: 'kp_item_hide',
+        media: 'kp_item_hide',
+        demineur: 'kp_item_hide',
       },
       windowMinimized: {
-        terminal:     false,
-        folder:       false,
+        terminal: false,
+        folder: false,
         autoportrait: false,
-        paint:        false,
-        meservices:   false,
-        personnaliser:false,
-        monparcours:  false,
-        pokemon:      false,
-        passions:     false,
-        clipy:        false,
-        starting:     false,
-        mail:         false,
-        media:        false,
-        demineur:     false,
+        paint: false,
+        exemples: false,
+        meservices: false,
+        personnaliser: false,
+        monparcours: false,
+        pokemon: false,
+        passions: false,
+        clipy: false,
+        starting: false,
+        mail: false,
+        media: false,
+        demineur: false,
       },
-      zIndexCounter: 10, 
+      zIndexCounter: 10,
       isDragging: false,
       isResizing: false,
       offsetX: null,
@@ -242,7 +218,7 @@ export default {
   mounted() {
     this.initDragAndResize();
 
-    
+
     const lastVisit = localStorage.getItem('lastVisit');
     const cooldownTime = 15 * 60 * 1000;
     if (!lastVisit || Date.now() - lastVisit > cooldownTime) {
@@ -252,8 +228,8 @@ export default {
     }
   },
   methods: {
-    
-    fermersession(){
+
+    fermersession() {
       this.showStarting = true;
     },
     handleCloseStarting() {
@@ -261,19 +237,19 @@ export default {
       this.showStarting = false;
     },
     handleBringToFront(appId) {
-    if (this.windowClasses[appId] === 'kp_item_hide' || this.windowClasses[appId] === 'kp_item_reduct') {
-      this.updateWindowClass(appId, 'kp_item_show');
-      if (!this.openWindows.includes(appId)) {
-        this.openWindows.push(appId);
-      }
-      this.$nextTick(() => {
-        const element = document.querySelector(`.container--${appId}`);
-        if (element) {
-          this.bringToFront({ currentTarget: element });
+      if (this.windowClasses[appId] === 'kp_item_hide' || this.windowClasses[appId] === 'kp_item_reduct') {
+        this.updateWindowClass(appId, 'kp_item_show');
+        if (!this.openWindows.includes(appId)) {
+          this.openWindows.push(appId);
         }
-      });
-    }
-  },
+        this.$nextTick(() => {
+          const element = document.querySelector(`.container--${appId}`);
+          if (element) {
+            this.bringToFront({ currentTarget: element });
+          }
+        });
+      }
+    },
     updateWindowClass(windowName, newClass) {
       if (this.windowClasses.hasOwnProperty(windowName)) {
         this.$set(this.windowClasses, windowName, newClass);
@@ -293,31 +269,31 @@ export default {
       });
     },
     openMenuDeroulant() {
-        this.isVisible = !this.isVisible; 
+      this.isVisible = !this.isVisible;
     },
 
     async updateWindowClass(windowName, newClass) {
       if (this.windowClasses.hasOwnProperty(windowName)) {
-      const previousClass = this.windowClasses[windowName];
-      this.windowClasses[windowName] = newClass;
+        const previousClass = this.windowClasses[windowName];
+        this.windowClasses[windowName] = newClass;
 
-      if (newClass === 'kp_item_show' && previousClass === 'kp_item_hide') {
-        this.$nextTick(() => {
-        const element = document.querySelector(`.container--${windowName}`);
-        if (element) {
-          this.bringToFront({ currentTarget: element });
-        } else {
-          console.error(`Élément non trouvé pour ${windowName}`);
+        if (newClass === 'kp_item_show' && previousClass === 'kp_item_hide') {
+          this.$nextTick(() => {
+            const element = document.querySelector(`.container--${windowName}`);
+            if (element) {
+              this.bringToFront({ currentTarget: element });
+            } else {
+              console.error(`Élément non trouvé pour ${windowName}`);
+            }
+          });
         }
-        });
-      }
       } else {
-      console.error(`La fenêtre "${windowName}" n'existe pas.`);
+        console.error(`La fenêtre "${windowName}" n'existe pas.`);
       }
     },
     handleAction(actionType) {
       this.toggleWindow(actionType);
-       
+
     },
 
     callBringToFront(appId) {
@@ -330,7 +306,7 @@ export default {
     },
 
 
-    
+
     bringToFront(event) {
       const element = event.currentTarget;
       if (!element) {
@@ -539,7 +515,7 @@ export default {
 
     restoreWindow(windowName) {
       this.updateWindowClass(windowName, 'kp_item_show');
-      
+
       this.$nextTick(() => {
         const element = document.querySelector(`.${windowName}`);
         if (element) {
@@ -551,9 +527,9 @@ export default {
 
     handleCloseWindow(windowName) {
       const index = this.openWindows.indexOf(windowName);
-      
+
       this.updateNotificationClass(windowName, 'notif_hide');
-      
+
       if (index !== -1) {
         this.updateWindowClass(windowName, 'kp_item_hide');
         this.openWindows.splice(index, 1);
@@ -561,7 +537,7 @@ export default {
         console.log(`La fenêtre "${windowName}" n'était pas ouverte.`);
       }
     },
-    
+
     toggleMenu() {
       this.menuIsVisible = !this.menuIsVisible;
       this.$refs.menuDeroulant.toggleClass(this.menuIsVisible);
@@ -578,8 +554,8 @@ export default {
         this.minimizeWindow(windowName);
       }
     },
-  
-},
+
+  },
   directives: {
     bringToFrontOnShow: {
       update(el, binding, vnode) {
@@ -631,37 +607,40 @@ export default {
   background: red;
   cursor: se-resize;
 }
-.kp_clipy_desktop{
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    top: auto;
-    left: auto;
+
+.kp_clipy_desktop {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  top: auto;
+  left: auto;
 }
 
 .window {
   position: absolute;
   z-index: 1;
 }
-.barrenotif{
+
+.barrenotif {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 999999;
 }
-  .kp_menu__backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0);
-    opacity: 0;
-    z-index: 9990;
-  }
 
-.container--menuderoulant{
+.kp_menu__backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0);
+  opacity: 0;
+  z-index: 9990;
+}
+
+.container--menuderoulant {
   position: fixed;
   z-index: 9991;
   bottom: 0;
@@ -670,43 +649,56 @@ export default {
   right: auto;
   pointer-events: none;
   height: 100vh;
-  width:100%;
+  width: 100%;
   max-width: 600px;
 }
-.container--terminal .window{
+
+.container--terminal .window {
   width: 800px;
 }
+
 .container--terminal .kp_item__window_draggable {
-    top: 200px;
-    left: 200px;  
-}
-.container--folder{
-  top: 50px;
-  left: 130px;  
-}
-.container--monparcours {
-  top: 120px;
-  left: 180px;  
-}
-.container--autoportrait {
-  top: 40px;
-  left: 140px;  
-}
-.container--paint{
-  top: 80px;
-  left: 180px;  
-}
-.container--mail{
-  top: 20px;
-  left: 120px;  
-}
-.container--media{
-  top: 180px;
-  left: 180px;  
-}
-.container--demineur{
-  top: 60px;
-  left: 120px;  
+  top: 200px;
+  left: 200px;
 }
 
+.container--folder {
+  top: 50px;
+  left: 130px;
+}
+
+.container--monparcours {
+  top: 120px;
+  left: 180px;
+}
+
+.container--autoportrait {
+  top: 40px;
+  left: 140px;
+}
+
+.container--paint {
+  top: 80px;
+  left: 180px;
+}
+
+.container--mail {
+  top: 20px;
+  left: 120px;
+}
+
+.container--media {
+  top: 180px;
+  left: 180px;
+}
+
+.container--demineur {
+  top: 60px;
+  left: 120px;
+}
+
+.ccontainer--messervices {
+  top: 80px;
+  left: 130px;
+}
 </style>

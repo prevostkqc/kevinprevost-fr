@@ -7,7 +7,7 @@
                     <div class="kp_element_title--icn">
                         <img class="kp_icon_zone--img" :src="textIcon" alt="text">
                     </div>
-                    <span>Kévin Prévost - autoportrait.txt</span>
+                    <span>Kévin Prévost - Notes.txt</span>
                 </p>
             </div>
             <!-- Utilisation du composant Navigation avec le bon contexte -->
@@ -222,6 +222,7 @@ export default {
     color: black;
     margin: 0;
     padding: 10px;
+    line-height: 1.5;
   }
   .kp_texte-image{
     filter: drop-shadow(3px 3px 2px black);

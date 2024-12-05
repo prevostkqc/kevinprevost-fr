@@ -35,6 +35,7 @@ import terminalIcon from '@/assets/images/icon-terminalkp.png';
 import mediaIcon from '@/assets/images/icon-media.png';
 import demineurIcon from '@/assets/images/icon-demineur.png';
 import servicesIcon from '@/assets/images/icon-services.png';
+import exemplesIcon from '@/assets/images/icon-exemples.png';
 
 export default {
   name: 'Desktop',
@@ -74,12 +75,28 @@ export default {
           altText: 'Messervices',
         },
         {
+          id: 'mail',
+          class: 'kp_folder--mail',
+          icon: mailIcon,
+          isTextIcon: false,
+          text: 'Me contacter',
+          altText: 'Mail',
+        },
+        {
           id: 'folder',
           class: 'kp_folder--folder',
           icon: folderIcon,
           isTextIcon: false,
           text: 'Mes réalisations',
           altText: 'Mes projets',
+        },
+        {
+          id: 'exemples',
+          class: 'kp_folder--exemples',
+          icon: exemplesIcon,
+          isTextIcon: false,
+          text: 'Mes exemples',
+          altText: 'Mes exemples',
         },
         {
           id: 'monparcours',
@@ -98,27 +115,11 @@ export default {
           altText: 'Mes passions',
         },
         {
-          id: 'mail',
-          class: 'kp_folder--mail',
-          icon: mailIcon,
-          isTextIcon: false,
-          text: 'Me contacter',
-          altText: 'Mail',
-        },
-        {
-          id: 'paint',
-          class: 'kp_folder--paint',
-          icon: paintIcon,
-          isTextIcon: false,
-          text: 'Paint',
-          altText: 'paint',
-        },
-        {
           id: 'autoportrait',
           class: 'kp_folder--autoportrait',
           icon: textIcon,
           isTextIcon: false,
-          text: 'Autoportrait',
+          text: 'Notes.txt',
           altText: 'Ma tête',
         },
         {
@@ -128,6 +129,14 @@ export default {
           isTextIcon: false,
           text: 'Lecteur Média',
           altText: 'Média',
+        },
+        {
+          id: 'paint',
+          class: 'kp_folder--paint',
+          icon: paintIcon,
+          isTextIcon: false,
+          text: 'Paint',
+          altText: 'paint',
         },
         {
           id: 'demineur',
@@ -232,6 +241,9 @@ export default {
   user-select: none;
 }
 
+.kp_folder--exemples{
+  display:none;
+}
 @media (max-width: 960px) {
   .kp_desktop {
     display: flex;
