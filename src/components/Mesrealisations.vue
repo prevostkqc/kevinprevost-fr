@@ -67,6 +67,8 @@ import Navigation from '@/components/Navigation.vue';
 import iconprojet from '@/assets/images/folder.png';
 import fallback from '@/assets/images/fallback.jpg';
 
+import fondpc from '@/assets/images/pcfond.png';
+
 export default {
  name: 'Folderprojects',
  emits: ['update-class', 'close', 'resize', 'reduct'],
@@ -96,6 +98,7 @@ export default {
      projects: [],
      selectedProjectId: null,
      iconprojet,
+      fondpc,
    };
  },
  computed: {

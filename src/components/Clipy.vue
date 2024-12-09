@@ -430,5 +430,9 @@ export default {
     right: 40px;
     transform: scale(0.8);
   }
+
+  .text-content{
+    display:none;
+  }
 }
 </style>

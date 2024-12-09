@@ -63,13 +63,18 @@
                           <p class="kp_page-title">{{ page || "" }}</p>
                         </div>
                       </div>
-
-                      <p class="kp_page-title  unprojet--texte  titre-page-principale  titre-page-mobile ">
-                        {{ selectedProject.nomdespages[selectedImageIndex]+ ' ' || "" }}Mobile&nbsp;:  
-                      </p>
-                      <div v-if="selectedProject.versionmobile === 'oui'" class="kp_mobile-image">
-                        <img :src="getPageThumbnailPathMobile(selectedProject.nomimageprojet, selectedImageIndex)" alt="Image mobile sélectionnée" @error="imageError($event)" class="kp_large-image-display" />
+                      
+                      <div class="gsm-container">
+                        <p class="kp_page-title  unprojet--texte  titre-page-principale  titre-page-mobile ">
+                          {{ selectedProject.nomdespages[selectedImageIndex]+ ' ' || "" }}Mobile&nbsp;:  
+                        </p>
+                        <div v-if="selectedProject.versionmobile === 'oui'" class="kp_mobile-image">
+                          <img :src="getPageThumbnailPathMobile(selectedProject.nomimageprojet, selectedImageIndex)" alt="Image mobile sélectionnée" @error="imageError($event)" class="kp_large-image-display  kp_large-image-display--gsm" />
+                        </div>
+                        
+                        <img :src="fondgsm" alt="Fond PC" class="kp_large-image-display-gsm" />
                       </div>
+                     
                   </div>
 
                   <div class="separator"></div>
@@ -78,9 +83,12 @@
                   <p class="kp_page-title  unprojet--texte  titre-page-principale ">
                     {{ selectedProject.nomdespages[selectedImageIndex]+ ' ' || "" }}Desktop&nbsp;:  
                   </p>
-                  <div class="kp_large-image">
-                    <img :src="getPageThumbnailPath(selectedProject.nomimageprojet, selectedImageIndex)" alt="Image sélectionnée" @error="imageError($event)" class="kp_large-image-display" />
+                  <div class="container-pc">
+                    <div class="kp_large-image">
+                      <img :src="getPageThumbnailPath(selectedProject.nomimageprojet, selectedImageIndex)" alt="Image sélectionnée" @error="imageError($event)" class="kp_large-image-display" />
+                    </div>
                   </div>
+                  <img :src="fondpc" alt="Fond PC" class="kp_large-image-display-pc" />
                 </div>
 
                
@@ -102,6 +110,9 @@ import FakeMenu     from '@/components/Fakemenu.vue';
 
 import iconprojet from '@/assets/images/icon-archive.png';
 import fallback from '@/assets/images/fallback.jpg';
+
+import fondpc from '@/assets/images/pcfond.png';
+import fondgsm from '@/assets/images/fondgsm.png';
 
 export default {
  name: 'Folderprojects',
@@ -135,6 +146,8 @@ export default {
      selectedImageIndex: 0,
      iconprojet,
      windowStateClass: '',
+     fondpc,
+     fondgsm,
    };
  },
 
@@ -380,12 +393,12 @@ export default {
 }
 .kp_part-image{
   width: 70%;
+  position: relative;
 }
 .kp_large-image{
-  max-height: calc(100vh - 300px);
   overflow-y: scroll;
-  outline: solid 2px #1b1b17;
-  max-width: 1300px;
+  /* max-height: calc(100vh - 300px); */
+  /* max-width: 1300px; */
 }
 .unprojet--titre-image{
   display: flex;
@@ -451,12 +464,7 @@ export default {
   width: 30%;
 }
 .kp_mobile-image{
-    width: 100%;
-    max-width: 430px;
-    max-height: calc(100vh - 580px);
-    height: 100%;
     overflow-y: scroll;
-    outline: solid 2px #1b1b17;
 }
 
 .titre-miniatures{
@@ -480,6 +488,64 @@ export default {
   padding-top: 25px;
 }
 
+
+.kp_large-image-display-pc{
+  width:100%;
+  z-index: 10;
+  position: relative;
+  width:84%;
+  left: 8%;
+  pointer-events: none;
+  user-select: none;
+}
+.kp_large-image{
+  position: absolute;
+  top: 0;
+  aspect-ratio: 16 / 11;
+  width: calc(69% - 4px);
+  top: 78px;
+  left: 15%;
+}
+
+.kp_large-image-display-gsm{
+  width:100%;
+  z-index: 10;
+  position: relative;
+  width:100%;
+  pointer-events: none;
+  user-select: none;
+}
+.kp_mobile-image{
+  position: absolute;
+  top: 0;
+  aspect-ratio: 9 / 16;
+  width: 100%;
+  top: 78px;
+  left: 0;
+}
+.gsm-container{
+  position: relative;
+  width: 100%;
+  height: fit-content;
+  margin-top: 20px;
+  padding: 20px 0;
+  border-top: solid 2px #000000;
+  max-width: 350px;
+}
+.kp_large-image-display--gsm{
+  position: absolute;
+  width: 99%;
+  left: 1%;
+}
+
+.kp_mobile-image{
+  position: absolute;
+  top: 0;
+  aspect-ratio: 9 / 17;
+  width: calc(97% + 1px);
+  top: 120px;
+  left: 2%;
+}
 @media screen and (max-width:960px){
   .kp_folder{
     height: calc(100vh - 47px) !important;
@@ -537,6 +603,9 @@ export default {
   .kp_element--container{
     padding-bottom: 70px !important;
   }
+}
+@media screen and (min-width:2840px){
+
 }
 
 </style>
