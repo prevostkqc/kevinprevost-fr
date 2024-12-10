@@ -31,7 +31,23 @@
       v-show="openWindows.includes('folder')"
       :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.folder]">
       <Folderprojects @update-class="updateWindowClass('folder', $event)" @close="handleCloseWindow('folder')"
-        :context="'folder'" :title="'folder'" />
+        @show-popup="showPopup" :context="'folder'" :title="'folder'" />
+    </div>
+
+    <!-- Popup d'image -->
+    <div v-if="isPopupOpen"  :class="['image-popup', popupType]">
+      <div class="popup-overlay" @click="closePopup"></div>
+      <div class="popup-content">
+
+        <div :class="[`kp_icon_zone`, `kp_icon_zone--close`, `kp_icon--close-pop`,  `kp_icon--close-${context}`]"
+          :id="`kp_action--close--${context}`" @click="closePopup">
+          <img class="kp_icon_zone--img" :src="navigationClose" alt="close">
+        </div>
+
+        <div class="container-pop">
+          <img :src="popupImageSrc" alt="Image en grand format" class="popup-image" />
+        </div>
+      </div>
     </div>
 
     <div class="container--autoportrait" v-bring-to-front-on-show @click="bringToFront($event)"
@@ -142,6 +158,8 @@ import Mail from '@/components/mail.vue';
 import Media from '@/components/Lecteurmedia.vue';
 import Demineur from '@/components/Demineur.vue';
 
+import navigationClose from '@/assets/images/close_icn.svg';
+
 export default {
   name: 'Home',
   components: {
@@ -213,7 +231,17 @@ export default {
       barrenotifClass: 'barrenotifClass',
       menuIsVisible: true,
       showStarting: true,
+      isPopupOpen: false,
+      popupImageSrc: '',
+      navigationClose,
+      opupType: '',
     };
+  },
+  props: {
+    context: {
+      type: String,
+      default: '',
+    },
   },
   mounted() {
     this.initDragAndResize();
@@ -258,6 +286,15 @@ export default {
       }
     },
 
+    showPopup({ imageSrc, type }) {
+      this.popupImageSrc = imageSrc;
+      this.popupType = type;
+      this.isPopupOpen = true;
+    },
+    closePopup() {
+      this.isPopupOpen = false;
+      this.popupType = '';
+    },
 
     initDragAndResize() {
       document.querySelectorAll('.kp_element--title').forEach(element => {
@@ -700,5 +737,79 @@ export default {
 .ccontainer--messervices {
   top: 80px;
   left: 130px;
+}
+
+
+
+
+.image-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 35px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgb(0 0 0 / 93%);
+  z-index: 1000;
+}
+
+.popup-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: transparent;
+  width: 100vw;
+  height: calc(100vh - 35px);
+}
+
+.kp_icon--close-folder {
+  left: auto;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+}
+
+.container-pop{
+  height: calc(100vh - 90px);
+  overflow-y: scroll;
+  max-width: 1400px;
+  width: calc(100% - 40px);
+  margin: auto;
+}
+.image-popup.gsm .container-pop {
+
+  max-width: 600px;
+}
+.popup-content {
+  position: relative;
+  width: calc(100% - 40px);
+  max-height: calc(100% - 40px);
+  padding: 40px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.popup-image {
+  display: block;
+  outline: solid 1px #CCCCCC;
+  width: 100%;
+  height: auto;
+}
+
+.kp_icon--close-pop{
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  left: auto;
+}
+
+@media screen and (max-width : 960px) {
+  .popup-content {
+    padding: 10px;
+  }
+  .container-pop{
+    width: 100%;
+  }
 }
 </style>

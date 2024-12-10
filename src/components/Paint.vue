@@ -281,11 +281,13 @@ export default {
 
 
     handleTouchStart(event) {
+      event.preventDefault();
       const touch = event.touches[0];
       const { offsetX, offsetY } = this.getCanvasCoords(touch.clientX, touch.clientY);
       this.handleMouseDown({ offsetX, offsetY });
     },
     handleTouchMove(event) {
+      event.preventDefault();
       const touch = event.touches[0];
       const { offsetX, offsetY } = this.getCanvasCoords(touch.clientX, touch.clientY);
       this.handleMouseMove({ offsetX, offsetY });
@@ -846,6 +848,16 @@ export default {
         this.stopDrawing(event);
       }
     });
+  },
+
+  beforeUnmount() {
+    const canvas = this.$refs.canvas;
+
+    canvas.removeEventListener('touchstart', this.handleTouchStart);
+    canvas.removeEventListener('touchmove', this.handleTouchMove);
+    canvas.removeEventListener('touchend', this.handleTouchEnd);
+
+    window.removeEventListener('mouseleave', this.stopDrawing);
   },
 
 

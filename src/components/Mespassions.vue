@@ -249,7 +249,6 @@ export default {
   },
   watch: {
     divWidth(newWidth) {
-      console.log('Mise à jour de la classe dynamique en fonction de divWidth:', this.dynamicClasses);
     },
   },
   methods: {
@@ -268,60 +267,60 @@ export default {
       }
     },
     initCardInteractions() {
-        const card = this.$refs.cardPokemon;
-        const cardGlow = this.$refs.cardGlow;
-        const cardGlow2 = this.$refs.cardGlow2;
-        const carCadre = this.$refs.carCadre;
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  const card = this.$refs.cardPokemon;
+  const cardGlow = this.$refs.cardGlow;
+  const cardGlow2 = this.$refs.cardGlow2;
+  const carCadre = this.$refs.carCadre;
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-        const updateGlowEffect = (x, y, elRect) => {
-            let midCardWidth = elRect.width / 2;
-            let midCardHeight = elRect.height / 2;
+  const updateGlowEffect = (x, y, elRect) => {
+    let midCardWidth = elRect.width / 2;
+    let midCardHeight = elRect.height / 2;
 
-            let angleX = (x - midCardWidth) / midCardWidth * 20;
-            let angleY = - (y - midCardHeight) / midCardHeight * 20;
+    let angleX = (x - midCardWidth) / midCardWidth * 20;
+    let angleY = -(y - midCardHeight) / midCardHeight * 20;
 
-            let glowX = x / elRect.width * 100;
-            let glowY = y / elRect.height * 100;
+    let glowX = x / elRect.width * 100;
+    let glowY = y / elRect.height * 100;
 
-            card.children[0].style.transform = `rotateX(${angleY}deg) rotateY(${angleX}deg)`;
-            cardGlow2.style.transform = `rotateX(${angleY}deg) rotateY(${angleX}deg)`;
-            cardGlow.style.backgroundPosition = `${glowX * 10}px ${glowY * 10}px`;
-            carCadre.style.filter = `drop-shadow(${glowX / 10}px ${glowY / 10}px 3px #000000AA)`;
-            cardGlow2.style.background = `radial-gradient(circle at ${glowX}% ${glowY}%, rgba(255, 255, 255, 0.9), transparent)`;
-        };
+    card.children[0].style.transform = `rotateX(${angleY}deg) rotateY(${angleX}deg)`;
+    cardGlow2.style.transform = `rotateX(${angleY}deg) rotateY(${angleX}deg)`;
+    cardGlow.style.backgroundPosition = `${glowX * 10}px ${glowY * 10}px`;
+    carCadre.style.filter = `drop-shadow(${glowX / 10}px ${glowY / 10}px 3px #000000AA)`;
+    cardGlow2.style.background = `radial-gradient(circle at ${glowX}% ${glowY}%, rgba(255, 255, 255, 0.9), transparent)`;
+  };
 
-        const resetCardPosition = () => {
-            card.children[0].style.transform = '';
-            cardGlow2.style.transform = '';
-            cardGlow.style.backgroundPosition = '';
-            carCadre.style.filter = '';
-            cardGlow2.style.background = `radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.9), transparent)`;
-        };
+  const resetCardPosition = () => {
+    card.children[0].style.transform = '';
+    cardGlow2.style.transform = '';
+    cardGlow.style.backgroundPosition = '';
+    carCadre.style.filter = '';
+    cardGlow2.style.background = `radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.9), transparent)`;
+  };
 
-        const handleMove = (e) => {
-            let elRect = card.getBoundingClientRect();
-            let x, y;
+  const handleMove = (e) => {
+    let elRect = card.getBoundingClientRect();
+    let x, y;
 
-            if (isMobile && e.touches) {
-                x = e.touches[0].clientX - elRect.left;
-                y = e.touches[0].clientY - elRect.top;
-            } else {
-                x = e.clientX - elRect.left;
-                y = e.clientY - elRect.top;
-            }
+    if (isMobile && e.touches) {
+      x = e.touches[0].clientX - elRect.left;
+      y = e.touches[0].clientY - elRect.top;
+    } else {
+      x = e.clientX - elRect.left;
+      y = e.clientY - elRect.top;
+    }
 
-            updateGlowEffect(x, y, elRect);
-        };
+    updateGlowEffect(x, y, elRect);
+  };
 
-        if (isMobile) {
-            card.addEventListener('touchmove', handleMove);
-            card.addEventListener('touchend', resetCardPosition);
-        } else {
-            card.addEventListener('mousemove', handleMove);
-            card.addEventListener('mouseleave', resetCardPosition);
-        }
-    },
+  if (isMobile) {
+    card.addEventListener('touchmove', handleMove, { passive: true });
+    card.addEventListener('touchend', resetCardPosition);
+  } else {
+    card.addEventListener('mousemove', handleMove);
+    card.addEventListener('mouseleave', resetCardPosition);
+  }
+},
     setActiveTab(tabIndex) {
       this.activeTab = tabIndex;
     },
@@ -592,7 +591,20 @@ export default {
     opacity: 0.5;
     background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.2) 0%, transparent);
     background-image: linear-gradient(90deg, transparent 0%, transparent 7%, rgb(177 0 0 / 42%) 29%, transparent 50%, transparent 53%, rgba(222, 255, 10, 0.48) 56%, transparent 100%);
+    background: rgb(255,248,0);
+    background: radial-gradient(circle, rgba(255,248,0,1) 0%, rgba(255,231,0,0.7344187675070029) 16%, rgba(233,215,0,1) 24%, rgba(234,133,0,1) 32%, rgba(236,55,0,1) 40%, rgba(238,91,0,1) 48%, rgba(213,156,41,1) 54%, rgba(240,0,0,1) 66%, rgba(255,158,0,1) 74%, rgba(242,243,0,1) 81%, rgba(245,0,0,1) 91%, rgba(255,0,0,1) 100%);
+    background-image: radial-gradient(circle, rgb(255, 248, 0) 0%, rgba(255, 231, 0, 0.733) 16%, rgb(233, 215, 0) 24%, rgb(234, 133, 0) 32%, rgb(236, 55, 0) 40%, rgb(238, 91, 0) 48%, rgb(213, 156, 41) 54%, rgb(240, 0, 0) 66%, rgb(255, 158, 0) 74%, rgb(242, 243, 0) 81%, rgb(245, 0, 0) 91%, rgb(255, 0, 0) 100%);
+    background-size: initial;
+    background-repeat: initial;
+    background-attachment: initial;
+    background-origin: initial;
+    background-clip: initial;
+    background-color: initial;
+    filter: drop-shadow(black 2px 4px 6px);
+    opacity: 0.4;
     transform: rotate(45deg);
+    pointer-events: none;
+    user-select: none;
     pointer-events: none;
 }
 .kp_card-pokemon--glow2  {
@@ -872,6 +884,7 @@ export default {
     max-height: calc(100vh - 48px);
     width: 100%;
     overflow: scroll;
+    overflow-x: hidden;
   }
   .passion-demonstaration--pokemon{
     gap: 50px;
