@@ -74,12 +74,17 @@ methods: {
       ===================  <br/>  
       =>  Qui suis-je ?  <=  <br/>  
       ===================  <br/><br/>  
-      Avec une solide expérience de plus de 10 ans dans le développement web, ma passion pour le multimédia et les évolutions technologiques a été le moteur de ma carrière.<br/><br/>
-      Spécialiste en création et optimisation de solutions web, je suis constamment à la recherche des dernières innovations pour apporter des réponses créatives et efficaces aux défis qui me sont proposés.<br/><br/>
-      Mon parcours m'a permis de développer une expertise approfondie et une excellente capacité d'analyse des solutions visuelles, des langages de programmation et des outils de développement, me positionnant comme un acteur clé dans la transformation numérique des entreprises.<br/><br/>
-      En tant que responsable au sein du groupe Cybertek de la Cellule Créative, regroupant les services de webdesign, motion-design, graphisme, intégration et développement front-end, j'ai affiné ma maîtrise en gestion d'équipe pour piloter des projets novateurs avec succès et pour stimuler l'engagement de mon équipe vers la réalisation de nos ambitions partagées.<br/><br/>
-      Mon approche, centrée sur la collaboration et l'innovation, favorise un environnement avec lequel la créativité et la technologie convergent vers un objectif commun.<br/><br/>
-      Dynamique et motivé, je suis toujours prêt à explorer de nouveaux horizons et à relever de nouveaux défis.<br/><br/>
+
+      Fort d’une expérience de 15 ans en développement web, j’ai piloté de nombreux projets alliant design visuel et optimisation de l’expérience utilisateur.
+      <br/><br/>
+      Expert en conception et amélioration de solutions numériques, j’aborde chaque projet avec exigence et ambition, alliant créativité et performance.
+      <br/><br/>
+      Ancien responsable d’une équipe créative réunissant les experts en webdesign, UI-UX design, motion design, graphisme, intégration et développement front-end, j’excelle dans la gestion de projet, l’innovation et la collaboration, menant chaque mission avec rigueur et efficacité.
+      <br/><br/>
+      Mon approche repose sur une synergie entre créativité et technologie, favorisant un environnement où l'innovation sert des objectifs concrets.
+      <br/><br/>
+      Passionné par le multimédia et les nouvelles technologies, je suis toujours à la recherche de nouveaux défis à relever.
+      <br/><br/>
       Bienvenue dans mon univers !
     `;
 

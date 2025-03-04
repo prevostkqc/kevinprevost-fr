@@ -27,6 +27,14 @@
         :context="'messervices'" :title="'messervices'" />
     </div>
 
+    
+    <div class="container--mescompetences" v-bring-to-front-on-show @click="bringToFront($event)"
+      v-show="openWindows.includes('mescompetences')"
+      :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.mescompetences]">
+      <Mescompetences @update-class="updateWindowClass('mescompetences', $event)" @close="handleCloseWindow('mescompetences')"
+        :context="'mescompetences'" :title="'mescompetences'" />
+    </div>
+
     <div class="container--folder" v-bring-to-front-on-show @click="bringToFront($event)"
       v-show="openWindows.includes('folder')"
       :class="['window', 'kp_item__window_draggable', 'kp_item__window_header', windowClasses.folder]">
@@ -142,6 +150,7 @@
 import Desktop from '@/components/Desktop.vue';
 import Terminal from '@/components/Terminal.vue';
 import Messervices from '@/components/Messervices.vue';
+import Mescompetences from '@/components/Mescompetences.vue';
 import Folderprojects from '@/components/Folderprojects.vue';
 import Autoportrait from '@/components/Autoportrait.vue';
 import Paint from '@/components/Paint.vue';
@@ -158,6 +167,7 @@ import Mail from '@/components/mail.vue';
 import Media from '@/components/Lecteurmedia.vue';
 import Demineur from '@/components/Demineur.vue';
 
+
 import navigationClose from '@/assets/images/close_icn.svg';
 
 export default {
@@ -166,6 +176,7 @@ export default {
     Desktop,
     Terminal,
     Messervices,
+    Mescompetences,
     Folderprojects,
     Autoportrait,
     Paint,
@@ -190,6 +201,7 @@ export default {
         folder: 'kp_item_hide',
         autoportrait: 'kp_item_hide',
         messervices: 'kp_item_hide',
+        mescompetences: 'kp_item_hide',
         paint: 'kp_item_hide',
         exemples: 'kp_item_hide',
         personnaliser: 'kp_item_hide',
@@ -210,6 +222,7 @@ export default {
         paint: false,
         exemples: false,
         meservices: false,
+        mescompetences: false,
         personnaliser: false,
         monparcours: false,
         pokemon: false,
@@ -734,9 +747,14 @@ export default {
   left: 120px;
 }
 
-.ccontainer--messervices {
+.container--messervices {
   top: 80px;
   left: 130px;
+}
+
+.container--mescompetences {
+  top: 100px;
+  left: 140px;
 }
 
 
@@ -802,6 +820,12 @@ export default {
   top: 10px;
   right: 10px;
   left: auto;
+}
+
+
+.kp_main {
+    background-image: url('/src/assets/images/windows-spring.jpg');
+    background-size: cover;
 }
 
 @media screen and (max-width : 960px) {

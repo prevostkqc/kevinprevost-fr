@@ -221,11 +221,11 @@ export default {
         {
           logo: sitecybertek,
           date: '2021 - 2024',
-          title: 'Responsable Cellule Créative & Développeur Front-end',
+          title: 'Responsable Cellule Créative',
           company: 'GROUPE CYBERTEK',
           location: 'Bordeaux',
           responsibilities: [
-            "Responsable des Développeurs Front-end, Integrateurs et Webdesigner.",
+            "Responsable des Développeurs Front-end, UI-UX designers, Integrateurs et Webdesigner.",
             "Intégration CSS, développement Front-end en collaboration avec l'équipe Back-end.",
             "Optimisation multi supports (responsive) de l'ensemble des affichages pour une meilleure expérience utilisateur.",
             "Gestion d'équipe basée sur une organisation et une communication permanente pour tenir les délais annoncés et trouver des solutions aux éventuels problèmes rencontrés.",

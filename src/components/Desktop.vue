@@ -36,6 +36,7 @@ import mediaIcon from '@/assets/images/icon-media.png';
 import demineurIcon from '@/assets/images/icon-demineur.png';
 import servicesIcon from '@/assets/images/icon-services.png';
 import exemplesIcon from '@/assets/images/icon-exemples.png';
+import mescompetencesIcon from '@/assets/images/icon-competences.png';
 
 export default {
   name: 'Desktop',
@@ -97,6 +98,14 @@ export default {
           isTextIcon: false,
           text: 'Mes exemples',
           altText: 'Mes exemples',
+        },
+        {
+          id: 'mescompetences',
+          class: 'kp_folder--mescompetences',
+          icon: mescompetencesIcon,
+          isTextIcon: false,
+          text: 'Mes compétences',
+          altText: 'Mes compétences',
         },
         {
           id: 'monparcours',

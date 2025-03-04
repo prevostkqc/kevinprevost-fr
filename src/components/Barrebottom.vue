@@ -65,6 +65,7 @@ import mediaIcon        from '@/assets/images/icon-media.png';
 import demineurIcon     from '@/assets/images/icon-demineur.png';
 import servicesIcon     from '@/assets/images/icon-services.png';
 import exemplesIcon     from '@/assets/images/icon-exemples.png';
+import competencesIcon  from '@/assets/images/icon-competences.png';
 
 export default {
   name: 'Barrebottom',
@@ -160,6 +161,13 @@ export default {
           class: 'kp_barre-une-app--messervices',
           icon: servicesIcon,
           title: 'Mes services',
+          isText: false
+        },
+        {
+          id: 'mescompetences',
+          class: 'kp_barre-une-app--competences',
+          icon: competencesIcon,
+          title: 'Mes compétences',
           isText: false
         },
         {
@@ -269,6 +277,7 @@ export default {
       this.heure = now.toLocaleTimeString();
       this.date = now.toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     }, 1000);
+    
  
     navigator.getBattery().then(battery => {
       this.percentbattery = Math.floor(battery.level * 100);

@@ -25,6 +25,8 @@
           @click="setActiveTab(2)">Le sport</li>
         <li :class="[{ active: activeTab === 3, 'selected-project': activeTab === 3 }, 'kp_folder-li']"
           @click="setActiveTab(3)">Le dessin</li>
+        <li :class="[{ active: activeTab === 4, 'selected-project': activeTab === 4 }, 'kp_folder-li']"
+          @click="setActiveTab(4)">Les jeux vidéo</li>
       </ul>
     </div>
     <div :class="['kp_content--block--content', 'kp_element--enable']">
@@ -190,6 +192,35 @@
         </div>
 
 
+        <!-- ----------------- -->
+        <!-- Jeux Vidéo -->
+        <div class="onglet  onglet--3" v-show="activeTab === 4">
+          <article class="container-passion  kp_card">
+            <div class="texte-passion">
+              <div class="kp_texte-carte">
+                <h2 class="kp_p-black kp_bold  kp_titre-passion">Les jeux vidéo</h2>
+                <p class="kp_texte kp_p-black">
+                  Les jeux vidéo ont toujours occupé une place centrale dans ma vie, bien au-delà du simple divertissement.
+                  <br>J’ai eu l'opportunité de <span class="kp_bold  kp_bold--passion">développer deux jeux POKéMON amateurs</span>, 
+                  <span class="kp_bold  kp_bold--passion">POKéMON Gemme</span> et <span class="kp_bold  kp_bold--passion">POKéMON Opale</span>, mettant en avant ma passion pour le game design et le développement.
+                  <br>En parallèle, j’ai également participé à la conception de visuels et au game design pour des jeux amateurs créés par des amis.
+                  <br><br>Grand collectionneur, je possède une <span class="kp_bold  kp_bold--passion">large collection de consoles et de jeux vidéo</span> 
+                  couvrant toutes les générations, témoignant de mon attachement à l’histoire vidéoludique.
+                  <br><br>J’ai également franchi le cap de la <span class="kp_bold  kp_bold--passion">réalité virtuelle</span>, une technologie qui me fascine et qui ouvre de nouvelles perspectives de gameplay.
+                  <br>Si j’en ai le temps, j’aimerais un jour concrétiser un projet de <span class="kp_bold  kp_bold--passion">jeu en VR</span>.
+                  <br><br>
+                </p>
+              </div>
+            </div>
+          </article>
+          <div class="passion-demonstaration">
+            <div class="part--passion  part--passion-jeux-video">
+              <img class="img-jeux-video-passion" :src="jeuxvideo" alt="Jeux vidéo">
+            </div>
+          </div>
+        </div>
+
+
 
       </div>
     </div>
@@ -220,6 +251,7 @@ import ubb from '@/assets/images/ubb.svg';
 import ubbphoto from '@/assets/images/ubbphoto.png';
 import boxers from '@/assets/images/boxers.svg';
 import boxersphoto from '@/assets/images/boxersphoto.png';
+import jeuxvideo from '@/assets/images/jeuxvideo.jpg';
 
 import tookek from '@/assets/images/tookek.gif';
 
@@ -262,6 +294,7 @@ export default {
       boxers,
       boxersphoto,
       tookek,
+      jeuxvideo,
       windowStateClass: 'kp_item_window_hide',
       activeTab: 1,
       divWidth: 0,
@@ -879,7 +912,9 @@ export default {
 }
 
 
-
+.img-jeux-video-passion{
+  width: 100%;
+}
 
 
 
